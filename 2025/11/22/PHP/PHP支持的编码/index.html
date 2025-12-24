@@ -1,0 +1,491 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <link rel='stylesheet' href='https://chinese-fonts-cdn.deno.dev/packages/lxgwwenkai/dist/LXGWWenKai-Bold/result.css' />
+  <link rel='stylesheet' href='https://chinese-fonts-cdn.deno.dev/packages/jhlst/dist/%E4%BA%AC%E8%8F%AF%E8%80%81%E5%AE%8B%E4%BD%93v2_002/result.css' />  
+  
+
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PHP支持的编码 [ 光田云恒 ]</title>
+
+  <link rel="icon" href="/img/favicon.ico">
+
+
+    <meta name="author" content="光田云恒">
+
+
+    <meta name="subtitle" content="技术 · 安全 · 随笔">
+
+
+    <meta name="Description" content="记录代码、渗透、随想">
+
+
+
+  <link rel="alternate" href="/atom.xml " title="光田云恒" type="application/atom+xml">
+
+
+  
+    <link rel="stylesheet" href="/css/main.css">
+  
+
+
+<!-- CbSearch 依赖 Bootstrap CSS -->
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+
+<script defer>
+  // 离开页面时标题变“光田云恒”，返回页面时标题恢复
+//   document.addEventListener('visibilitychange', function () {
+//   if (document.visibilityState == 'hidden') {
+//       normal_title = document.title;
+//       document.title = '光田云恒';
+//   } else document.title = normal_title;
+// });
+
+</script>
+  <body data-theme="light" class="notransition">
+    <script defer>
+      const body = document.body;
+      const data = body.getAttribute("data-theme");
+      const initTheme = (state) => {
+        if (state === "dark") {
+          body.setAttribute("data-theme", "dark");
+        } else if (state === "light") {
+          body.removeAttribute("data-theme");
+        } else {
+          localStorage.setItem("theme", data);
+        }
+      };
+   
+      initTheme(localStorage.getItem("theme"));
+      
+      setTimeout(() => body.classList.remove("notransition"), 75);
+    </script>
+  <div class="navbar" role="navigation">
+  <nav class="menu">
+    <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+    <label for="menu-trigger">
+      <span class="menu-icon">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 512 512"
+        >
+          <path
+            d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"
+          />
+        </svg>
+      </span>
+    </label>
+    <a id="mode">
+      <svg
+        class="mode-sunny"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 512 512"
+      >
+        <title>LIGHT</title>
+        <line
+          x1="256"
+          y1="48"
+          x2="256"
+          y2="96"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="256"
+          y1="416"
+          x2="256"
+          y2="464"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="108.92"
+          x2="369.14"
+          y2="142.86"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="369.14"
+          x2="108.92"
+          y2="403.08"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="464"
+          y1="256"
+          x2="416"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="96"
+          y1="256"
+          x2="48"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="403.08"
+          x2="369.14"
+          y2="369.14"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="142.86"
+          x2="108.92"
+          y2="108.92"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <circle
+          cx="256"
+          cy="256"
+          r="80"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+      </svg>
+      <svg
+        class="mode-moon"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 512 512"
+      >
+        <title>DARK</title>
+        <line
+          x1="256"
+          y1="48"
+          x2="256"
+          y2="96"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="256"
+          y1="416"
+          x2="256"
+          y2="464"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="108.92"
+          x2="369.14"
+          y2="142.86"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="369.14"
+          x2="108.92"
+          y2="403.08"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="464"
+          y1="256"
+          x2="416"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="96"
+          y1="256"
+          x2="48"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="403.08"
+          x2="369.14"
+          y2="369.14"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="142.86"
+          x2="108.92"
+          y2="108.92"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <circle
+          cx="256"
+          cy="256"
+          r="80"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+      </svg>
+    </a>
+    <!-- 已移除：靠近深/浅色切换的冗余搜索按钮与悬浮搜索面板（按需求可恢复） -->
+    <div class="trigger">
+      <div class="trigger-container">
+        <!-- 菜单项 -->
+            
+        <a class="menu-link " href="/"
+          > 主页</a
+        >
+            
+        <a class="menu-link " href="/tags/"
+          > 标签</a
+        >
+            
+        <a class="menu-link " href="/categories/"
+          > 类别</a
+        >
+            
+        <a class="menu-link " href="/archives/"
+          > 档案馆</a
+        >
+            
+        <a class="menu-link " href="/about/"
+          > 关于</a
+        >
+        
+      </div>
+    </div>
+  </nav>
+</div>
+
+  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up " ></i></button>
+<button id="toggleButton"><i class="fa-solid fa-chart-bar " ></i></button>
+<div id="overlay" class="overlay">
+  <div class="content">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">The following character encodings are supported in this PHP extension</span></a></li></ol>
+    <button id="closeButton"><i class="fa-solid fa-circle-xmark"></i></button>
+  </div>
+</div>
+<div class="wrapper post">
+  <head>
+    <!-- 引入 Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <meta name="generator" content="Hexo 8.1.1"></head>
+
+
+
+  <main class="page-content" aria-label="Content">
+      <header class="header">
+        
+          <div class="tags">
+            <a href="/tags/PHP/" class="tag"># PHP</a><a href="/tags/%E7%BC%96%E7%A0%81/" class="tag"># 编码</a>
+          </div>
+        
+        <h1 class="header-title" itemprop="headline">PHP支持的编码</h1>
+          <div class="post-meta">
+            最后更新: <time>2025年11月22日</time>
+            作者: <span itemprop="author">
+              <span itemprop="name">光田云恒</span>
+            </span>
+            字数: <span class="post-count">202</span>
+            预计阅读时间: <span class="post-count">1min</span> 
+          </div>       
+        </header>
+          <div class="page-content"><h3>The following character encodings are supported in this PHP extension</h3>
+<pre><code class="language-plain">UTF-32BE*
+UTF-32LE*
+UTF-16*
+UTF-16BE*
+UTF-16LE*
+UTF-7
+UTF7-IMAP
+UTF-8*
+ASCII*
+EUC-JP*
+SJIS*
+eucJP-win*
+SJIS-win*
+ISO-2022-JP
+ISO-2022-JP-MS
+CP932
+CP51932
+SJIS-mac (alias: MacJapanese)
+SJIS-Mobile#DOCOMO (alias: SJIS-DOCOMO)
+SJIS-Mobile#KDDI (alias: SJIS-KDDI)
+SJIS-Mobile#SOFTBANK (alias: SJIS-SOFTBANK)
+UTF-8-Mobile#DOCOMO (alias: UTF-8-DOCOMO)
+UTF-8-Mobile#KDDI-A
+UTF-8-Mobile#KDDI-B (alias: UTF-8-KDDI)
+UTF-8-Mobile#SOFTBANK (alias: UTF-8-SOFTBANK)
+ISO-2022-JP-MOBILE#KDDI (alias: ISO-2022-JP-KDDI)
+JIS
+JIS-ms
+CP50220
+CP50220raw
+CP50221
+CP50222
+ISO-8859-1*
+ISO-8859-2*
+ISO-8859-3*
+ISO-8859-4*
+ISO-8859-5*
+ISO-8859-6*
+ISO-8859-7*
+ISO-8859-8*
+ISO-8859-9*
+ISO-8859-10*
+ISO-8859-13*
+ISO-8859-14*
+ISO-8859-15*
+ISO-8859-16*
+byte2be
+byte2le
+byte4be
+byte4le
+BASE64
+HTML-ENTITIES (alias: HTML)
+7bit
+8bit
+EUC-CN*
+CP936
+GB18030
+HZ
+EUC-TW*
+CP950
+BIG-5*
+EUC-KR*
+UHC (alias: CP949)
+ISO-2022-KR
+Windows-1251 (alias: CP1251)
+Windows-1252 (alias: CP1252)
+CP866 (alias: IBM866)
+KOI8-R*
+KOI8-U*
+ArmSCII-8 (alias: ArmSCII8)
+</code></pre>
+</div>          
+          <nav class="post-nav">
+    
+    <a class="post-nav-item post-nav-prev" href="/2025/11/22/PHP/PHP%E8%BF%87%E6%BB%A4/">
+      <div class="nav-arrow">&lt;&nbsp;NEWER</div>
+      <span class="post-title">PHP过滤</span>
+    </a>
+    
+    
+    <a class="post-nav-item post-nav-next" href="/2025/11/22/Sundry/%E9%9F%B3%E9%A2%91%E6%96%87%E4%BB%B6%E7%9A%84%E5%8F%A3%E8%A2%8B%E4%BD%8D_%E5%AE%B9%E5%99%A8/">
+      <div class="nav-arrow">OLDER&nbsp;&gt;</div>
+      <span class="post-title">音频文件的口袋位/容器</span>
+    </a>
+    
+  </nav>
+
+   </main>
+</div>
+
+  <footer class="footer">
+  <small class="footer_copyright">
+    <div id="bottom-inner">
+      © Site by 光田云恒<br>
+
+    </div>
+  </small>
+</footer>
+
+<!-- jQuery -->
+<script src="//cdn.bootcss.com/jquery/2.2.2/jquery.min.js"></script>
+
+<!-- Bootstrap 核心 JS -->
+<script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+
+
+    
+      <script src="/js/main.js"></script>
+    
+  
+  <script>
+    window.FPConfig = {
+      delay: 0,
+      ignoreKeywords: [],
+      maxRPS: 3,
+      hoverDelay: 50,
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+  document.body.classList.add('loaded');
+});
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,724 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <link rel='stylesheet' href='https://chinese-fonts-cdn.deno.dev/packages/lxgwwenkai/dist/LXGWWenKai-Bold/result.css' />
+  <link rel='stylesheet' href='https://chinese-fonts-cdn.deno.dev/packages/jhlst/dist/%E4%BA%AC%E8%8F%AF%E8%80%81%E5%AE%8B%E4%BD%93v2_002/result.css' />  
+  
+
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wireshark过滤语法 [ 光田云恒 ]</title>
+
+  <link rel="icon" href="/img/favicon.ico">
+
+
+    <meta name="author" content="光田云恒">
+
+
+    <meta name="subtitle" content="技术 · 安全 · 随笔">
+
+
+    <meta name="Description" content="记录代码、渗透、随想">
+
+
+
+  <link rel="alternate" href="/atom.xml " title="光田云恒" type="application/atom+xml">
+
+
+  
+    <link rel="stylesheet" href="/css/main.css">
+  
+
+
+<!-- CbSearch 依赖 Bootstrap CSS -->
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+
+<script defer>
+  // 离开页面时标题变“光田云恒”，返回页面时标题恢复
+//   document.addEventListener('visibilitychange', function () {
+//   if (document.visibilityState == 'hidden') {
+//       normal_title = document.title;
+//       document.title = '光田云恒';
+//   } else document.title = normal_title;
+// });
+
+</script>
+  <body data-theme="light" class="notransition">
+    <script defer>
+      const body = document.body;
+      const data = body.getAttribute("data-theme");
+      const initTheme = (state) => {
+        if (state === "dark") {
+          body.setAttribute("data-theme", "dark");
+        } else if (state === "light") {
+          body.removeAttribute("data-theme");
+        } else {
+          localStorage.setItem("theme", data);
+        }
+      };
+   
+      initTheme(localStorage.getItem("theme"));
+      
+      setTimeout(() => body.classList.remove("notransition"), 75);
+    </script>
+  <div class="navbar" role="navigation">
+  <nav class="menu">
+    <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+    <label for="menu-trigger">
+      <span class="menu-icon">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 512 512"
+        >
+          <path
+            d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"
+          />
+        </svg>
+      </span>
+    </label>
+    <a id="mode">
+      <svg
+        class="mode-sunny"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 512 512"
+      >
+        <title>LIGHT</title>
+        <line
+          x1="256"
+          y1="48"
+          x2="256"
+          y2="96"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="256"
+          y1="416"
+          x2="256"
+          y2="464"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="108.92"
+          x2="369.14"
+          y2="142.86"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="369.14"
+          x2="108.92"
+          y2="403.08"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="464"
+          y1="256"
+          x2="416"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="96"
+          y1="256"
+          x2="48"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="403.08"
+          x2="369.14"
+          y2="369.14"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="142.86"
+          x2="108.92"
+          y2="108.92"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <circle
+          cx="256"
+          cy="256"
+          r="80"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+      </svg>
+      <svg
+        class="mode-moon"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 512 512"
+      >
+        <title>DARK</title>
+        <line
+          x1="256"
+          y1="48"
+          x2="256"
+          y2="96"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="256"
+          y1="416"
+          x2="256"
+          y2="464"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="108.92"
+          x2="369.14"
+          y2="142.86"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="369.14"
+          x2="108.92"
+          y2="403.08"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="464"
+          y1="256"
+          x2="416"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="96"
+          y1="256"
+          x2="48"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="403.08"
+          x2="369.14"
+          y2="369.14"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="142.86"
+          x2="108.92"
+          y2="108.92"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <circle
+          cx="256"
+          cy="256"
+          r="80"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+      </svg>
+    </a>
+    <!-- 已移除：靠近深/浅色切换的冗余搜索按钮与悬浮搜索面板（按需求可恢复） -->
+    <div class="trigger">
+      <div class="trigger-container">
+        <!-- 菜单项 -->
+            
+        <a class="menu-link " href="/"
+          > 主页</a
+        >
+            
+        <a class="menu-link " href="/tags/"
+          > 标签</a
+        >
+            
+        <a class="menu-link " href="/categories/"
+          > 类别</a
+        >
+            
+        <a class="menu-link " href="/archives/"
+          > 档案馆</a
+        >
+            
+        <a class="menu-link " href="/about/"
+          > 关于</a
+        >
+        
+      </div>
+    </div>
+  </nav>
+</div>
+
+  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up " ></i></button>
+<button id="toggleButton"><i class="fa-solid fa-chart-bar " ></i></button>
+<div id="overlay" class="overlay">
+  <div class="content">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">1. 捕获过滤器（Capture Filter）详解</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">2. 显示过滤器（Display Filter）详解</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">3. 显示过滤器高级技巧</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">4. 捕获过滤器实用技巧和复杂表达式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">6. 显示过滤器更详细字段解析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">7. 显示过滤器性能优化建议</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">8. 实用场景举例</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">9. 捕获过滤器更丰富的使用场景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">10. 显示过滤器高级语法技巧</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">11. 捕获过滤器 vs 显示过滤器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">12. 常用命令参数总结</span></a></li></ol>
+    <button id="closeButton"><i class="fa-solid fa-circle-xmark"></i></button>
+  </div>
+</div>
+<div class="wrapper post">
+  <head>
+    <!-- 引入 Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <meta name="generator" content="Hexo 8.1.1"></head>
+
+
+
+  <main class="page-content" aria-label="Content">
+      <header class="header">
+        
+          <div class="tags">
+            <a href="/tags/%E5%91%BD%E4%BB%A4/" class="tag"># 命令</a><a href="/tags/%E8%AF%AD%E6%B3%95/" class="tag"># 语法</a><a href="/tags/%E8%BF%87%E6%BB%A4/" class="tag"># 过滤</a>
+          </div>
+        
+        <h1 class="header-title" itemprop="headline">Wireshark过滤语法</h1>
+          <div class="post-meta">
+            最后更新: <time>2025年11月25日</time>
+            作者: <span itemprop="author">
+              <span itemprop="name">光田云恒</span>
+            </span>
+            字数: <span class="post-count">2.2k</span>
+            预计阅读时间: <span class="post-count">9min</span> 
+          </div>       
+        </header>
+          <div class="page-content"><h1><strong>1. 捕获过滤器（Capture Filter）详解</strong></h1>
+<p>捕获过滤器作用是在抓包开始前限制抓取数据包，基于 BPF（Berkeley Packet Filter）语法。它对数据流量起“网筛”作用，过滤掉不关心的包，节省空间和性能。常用在抓包前预过滤。<br>
+<strong>1.1 基础语法结构</strong><br>
+捕获过滤器是基于简洁的关键词和运算符，形式类似：</p>
+<pre><code class="language-plain">&lt;表达式&gt; [and|or|not &lt;表达式&gt;] ...
+</code></pre>
+<p>支持的基本关键词：<br>
+<img src="/img/WireShark%E8%BF%87%E6%BB%A4%E8%AF%AD%E6%B3%95/%E5%9F%BA%E6%9C%AC%E5%85%B3%E9%94%AE%E8%AF%8D.png" alt=""><br>
+<strong>1.2 逻辑运算符</strong></p>
+<ul>
+<li>and：且</li>
+<li>or：或</li>
+<li>not：非<br>
+示例：<br>
+抓取源 IP 是 10.0.0.1 且目标端口为 80 的 TCP 流量：</li>
+</ul>
+<pre><code class="language-plain">src host 10.0.0.1 and tcp and dst port 80
+</code></pre>
+<p>抓取所有 UDP 包或 ICMP 包：</p>
+<pre><code class="language-plain">udp or icmp
+</code></pre>
+<p>排除 ARP 包：</p>
+<pre><code class="language-plain">not arp
+</code></pre>
+<p><strong>1.3 捕获过滤器示例</strong><br>
+<img src="/img/WireShark%E8%BF%87%E6%BB%A4%E8%AF%AD%E6%B3%95/%E6%8D%95%E8%8E%B7%E8%BF%87%E6%BB%A4%E5%99%A8%E7%A4%BA%E4%BE%8B.png" alt=""></p>
+<h1><strong>2. 显示过滤器（Display Filter）详解</strong></h1>
+<p>显示过滤器用在抓包完成后筛选数据包，功能强大、语法复杂，能针对各种协议和字段精确过滤。<br>
+<strong>2.1 语法结构</strong></p>
+<pre><code class="language-plain">&lt;协议&gt;.&lt;字段&gt; &lt;比较符&gt; &lt;值&gt; [逻辑运算符 &lt;过滤表达式&gt;]...
+</code></pre>
+<p><strong>2.2 常用比较符</strong><br>
+<img src="/img/WireShark%E8%BF%87%E6%BB%A4%E8%AF%AD%E6%B3%95/%E5%B8%B8%E7%94%A8%E6%AF%94%E8%BE%83%E7%AC%A6.png" alt=""><br>
+<strong>2.3 逻辑运算符</strong></p>
+<ul>
+<li>and：且</li>
+<li>or：或</li>
+<li>not：非<br>
+<strong>2.4 常用协议及字段示例</strong><br>
+<img src="/img/WireShark%E8%BF%87%E6%BB%A4%E8%AF%AD%E6%B3%95/%E5%B8%B8%E7%94%A8%E5%8D%8F%E8%AE%AE%E5%8F%8A%E5%AD%97%E6%AE%B5.png" alt=""><br>
+<strong>2.5 示例过滤器</strong><br>
+过滤源 IP 是 10.0.0.2 的包：</li>
+</ul>
+<pre><code class="language-plain">ip.src == 10.0.0.2
+</code></pre>
+<p>过滤目标端口是 80 或 443 的 TCP 包：</p>
+<pre><code class="language-plain">tcp.dstport == 80 or tcp.dstport == 443
+</code></pre>
+<p>过滤 HTTP GET 请求：</p>
+<pre><code class="language-plain">http.request.method == &quot;GET&quot;
+</code></pre>
+<p>过滤 DNS 查询包：</p>
+<pre><code class="language-plain">dns.flags.response == 0
+</code></pre>
+<h1><strong>3. 显示过滤器高级技巧</strong></h1>
+<p><strong>3.1 组合逻辑过滤</strong><br>
+过滤条件可以任意组合，利用括号明确优先级，满足复杂过滤需求。<br>
+示例：过滤源 IP 是 192.168.1.1 且目标端口是 80 或 443 的 TCP 包</p>
+<pre><code class="language-plain">ip.src == 192.168.1.1 and (tcp.dstport == 80 or tcp.dstport == 443)
+</code></pre>
+<p><strong>3.2 利用协议标志位过滤</strong><br>
+针对 TCP 标志位的过滤非常实用，常用于诊断连接问题。<br>
+过滤 TCP SYN 包（发起连接）</p>
+<pre><code class="language-plain">tcp.flags.syn == 1 and tcp.flags.ack == 0
+</code></pre>
+<p>过滤 TCP FIN 包（关闭连接）</p>
+<pre><code class="language-plain">tcp.flags.fin == 1
+</code></pre>
+<p>过滤 TCP 重传包</p>
+<pre><code class="language-plain">tcp.analysis.retransmission
+</code></pre>
+<p><strong>3.3 按报文长度过滤</strong><br>
+有时候抓包数据量巨大，可以按包大小过滤，只看超过一定长度的包。</p>
+<pre><code class="language-plain">frame.len &gt; 1000
+</code></pre>
+<p>这可以帮你快速聚焦大数据包，比如文件传输。<br>
+<strong>3.4 过滤存在某字段的包</strong><br>
+某些字段只有部分包有，例如 SSL 握手包中的 ssl.handshake 字段，过滤时可以用：</p>
+<pre><code class="language-plain">ssl.handshake
+</code></pre>
+<p>表示只显示带有握手字段的包。<br>
+<strong>3.5 过滤 IPv6 流量</strong><br>
+IPv6 过滤与 IPv4 类似，但字段名不同。<br>
+过滤 IPv6 源地址为 fe80::1 的包：</p>
+<pre><code class="language-plain">ipv6.src == fe80::1
+</code></pre>
+<p>过滤所有 IPv6 流量：</p>
+<pre><code class="language-plain">ipv6
+</code></pre>
+<p><strong>3.6 过滤字符串字段包含关系</strong><br>
+常用 HTTP 或 DNS 过滤，查找域名或 URL 包含某关键字。<br>
+HTTP Host 中包含 google：</p>
+<pre><code class="language-plain">http.host contains &quot;google&quot;
+</code></pre>
+<p>DNS 查询名匹配某正则表达式（<a target="_blank" rel="noopener" href="http://xn--onqp2x33g95e.com">如所有以.com</a> 结尾）：</p>
+<pre><code class="language-plain">dns.qry.name matches &quot;.*\.com&quot;
+</code></pre>
+<h1><strong>4. 捕获过滤器实用技巧和复杂表达式</strong></h1>
+<p><strong>4.1 捕获时指定多个条件</strong><br>
+要捕获多个 IP 或端口流量时，用括号明确优先级。<br>
+示例：抓取目的 IP 是 192.168.1.1 或 192.168.1.2 的 TCP 包</p>
+<pre><code class="language-plain">tcp and (dst host 192.168.1.1 or dst host 192.168.1.2)
+</code></pre>
+<p><strong>4.2 排除特定协议</strong><br>
+想抓包排除 ARP 包：</p>
+<pre><code class="language-plain">not arp
+</code></pre>
+<p>想抓取非 TCP 包：</p>
+<pre><code class="language-plain">not tcp
+</code></pre>
+<p><strong>4.3 指定网卡的捕获过滤器</strong><br>
+用-i 参数指定抓哪个接口，结合过滤器精确抓包：</p>
+<pre><code class="language-plain">tcpdump -i eth0 tcp port 80
+</code></pre>
+<p><strong>4.4 捕获过滤器语法限制</strong><br>
+捕获过滤器不支持协议内部字段，只能针对包头基本字段（IP、端口、协议），不支持显示过滤器的复杂条件。</p>
+<h1><strong>6. 显示过滤器更详细字段解析</strong></h1>
+<p><strong>6.1 以太网层（Ethernet）</strong></p>
+<ul>
+<li>eth.src：源 MAC 地址</li>
+<li>eth.dst：目的 MAC 地址</li>
+<li>eth.type：以太网类型，如 0x0800 表示 IPv4，0x86DD 表示 IPv6<br>
+<strong>6.2 IP 层</strong></li>
+<li>ip.version：IP 协议版本，4 或 6</li>
+<li>ip.ttl：生存时间（TTL）</li>
+<li><a target="_blank" rel="noopener" href="http://ip.id">ip.id</a>：标识，用于分片识别</li>
+<li>ip.proto：承载协议类型，如 6 是 TCP，17 是 UDP</li>
+<li>ip.flags：分片标志</li>
+<li>ip.frag_offset：分片偏移<br>
+示例过滤 TTL 小于 64 的包：</li>
+</ul>
+<pre><code class="language-plain">ip.ttl &lt; 64
+</code></pre>
+<p><strong>6.3 TCP 层</strong></p>
+<ul>
+<li>tcp.seq：序列号</li>
+<li>tcp.ack：确认号</li>
+<li>tcp.flags：标志位整体</li>
+<li>tcp.flags.syn：同步标志</li>
+<li>tcp.flags.ack：确认标志</li>
+<li>tcp.flags.fin：关闭连接标志</li>
+<li>tcp.window_size：窗口大小<br>
+过滤 TCP 窗口大小小于 1024 的包：</li>
+</ul>
+<pre><code class="language-plain">tcp.window_size &lt; 1024
+</code></pre>
+<p><strong>6.4 UDP 层</strong></p>
+<ul>
+<li>udp.length：UDP 报文长度<br>
+<strong>6.5 ICMP 层</strong></li>
+<li>icmp.type：类型码（如 8 是 Echo 请求，0 是 Echo 应答）</li>
+<li>icmp.code：类型细分<br>
+过滤 ICMP Echo 请求包：</li>
+</ul>
+<pre><code class="language-plain">icmp.type == 8
+</code></pre>
+<p><strong>6.6 HTTP 协议</strong></p>
+<ul>
+<li>http.request.method：请求方法（GET、POST、PUT 等）</li>
+<li>http.response.code：响应码（200、404 等）</li>
+<li>http.host：请求的主机名</li>
+<li>http.user_agent：客户端信息<br>
+过滤 HTTP 响应码 404：</li>
+</ul>
+<pre><code class="language-plain">http.response.code == 404
+</code></pre>
+<p><strong>6.7 DNS 协议</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://dns.qry.name">dns.qry.name</a>：查询域名</li>
+<li>dns.qry.type：查询类型（A、AAAA、MX 等）</li>
+<li>dns.a：A 记录返回 IP 地址</li>
+<li>dns.flags.response：0 表示请求，1 表示响应<br>
+过滤所有 DNS 查询包：</li>
+</ul>
+<pre><code class="language-plain">dns.flags.response == 0
+</code></pre>
+<p><strong>6.8 SSL/TLS 协议</strong></p>
+<ul>
+<li>ssl.handshake.type：握手类型（客户端 Hello、服务端 Hello 等）</li>
+<li>ssl.record.version：协议版本</li>
+<li>ssl.record.length：记录长度<br>
+过滤所有 TLS 客户端 Hello 包：</li>
+</ul>
+<pre><code class="language-plain">ssl.handshake.type == 1
+</code></pre>
+<h1><strong>7. 显示过滤器性能优化建议</strong></h1>
+<p>当抓包文件巨大时，复杂过滤语法可能会导致 Wireshark 卡顿甚至崩溃。以下建议帮你提升效率：</p>
+<ul>
+<li>尽量先用捕获过滤器减少抓包量</li>
+<li>过滤表达式中避免使用 contains 和 matches 这类正则匹配，性能消耗大</li>
+<li>尽量使用字段的等值或范围比较</li>
+<li>对 IP 和端口的过滤尽量集中，不要写太多 or 条件</li>
+<li>使用括号明确运算顺序，避免解析错误</li>
+<li>分步骤过滤，先用粗过滤，再逐步精细化</li>
+</ul>
+<h1><strong>8. 实用场景举例</strong></h1>
+<p><strong>8.1 定位特定主机通信</strong><br>
+只看某台主机的所有流量：</p>
+<pre><code class="language-plain">ip.addr == 192.168.1.100
+</code></pre>
+<p><strong>8.2 诊断 TCP 三次握手过程</strong><br>
+过滤 TCP SYN 包：</p>
+<pre><code class="language-plain">tcp.flags.syn == 1 and tcp.flags.ack == 0
+</code></pre>
+<p>过滤 TCP SYN+ACK 包：</p>
+<pre><code class="language-plain">tcp.flags.syn == 1 and tcp.flags.ack == 1
+</code></pre>
+<p>过滤完成三次握手的包：</p>
+<pre><code class="language-plain">tcp.flags.ack == 1 and tcp.seq == tcp.ack - 1
+</code></pre>
+<p><strong>8.3 抓取 HTTP 请求</strong><br>
+过滤所有 HTTP 请求：</p>
+<pre><code class="language-plain">http.request
+</code></pre>
+<p>过滤 POST 请求：</p>
+<pre><code class="language-plain">http.request.method == &quot;POST&quot;
+</code></pre>
+<p><strong>8.4 DNS 问题排查</strong><br>
+过滤 DNS 请求：</p>
+<pre><code class="language-plain">dns.flags.response == 0
+</code></pre>
+<p>过滤 DNS 响应：</p>
+<pre><code class="language-plain">dns.flags.response == 1
+</code></pre>
+<p>过滤查询失败的 DNS 响应（RCODE 不为 0）：</p>
+<pre><code class="language-plain">dns.flags.rcode != 0
+</code></pre>
+<p><strong>8.5 网络攻击检测</strong><br>
+过滤 ICMP 洪泛攻击（大量 ICMP 请求）：</p>
+<pre><code class="language-plain">icmp.type == 8
+</code></pre>
+<p>过滤 TCP SYN 洪泛攻击：</p>
+<pre><code class="language-plain">tcp.flags.syn == 1 and tcp.flags.ack == 0
+</code></pre>
+<h1><strong>9. 捕获过滤器更丰富的使用场景</strong></h1>
+<p><strong>9.1 按接口过滤</strong><br>
+指定接口抓包：</p>
+<pre><code class="language-plain">tcpdump -i eth1
+</code></pre>
+<p>监听所有接口：</p>
+<pre><code class="language-plain">tcpdump -i any
+</code></pre>
+<p><strong>9.2 指定 MAC 地址抓包</strong><br>
+抓取源 MAC 地址是 00:11:22:33:44:55 的包：</p>
+<pre><code class="language-plain">ether src 00:11:22:33:44:55
+</code></pre>
+<p>目的 MAC 地址：</p>
+<pre><code class="language-plain">ether dst 00:11:22:33:44:55
+</code></pre>
+<p><strong>9.3 抓特定协议</strong><br>
+抓取 HTTP 流量（通常端口 80 端口）：</p>
+<pre><code class="language-plain">tcp port 80
+</code></pre>
+<p>抓取 DNS 流量：</p>
+<pre><code class="language-plain">udp port 53
+</code></pre>
+<p>抓取所有 ARP 包：</p>
+<pre><code class="language-plain">arp
+</code></pre>
+<p><strong>9.4 按包大小过滤</strong><br>
+抓包长度大于 1000 字节的包：</p>
+<pre><code class="language-plain">greater 1000
+</code></pre>
+<p><strong>9.5 复杂组合示例</strong><br>
+抓取目标是 192.168.1.10 且 TCP 端口是 22 或 80 的包：</p>
+<pre><code class="language-plain">dst host 192.168.1.10 and tcp and (dst port 22 or dst port 80)
+</code></pre>
+<p>抓取除 ICMP 外所有流量：</p>
+<pre><code class="language-plain">not icmp
+</code></pre>
+<h1><strong>10. 显示过滤器高级语法技巧</strong></h1>
+<p><strong>10.1 字段赋值判断</strong><br>
+某些协议中字段可判断是否存在或赋值。<br>
+判断 HTTP 请求是否有 Host 头：</p>
+<pre><code class="language-plain">http.host
+</code></pre>
+<p>判断 DNS 查询名是否以某域名结尾（正则）：</p>
+<pre><code class="language-plain">dns.qry.name matches &quot;.*\.cn$&quot;
+</code></pre>
+<p><strong>10.2 多字段范围过滤</strong><br>
+过滤 TCP 目的端口是 1024 到 65535 的包（高端口）：</p>
+<pre><code class="language-plain">tcp.dstport &gt;= 1024 and tcp.dstport &lt;= 65535
+</code></pre>
+<p><strong>10.3 空值判断</strong><br>
+过滤没有 TCP 选项的包：</p>
+<pre><code class="language-plain">!tcp.options
+</code></pre>
+<p><strong>10.4 按协议层级过滤</strong><br>
+过滤所有包含 HTTP 但排除 HTTPS 的包：</p>
+<pre><code class="language-plain">http and not ssl
+</code></pre>
+<p><strong>10.5 显示过滤器变量</strong><br>
+Wireshark 支持变量绑定和条件过滤，可在高级脚本和命令行用法中发挥作用，这里不做深讲。</p>
+<h1><strong>11. 捕获过滤器 vs 显示过滤器</strong></h1>
+<p><img src="/img/Wireshark%E8%BF%87%E6%BB%A4%E8%AF%AD%E6%B3%95/%E8%BF%87%E6%BB%A4%E5%99%A8.png" alt=""></p>
+<h1><strong>12. 常用命令参数总结</strong></h1>
+<pre><code class="language-plain">-i &lt;interface&gt;：指定接口
+-c &lt;count&gt;：抓包数量限制
+-s &lt;snaplen&gt;：抓包长度限制
+-w &lt;file&gt;：写入文件
+-r &lt;file&gt;：读取文件分析
+-n：禁止DNS解析，直接显示IP
+-v：详细模式
+-e：显示链路层头部信息
+</code></pre>
+</div>          
+          <nav class="post-nav">
+    
+    <a class="post-nav-item post-nav-prev" href="/2025/11/22/Sundry/%E9%9F%B3%E9%A2%91%E6%96%87%E4%BB%B6%E7%9A%84%E5%8F%A3%E8%A2%8B%E4%BD%8D_%E5%AE%B9%E5%99%A8/">
+      <div class="nav-arrow">&lt;&nbsp;NEWER</div>
+      <span class="post-title">音频文件的口袋位/容器</span>
+    </a>
+    
+    
+    <a class="post-nav-item post-nav-next" href="/2025/11/21/hello-world/">
+      <div class="nav-arrow">OLDER&nbsp;&gt;</div>
+      <span class="post-title">Hello</span>
+    </a>
+    
+  </nav>
+
+   </main>
+</div>
+
+  <footer class="footer">
+  <small class="footer_copyright">
+    <div id="bottom-inner">
+      © Site by 光田云恒<br>
+
+    </div>
+  </small>
+</footer>
+
+<!-- jQuery -->
+<script src="//cdn.bootcss.com/jquery/2.2.2/jquery.min.js"></script>
+
+<!-- Bootstrap 核心 JS -->
+<script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+
+
+    
+      <script src="/js/main.js"></script>
+    
+  
+  <script>
+    window.FPConfig = {
+      delay: 0,
+      ignoreKeywords: [],
+      maxRPS: 3,
+      hoverDelay: 50,
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+  document.body.classList.add('loaded');
+});
+
+  </script>
+</body>
+</html>

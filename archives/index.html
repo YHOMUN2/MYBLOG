@@ -1,0 +1,608 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <link rel='stylesheet' href='https://chinese-fonts-cdn.deno.dev/packages/lxgwwenkai/dist/LXGWWenKai-Bold/result.css' />
+  <link rel='stylesheet' href='https://chinese-fonts-cdn.deno.dev/packages/jhlst/dist/%E4%BA%AC%E8%8F%AF%E8%80%81%E5%AE%8B%E4%BD%93v2_002/result.css' />  
+  
+
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> Archives  [ 光田云恒 ]</title>
+
+  <link rel="icon" href="/img/favicon.ico">
+
+
+    <meta name="author" content="光田云恒">
+
+
+    <meta name="subtitle" content="技术 · 安全 · 随笔">
+
+
+    <meta name="Description" content="记录代码、渗透、随想">
+
+
+
+  <link rel="alternate" href="/atom.xml " title="光田云恒" type="application/atom+xml">
+
+
+  
+    <link rel="stylesheet" href="/css/main.css">
+  
+
+
+<!-- CbSearch 依赖 Bootstrap CSS -->
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+
+<script defer>
+  // 离开页面时标题变“光田云恒”，返回页面时标题恢复
+//   document.addEventListener('visibilitychange', function () {
+//   if (document.visibilityState == 'hidden') {
+//       normal_title = document.title;
+//       document.title = '光田云恒';
+//   } else document.title = normal_title;
+// });
+
+</script>
+  <body data-theme="light" class="notransition">
+    <script defer>
+      const body = document.body;
+      const data = body.getAttribute("data-theme");
+      const initTheme = (state) => {
+        if (state === "dark") {
+          body.setAttribute("data-theme", "dark");
+        } else if (state === "light") {
+          body.removeAttribute("data-theme");
+        } else {
+          localStorage.setItem("theme", data);
+        }
+      };
+   
+      initTheme(localStorage.getItem("theme"));
+      
+      setTimeout(() => body.classList.remove("notransition"), 75);
+    </script>
+  <div class="navbar" role="navigation">
+  <nav class="menu">
+    <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+    <label for="menu-trigger">
+      <span class="menu-icon">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 512 512"
+        >
+          <path
+            d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"
+          />
+        </svg>
+      </span>
+    </label>
+    <a id="mode">
+      <svg
+        class="mode-sunny"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 512 512"
+      >
+        <title>LIGHT</title>
+        <line
+          x1="256"
+          y1="48"
+          x2="256"
+          y2="96"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="256"
+          y1="416"
+          x2="256"
+          y2="464"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="108.92"
+          x2="369.14"
+          y2="142.86"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="369.14"
+          x2="108.92"
+          y2="403.08"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="464"
+          y1="256"
+          x2="416"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="96"
+          y1="256"
+          x2="48"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="403.08"
+          x2="369.14"
+          y2="369.14"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="142.86"
+          x2="108.92"
+          y2="108.92"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <circle
+          cx="256"
+          cy="256"
+          r="80"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+      </svg>
+      <svg
+        class="mode-moon"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 512 512"
+      >
+        <title>DARK</title>
+        <line
+          x1="256"
+          y1="48"
+          x2="256"
+          y2="96"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="256"
+          y1="416"
+          x2="256"
+          y2="464"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="108.92"
+          x2="369.14"
+          y2="142.86"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="369.14"
+          x2="108.92"
+          y2="403.08"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="464"
+          y1="256"
+          x2="416"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="96"
+          y1="256"
+          x2="48"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="403.08"
+          x2="369.14"
+          y2="369.14"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="142.86"
+          x2="108.92"
+          y2="108.92"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <circle
+          cx="256"
+          cy="256"
+          r="80"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+      </svg>
+    </a>
+    <!-- 已移除：靠近深/浅色切换的冗余搜索按钮与悬浮搜索面板（按需求可恢复） -->
+    <div class="trigger">
+      <div class="trigger-container">
+        <!-- 菜单项 -->
+            
+        <a class="menu-link " href="/"
+          > 主页</a
+        >
+            
+        <a class="menu-link " href="/tags/"
+          > 标签</a
+        >
+            
+        <a class="menu-link " href="/categories/"
+          > 类别</a
+        >
+            
+        <a class="menu-link active" href="/archives/"
+          > 档案馆</a
+        >
+            
+        <a class="menu-link " href="/about/"
+          > 关于</a
+        >
+        
+      </div>
+    </div>
+  </nav>
+</div>
+
+  
+
+
+  <div class="wrapper">
+    <main class="page-content">
+    <header class="header">
+      <h1 class="header-title center">Archives</h1>
+    </header>
+    <div class="archive-container">    
+      
+      
+      <div class="monthly-archives">
+        
+          
+          <div class="archive-month-group">
+            <h2 class="archive-month-title">
+              2025年 十二月
+              <span class="post-count">(1篇)</span>
+            </h2>
+            
+            <ul class="archive-post-list">
+              
+                <li class="archive-post-item">
+                  <time class="post-date" datetime="2025-12-21T02:11:20.591Z">
+                    12-21
+                  </time>
+                  <a href="/2025/12/21/School/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/" class="post-title">
+                    计算机组成期末复习
+                  </a>
+                  
+                  
+                    <div class="post-tags">
+                      
+                        <a href="/tags/%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/" class="tag">#期末复习</a>
+                      
+                        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/" class="tag">#计算机组成</a>
+                      
+                    </div>
+                  
+                </li>
+              
+            </ul>
+          </div>
+        
+          
+          <div class="archive-month-group">
+            <h2 class="archive-month-title">
+              2025年 十一月
+              <span class="post-count">(9篇)</span>
+            </h2>
+            
+            <ul class="archive-post-list">
+              
+                <li class="archive-post-item">
+                  <time class="post-date" datetime="2025-11-23T05:41:52.186Z">
+                    11-23
+                  </time>
+                  <a href="/2025/11/23/Sundry/Misc/" class="post-title">
+                    MISC
+                  </a>
+                  
+                  
+                    <div class="post-tags">
+                      
+                        <a href="/tags/Misc/" class="tag">#Misc</a>
+                      
+                    </div>
+                  
+                </li>
+              
+                <li class="archive-post-item">
+                  <time class="post-date" datetime="2025-11-23T04:45:30.586Z">
+                    11-23
+                  </time>
+                  <a href="/2025/11/23/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/tags%E4%B8%8Ecategories%E7%9A%843D%E9%A1%B5%E9%9D%A2/" class="post-title">
+                    tags与categories的3D页面
+                  </a>
+                  
+                  
+                    <div class="post-tags">
+                      
+                        <a href="/tags/BLOG/" class="tag">#BLOG</a>
+                      
+                        <a href="/tags/JS/" class="tag">#JS</a>
+                      
+                    </div>
+                  
+                </li>
+              
+                <li class="archive-post-item">
+                  <time class="post-date" datetime="2025-11-22T12:49:09.483Z">
+                    11-22
+                  </time>
+                  <a href="/2025/11/22/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/Hexo%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/" class="post-title">
+                    Hexo 项目结构
+                  </a>
+                  
+                  
+                    <div class="post-tags">
+                      
+                        <a href="/tags/HEXO/" class="tag">#HEXO</a>
+                      
+                        <a href="/tags/BLOG/" class="tag">#BLOG</a>
+                      
+                        <a href="/tags/MARKDOWN/" class="tag">#MARKDOWN</a>
+                      
+                    </div>
+                  
+                </li>
+              
+                <li class="archive-post-item">
+                  <time class="post-date" datetime="2025-11-22T12:45:31.878Z">
+                    11-22
+                  </time>
+                  <a href="/2025/11/22/PHP/PHP%E8%BF%87%E6%BB%A4/" class="post-title">
+                    PHP过滤
+                  </a>
+                  
+                  
+                    <div class="post-tags">
+                      
+                        <a href="/tags/PHP/" class="tag">#PHP</a>
+                      
+                        <a href="/tags/%E8%BF%87%E6%BB%A4/" class="tag">#过滤</a>
+                      
+                    </div>
+                  
+                </li>
+              
+                <li class="archive-post-item">
+                  <time class="post-date" datetime="2025-11-22T12:41:54.762Z">
+                    11-22
+                  </time>
+                  <a href="/2025/11/22/PHP/PHP%E6%94%AF%E6%8C%81%E7%9A%84%E7%BC%96%E7%A0%81/" class="post-title">
+                    PHP支持的编码
+                  </a>
+                  
+                  
+                    <div class="post-tags">
+                      
+                        <a href="/tags/PHP/" class="tag">#PHP</a>
+                      
+                        <a href="/tags/%E7%BC%96%E7%A0%81/" class="tag">#编码</a>
+                      
+                    </div>
+                  
+                </li>
+              
+                <li class="archive-post-item">
+                  <time class="post-date" datetime="2025-11-22T11:40:46.604Z">
+                    11-22
+                  </time>
+                  <a href="/2025/11/22/Sundry/%E9%9F%B3%E9%A2%91%E6%96%87%E4%BB%B6%E7%9A%84%E5%8F%A3%E8%A2%8B%E4%BD%8D_%E5%AE%B9%E5%99%A8/" class="post-title">
+                    音频文件的口袋位/容器
+                  </a>
+                  
+                  
+                    <div class="post-tags">
+                      
+                        <a href="/tags/%E9%9A%90%E5%86%99/" class="tag">#隐写</a>
+                      
+                    </div>
+                  
+                </li>
+              
+                <li class="archive-post-item">
+                  <time class="post-date" datetime="2025-11-21T14:30:38.661Z">
+                    11-21
+                  </time>
+                  <a href="/2025/11/21/Sundry/Wireshark%E8%BF%87%E6%BB%A4%E8%AF%AD%E6%B3%95/" class="post-title">
+                    Wireshark过滤语法
+                  </a>
+                  
+                  
+                    <div class="post-tags">
+                      
+                        <a href="/tags/%E5%91%BD%E4%BB%A4/" class="tag">#命令</a>
+                      
+                        <a href="/tags/%E8%AF%AD%E6%B3%95/" class="tag">#语法</a>
+                      
+                        <a href="/tags/%E8%BF%87%E6%BB%A4/" class="tag">#过滤</a>
+                      
+                    </div>
+                  
+                </li>
+              
+                <li class="archive-post-item">
+                  <time class="post-date" datetime="2025-11-21T14:22:12.448Z">
+                    11-21
+                  </time>
+                  <a href="/2025/11/21/hello-world/" class="post-title">
+                    Hello
+                  </a>
+                  
+                  
+                </li>
+              
+                <li class="archive-post-item">
+                  <time class="post-date" datetime="2025-11-21T12:47:45.412Z">
+                    11-21
+                  </time>
+                  <a href="/2025/11/21/KALI/KALI%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/" class="post-title">
+                    KALI小知识点
+                  </a>
+                  
+                  
+                    <div class="post-tags">
+                      
+                        <a href="/tags/%E9%9A%90%E5%86%99/" class="tag">#隐写</a>
+                      
+                        <a href="/tags/dict/" class="tag">#dict</a>
+                      
+                    </div>
+                  
+                </li>
+              
+            </ul>
+          </div>
+        
+      </div>
+    </div>
+      <nav class="pagination">
+        <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/">下一页</a>
+      </nav>
+    </main>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const yearToggles = document.querySelectorAll('.year-toggle');
+      
+      yearToggles.forEach(toggle => {
+        toggle.addEventListener('click', function() {
+          const year = this.dataset.year;
+          const content = document.querySelector(`.year-content[data-year="${year}"]`);
+          content.classList.toggle('collapsed');
+          this.textContent = content.classList.contains('collapsed') ? '展开' : '折叠';
+        });
+      });
+    });
+    </script>
+  <footer class="footer">
+  <small class="footer_copyright">
+    <div id="bottom-inner">
+      © Site by 光田云恒<br>
+
+    </div>
+  </small>
+</footer>
+
+<!-- jQuery -->
+<script src="//cdn.bootcss.com/jquery/2.2.2/jquery.min.js"></script>
+
+<!-- Bootstrap 核心 JS -->
+<script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+
+
+    
+      <script src="/js/main.js"></script>
+    
+  
+  <script>
+    window.FPConfig = {
+      delay: 0,
+      ignoreKeywords: [],
+      maxRPS: 3,
+      hoverDelay: 50,
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+  document.body.classList.add('loaded');
+});
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,1262 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <link rel='stylesheet' href='https://chinese-fonts-cdn.deno.dev/packages/lxgwwenkai/dist/LXGWWenKai-Bold/result.css' />
+  <link rel='stylesheet' href='https://chinese-fonts-cdn.deno.dev/packages/jhlst/dist/%E4%BA%AC%E8%8F%AF%E8%80%81%E5%AE%8B%E4%BD%93v2_002/result.css' />  
+  
+
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MISC [ 光田云恒 ]</title>
+
+  <link rel="icon" href="/img/favicon.ico">
+
+
+    <meta name="author" content="光田云恒">
+
+
+    <meta name="subtitle" content="技术 · 安全 · 随笔">
+
+
+    <meta name="Description" content="记录代码、渗透、随想">
+
+
+
+  <link rel="alternate" href="/atom.xml " title="光田云恒" type="application/atom+xml">
+
+
+  
+    <link rel="stylesheet" href="/css/main.css">
+  
+
+
+<!-- CbSearch 依赖 Bootstrap CSS -->
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+
+<script defer>
+  // 离开页面时标题变“光田云恒”，返回页面时标题恢复
+//   document.addEventListener('visibilitychange', function () {
+//   if (document.visibilityState == 'hidden') {
+//       normal_title = document.title;
+//       document.title = '光田云恒';
+//   } else document.title = normal_title;
+// });
+
+</script>
+  <body data-theme="light" class="notransition">
+    <script defer>
+      const body = document.body;
+      const data = body.getAttribute("data-theme");
+      const initTheme = (state) => {
+        if (state === "dark") {
+          body.setAttribute("data-theme", "dark");
+        } else if (state === "light") {
+          body.removeAttribute("data-theme");
+        } else {
+          localStorage.setItem("theme", data);
+        }
+      };
+   
+      initTheme(localStorage.getItem("theme"));
+      
+      setTimeout(() => body.classList.remove("notransition"), 75);
+    </script>
+  <div class="navbar" role="navigation">
+  <nav class="menu">
+    <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+    <label for="menu-trigger">
+      <span class="menu-icon">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 512 512"
+        >
+          <path
+            d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"
+          />
+        </svg>
+      </span>
+    </label>
+    <a id="mode">
+      <svg
+        class="mode-sunny"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 512 512"
+      >
+        <title>LIGHT</title>
+        <line
+          x1="256"
+          y1="48"
+          x2="256"
+          y2="96"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="256"
+          y1="416"
+          x2="256"
+          y2="464"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="108.92"
+          x2="369.14"
+          y2="142.86"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="369.14"
+          x2="108.92"
+          y2="403.08"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="464"
+          y1="256"
+          x2="416"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="96"
+          y1="256"
+          x2="48"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="403.08"
+          x2="369.14"
+          y2="369.14"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="142.86"
+          x2="108.92"
+          y2="108.92"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <circle
+          cx="256"
+          cy="256"
+          r="80"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+      </svg>
+      <svg
+        class="mode-moon"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 512 512"
+      >
+        <title>DARK</title>
+        <line
+          x1="256"
+          y1="48"
+          x2="256"
+          y2="96"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="256"
+          y1="416"
+          x2="256"
+          y2="464"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="108.92"
+          x2="369.14"
+          y2="142.86"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="369.14"
+          x2="108.92"
+          y2="403.08"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="464"
+          y1="256"
+          x2="416"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="96"
+          y1="256"
+          x2="48"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="403.08"
+          x2="369.14"
+          y2="369.14"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="142.86"
+          x2="108.92"
+          y2="108.92"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <circle
+          cx="256"
+          cy="256"
+          r="80"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+      </svg>
+    </a>
+    <!-- 已移除：靠近深/浅色切换的冗余搜索按钮与悬浮搜索面板（按需求可恢复） -->
+    <div class="trigger">
+      <div class="trigger-container">
+        <!-- 菜单项 -->
+            
+        <a class="menu-link " href="/"
+          > 主页</a
+        >
+            
+        <a class="menu-link " href="/tags/"
+          > 标签</a
+        >
+            
+        <a class="menu-link " href="/categories/"
+          > 类别</a
+        >
+            
+        <a class="menu-link " href="/archives/"
+          > 档案馆</a
+        >
+            
+        <a class="menu-link " href="/about/"
+          > 关于</a
+        >
+        
+      </div>
+    </div>
+  </nav>
+</div>
+
+  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up " ></i></button>
+<button id="toggleButton"><i class="fa-solid fa-chart-bar " ></i></button>
+<div id="overlay" class="overlay">
+  <div class="content">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">Nepnep 祝你新年快乐啦！</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">CatFlag（cat 命令）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">CatchCat(GPS 数据流)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">CatCatCat（图片--&gt;编码与解码）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">删库跑路-(文件分离)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">1. binwalk</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">2. -e（或 --extract）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">[简单] 凯撒大帝在培根里藏了什么（培根与凯撒密码）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">[简单] 简单的 base 编码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">来自银河的信号（音频-&gt;图片-&gt;解码）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">steg 没有 py</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">时间刺客！（图片基本属性）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">看雪看雪看雪（基础属性-&gt;snow 解码）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">流量分析 2（流量中的异常包 flag&#x2F;test）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">nice_bgm（音频 private_bit 隐藏）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">private_bit 是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">为什么你会觉得它被“隐藏信息”使用？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">fakezip（压缩包头文件）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">Check（图片 LSB（最低有效位）隐写+HTML）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">wire1（SQL 注入+ascii）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">Encode（解码）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">1-misc（压缩包密码）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">碎纸机 11（图片合并）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">Let_god_knows（图片+Red plane）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">Red plane 0 是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">misc2-1（图片逆序输出）</span></a></li></ol></li></ol>
+    <button id="closeButton"><i class="fa-solid fa-circle-xmark"></i></button>
+  </div>
+</div>
+<div class="wrapper post">
+  <head>
+    <!-- 引入 Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <meta name="generator" content="Hexo 8.1.1"></head>
+
+
+
+  <main class="page-content" aria-label="Content">
+      <header class="header">
+        
+          <div class="tags">
+            <a href="/tags/Misc/" class="tag"># Misc</a>
+          </div>
+        
+        <h1 class="header-title" itemprop="headline">MISC</h1>
+          <div class="post-meta">
+            最后更新: <time>2025年12月21日</time>
+            作者: <span itemprop="author">
+              <span itemprop="name">光田云恒</span>
+            </span>
+            字数: <span class="post-count">8.1k</span>
+            预计阅读时间: <span class="post-count">33min</span> 
+          </div>       
+        </header>
+          <div class="page-content"><h3>Nepnep 祝你新年快乐啦！</h3>
+<p><img src="/img/MISC/1.png" alt=""><br>
+方法 1：视频最后一帧<br>
+<img src="/img/MISC/2.png" alt=""><br>
+方法 2：使用网页 F12，查看网页源代码，搜索“catctf”<br>
+<img src="/img/MISC/3.png" alt=""><br>
+<font style="color:#E746A4;">flag：CatCTF{H4ppy_n3w_y34r}</font></p>
+<h3>CatFlag（cat 命令）</h3>
+<p><img src="/img/MISC/4.png" alt=""><br>
+<img src="/img/MISC/5.png" alt=""><br>
+下载附件查看，是一串字符，题目给出提示使用<code>cat flag</code> or<code> type flag</code></p>
+<div class="info-block">
+<p><code>cat</code> 是 Linux 系统中非常常用的命令，用来 <strong>查看文件内容</strong>、<strong>合并多个文件</strong>、<strong>创建新文件</strong> 等。<br>
+<code>type</code> 不是用于查看文件内容的命令，而是 <strong>用于查看命令的类型与来源</strong>。<br>
+它可以告诉你某个命令是：</p>
+<ul>
+<li>内建命令（shell builtin）</li>
+<li>外部命令（在 <code>/bin</code>、<code>/usr/bin</code> 等路径）</li>
+<li>别名（alias）</li>
+<li>函数（function）</li>
+</ul>
+</div>
+<p><img src="/img/MISC/6.png" alt=""><br>
+使用 kali 输入<code>cat '/home/gtyh/桌面/flag'</code><br>
+<img src="/img/MISC/7.png" alt=""><br>
+<font style="color:#E746A4;">flag：CatCTF{!2023_Will_Be_Special,2022_Was_Not!}</font></p>
+<h3>CatchCat(GPS 数据流)</h3>
+<p><img src="/img/MISC/8.png" alt=""><br>
+题目给出提示，附件中 txt 内容是 GPS 数据流<br>
+<img src="/img/MISC/9.png" alt=""><br>
+方法 1：使用网站（根据 GPS 文件生成一个 HTML 地图）<a target="_blank" rel="noopener" href="https://www.gpsvisualizer.com/map_input">https://www.gpsvisualizer.com/map_input</a><br>
+选择文件--&gt; Draw the map --&gt; 跳转网页 --&gt; 等待出现一个地图 --&gt; 旋转 90°--&gt;查看 flag<br>
+<img src="/img/MISC/10.png" alt=""><br>
+<img src="/img/MISC/11.png" alt=""><br>
+<img src="/img/MISC/12.png" alt=""><br>
+<font style="color:#D22D8D;">flag：CatCTF{GPS_M1ao}</font><br>
+方法 2：将 txt 文件转为 kml 文件，在使用网站画出上面的图案<br>
+备注：<strong>KML（Keyhole Markup Language）</strong> 是一种基于 <strong>XML</strong> 的文件格式，用来在地图软件中（如 Google Earth、Google Maps、ArcGIS 等）描述地理信息。<br>
+文件扩展名通常是 <code>.kml</code> 或 <code>.kmz</code>（压缩版本）。</p>
+<h3>CatCatCat（图片--&gt;编码与解码）</h3>
+<p><img src="/img/MISC/13.png" alt=""><br>
+解压后的文件展示<br>
+<img src="/img/MISC/14.png" alt=""><br>
+这里需要用到 kali 的 strings 命令<br>
+<img src="/img/MISC/15.png" alt=""><br>
+输入命令 <code>strings 猫猫.jpg</code>,可以看到 kali 输出了一大串字符，<br>
+其中包含关键字符：<code>passwordis..catflag..</code>，可以猜测是解压或转码的密码<br>
+<img src="/img/MISC/16.png" alt=""><br>
+我们接着看另外一个 txt 文件里面内容，注意文件名：兔子与 91（rabbit 加密和 base91 编码）<br>
+<img src="/img/MISC/17.png" alt=""><br>
+使用在线解码网站进行 Rabbit 解密<br>
+<img src="/img/MISC/18.png" alt=""><br>
+使用 base91 解码<br>
+<img src="/img/MISC/19.png" alt=""><br>
+将 cat 文本复制到网站中点击 Ook! to Text 即可出现 flag</p>
+<div class="info-block">
+<p>Ook 编码：<br>
+只要你看到这种 <strong>重复单词 + 标点符号组合（共三种标点）</strong>、并且数量众多、像“猫语”一样循环出现，<br>
+<strong>99% 就是 OOK 编码</strong>（或者它的变体，比如把 &quot;Ook&quot; 换成 &quot;cat&quot;）。<br>
+<img src="/img/MISC/20.png" alt=""></p>
+</div>
+<div class="info-block">
+<p><strong>Ook! To Text</strong><br>
+等价于：把 Ook → 转成 Brainfuck → 执行 → 输出文本。也就是说它做了两步合并（转换 + 运行）。</p>
+</div>
+<p><img src="/img/MISC/21.png" alt=""><br>
+法二：把下面脚本保存为 <code>ook_decode.py</code>，把你的原始文件（含 <code>cat.</code> 等）放在同目录，假设文件名 <code>ook.txt</code>，然后运行 <code>python ook_decode.py</code> 即可得到输出：</p>
+<pre><code class="language-python">#ook_decode.py
+import re
+#修改为你的文件名
+txt_path = &quot;ook.txt&quot;
+with open(txt_path, &quot;r&quot;, encoding=&quot;utf-8&quot;) as f:
+    raw = f.read()
+tokens = re.findall(r&quot;cat[.!?]&quot;, raw)         # 找到 cat. cat? cat!
+ook_tokens = [t.replace(&quot;cat&quot;, &quot;Ook&quot;) for t in tokens]
+pair_to_bf = {
+    (&quot;Ook.&quot;, &quot;Ook?&quot;): &quot;&gt;&quot;,
+    (&quot;Ook?&quot;, &quot;Ook.&quot;): &quot;&lt;&quot;,
+    (&quot;Ook.&quot;, &quot;Ook.&quot;): &quot;+&quot;,
+    (&quot;Ook!&quot;, &quot;Ook!&quot;): &quot;-&quot;,
+    (&quot;Ook!&quot;, &quot;Ook.&quot;): &quot;.&quot;,
+    (&quot;Ook.&quot;, &quot;Ook!&quot;): &quot;,&quot;,
+    (&quot;Ook!&quot;, &quot;Ook?&quot;): &quot;[&quot;,
+    (&quot;Ook?&quot;, &quot;Ook!&quot;): &quot;]&quot;,
+}
+bf = []
+for i in range(0, len(ook_tokens)-1, 2):
+    a = ook_tokens[i]
+    b = ook_tokens[i+1]
+    if (a,b) not in pair_to_bf:
+        raise SystemExit(f&quot;Unknown pair: {(a,b)}&quot;)
+    bf.append(pair_to_bf[(a,b)])
+bf_code = &quot;&quot;.join(bf)
+#简单的 Brainfuck 解释器（无输入）
+def run_bf(code, max_steps=20000000, mem_size=30000):
+    tape = [0]*mem_size
+    ptr = 0
+    pc = 0
+    output = []
+    steps = 0
+    # 匹配括号
+    stack = []
+    match = {}
+    for i,ch in enumerate(code):
+        if ch == &quot;[&quot;:
+            stack.append(i)
+        elif ch == &quot;]&quot;:
+            if not stack:
+                raise ValueError(&quot;Unmatched ] at %d&quot; % i)
+            j = stack.pop()
+            match[i] = j
+            match[j] = i
+    if stack:
+        raise ValueError(&quot;Unmatched [ at %d&quot; % stack[-1])
+    while pc &lt; len(code) and steps &lt; max_steps:
+        ch = code[pc]
+        if ch == &quot;&gt;&quot;:
+            ptr += 1
+        elif ch == &quot;&lt;&quot;:
+            ptr -= 1
+        elif ch == &quot;+&quot;:
+            tape[ptr] = (tape[ptr] + 1) % 256
+        elif ch == &quot;-&quot;:
+            tape[ptr] = (tape[ptr] - 1) % 256
+        elif ch == &quot;.&quot;:
+            output.append(chr(tape[ptr]))
+        elif ch == &quot;,&quot;:
+            tape[ptr] = 0  # no input provided
+        elif ch == &quot;[&quot;:
+            if tape[ptr] == 0:
+                pc = match[pc]
+        elif ch == &quot;]&quot;:
+            if tape[ptr] != 0:
+                pc = match[pc]
+        pc += 1
+        steps += 1
+    return &quot;&quot;.join(output)
+print(&quot;Generated BF length:&quot;, len(bf_code))
+print(&quot;Executing BF...&quot;)
+print(run_bf(bf_code))
+</code></pre>
+<p>放在同一个文件夹下，输入 <code>python ook_decode.py</code>,提交的时候注意将 CATCTF==》CatCTF<br>
+<img src="/img/MISC/22.png" alt=""><br>
+<font style="color:#D22D8D;">flag:CATCTF{Th1s_V3ry_cute_catcat!!!}</font></p>
+<h3>删库跑路-(文件分离)</h3>
+<p><img src="/img/MISC/23.png" alt=""><br>
+使用 010 Editor 查看文件，发现文件大多说是 00 00 00 ，说明：<code>qcow2</code> 是稀疏文件（sparse file）格式：</p>
+<div class="info-block">
+<p>文件逻辑大小可能几十 MB，但实际占用磁盘只有几 KB。<br>
+只有真正写入的数据块才存有内容，其余部分逻辑上存在、物理上未分配（所以都是 00）。<br>
+是未使用（空闲）扇区</p>
+</div>
+<p><img src="/img/MISC/24.png" alt=""><br>
+<img src="/img/MISC/25.png" alt=""><br>
+把文件复制到 kali 中 输入 <code>python3 -m binwalk --run-as=root -e vm-106-disk-1.qcow2</code></p>
+<div class="info-block">
+<h3>1. <code>binwalk</code></h3>
+<p><code>binwalk</code> 是一个静态二进制 / 镜像分析工具，常用于：</p>
+<ul>
+<li>扫描文件或磁盘镜像里的 <strong>文件签名（magic headers）</strong>、压缩段、文件系统头；</li>
+<li><strong>自动提取</strong>（carve/extract）在镜像中识别出的内嵌文件（比如 gzip、squashfs、tar、jpeg、elf 等）；</li>
+<li>在取证 / 逆向 / CTF 中非常常用。</li>
+</ul>
+<h3>2. <code>-e</code>（或 <code>--extract</code>）</h3>
+<p><code>-e</code> 的意思是 <strong>提取</strong>（extract）：</p>
+<ul>
+<li>binwalk 在扫描到已知签名后，会尝试调用对应的提取器（比如 <code>dd</code>, <code>bunzip2</code>, <code>unsquashfs</code> 等）把识别到的嵌入文件解包出来。</li>
+<li>执行后会在当前目录创建一个以源文件名开头的目录，默认命名规则类似：<br>
+<code>_vm-106-disk-1.qcow2.extracted/</code><br>
+里面会放置 binwalk 提取出的所有文件和子目录，以及一些日志/偏移信息文件（.dirs, .extracted 等）。</li>
+</ul>
+</div>
+<p>输入命令<code>python3 -m binwalk --run-as=root -e vm-106-disk-1.qcow2</code></p>
+<div class="info-block">
+<p>注意：<br>
+一开始<code>binwalk -e vm-106-disk-1.qcow2 --run-as=root </code>这行命令会报错。<br>
+<code>python3 -m binwalk</code> 直接让 Python 去加载 binwalk 模块并执行它，不依赖于在系统路径里由 pip/apt 安装的“console_scripts”入口点脚本。之前的 <code>StopIteration</code> 是那个入口点脚本试图通过 pkg_resources 或 importlib.metadata 找到注册的控制台函数，但没有找到或找错了 Python 环境，导致失败；用 <code>-m</code> 绕开了这个中间层，因此能成功运行。</p>
+</div>
+<p><img src="/img/MISC/26.png" alt=""></p>
+<div class="info-block">
+<p>扫描结果，binwalk 识别到三个主要签名：</p>
+<ul>
+<li><code>0x50000</code>（十进制 327680）：ext filesystem（第一个 ext）</li>
+<li><code>0x8091000</code>（十进制 134811648）：gzip 压缩数据</li>
+<li><code>0x10056000</code>（十进制 268787712）：另一个 ext filesystem<br>
+对应到提取目录，你现在有：</li>
+<li><code>50000.ext</code> —— 一段被当作 ext（可能含分区/文件系统）的原始块（大小 <code>536870912</code> 字节）</li>
+<li><code>8091000</code> —— 一个小文件（<code>10240</code> 字节），binwalk 识别为 gzip 段</li>
+<li><code>10056000.ext2</code> —— 另一个被导出的 ext2/ext 文件（<code>268410880</code> 字节）</li>
+<li><code>ext-root</code> —— binwalk 可能已经把其中一个文件系统部分以目录形式解包（如果 binwalk 能直接提取文件树，会放在这里）</li>
+</ul>
+</div>
+<p>当你分离出来后，会发现桌面多一个文件夹，打开 8091000 文件，即可看见 flag<br>
+<img src="/img/MISC/27.png" alt=""><br>
+<font style="color:#D22D8D;">flag{c28c424b-fd8c-45b9-b406-0a933b1ca7b1}</font></p>
+<h3>[简单] 凯撒大帝在培根里藏了什么（培根与凯撒密码）</h3>
+<p><img src="/img/MISC/28.png" alt=""><br>
+下载文件，看到文件有一串 ABAB 的字符<br>
+<img src="/img/MISC/29.png" alt=""><br>
+解题：AB 串是一个培根密码，接着是一个凯撒密码(思路，题目已经给出提示)</p>
+<div class="info-block">
+<p>备注：<br>
+又叫“培根双字母密码”或“Baconian Cipher”，是由英国哲学家 弗朗西斯·培根（Francis Bacon） 在 1605 年发明的一种隐写密码。它有趣的地方在于，它并不直接改变字母本身，而是通过“文字表面”隐藏信息——像一封普通信中潜藏着另一条暗语。<br>
+<img src="/img/MISC/30.png" alt=""></p>
+</div>
+<p>使用<a target="_blank" rel="noopener" href="http://www.hiencode.com/baconian.html">培根密码解码</a>，获得<code>ngbklatcoznixevzu</code><br>
+<img src="/img/MISC/31.png" alt=""><br>
+使用<a target="_blank" rel="noopener" href="http://www.hiencode.com/caesar.html">凯撒密码加密</a>，获得一个有语义的一句话即可（这个 20 凑出来的？我不知道）<br>
+<img src="/img/MISC/32.png" alt=""><br>
+注意后面要转大写，才能提交成功<br>
+<font style="color:#D22D8D;">flag{HAVEFUNWITHCRYPTO}</font></p>
+<h3>[简单] 简单的 base 编码</h3>
+<p><img src="/img/MISC/33.png" alt=""><br>
+解题思路：先用 bese64 解码 20 次，再用 base92 解码 1 次<br>
+下面是 base64 解码 20 次的 python 代码，保存为<code>encode_python.py</code></p>
+<pre><code class="language-python">import base64
+with open(&quot;encode.txt&quot;, &quot;r&quot;) as file:
+    data = file.read()
+for _ in range(20):
+    data = base64.b64decode(data)
+print(data)
+</code></pre>
+<p>使用 cmd 输入<code>python encode_python.py</code>，注意将连个文件放在同一个文件夹中<br>
+<img src="/img/MISC/34.png" alt=""><br>
+获得解码的字符串<code>b'F#S&lt;YRa[$*x7,&gt;{F3DH5N/3.5+J6WD%P841JRN_i51F1Z!'</code><br>
+<img src="/img/MISC/35.png" alt=""><br>
+再用 base92 解码即可，注意只需要引号内的字符<code>F#S&lt;YRa[$*x7,&gt;{F3DH5N/3.5+J6WD%P841JRN_i51F1Z!</code><br>
+<img src="/img/MISC/36.png" alt=""><br>
+<font style="color:#D22D8D;">flag{d0<em>y0u_l1ke_base92</em>!??!_by_Sh3n}</font></p>
+<h3>来自银河的信号（音频-&gt;图片-&gt;解码）</h3>
+<p><img src="/img/MISC/37.png" alt=""><br>
+下载附件后，是一个音频文件，粗看没有可用信息，我们可以使用<strong>音频转图像</strong>的方式解题<br>
+首先需要下载<strong>虚拟音频设备驱动（ VB-CABLE ）</strong></p>
+<div class="info-block">
+<p><strong>VB-CABLE</strong> 是一种 <strong>虚拟音频设备驱动</strong>，安装后系统会多出一个“虚拟声卡”，一般显示为：</p>
+<ul>
+<li><strong>CABLE Input (VB-Audio Virtual Cable)</strong></li>
+<li><strong>CABLE Output (VB-Audio Virtual Cable)</strong><br>
+可以把它理解为一根“虚拟音频线”，将系统或某个程序的输出声音“接入”到另一个程序的输入中。</li>
+</ul>
+</div>
+<p><img src="/img/MISC/38.png" alt=""><br>
+然后在设置中声音处的输出/输入，选为 VB-Audio 的虚拟设备<br>
+<img src="/img/MISC/39.png" alt=""><br>
+接着我们使用 MMSSTV 软件进行解码，代开软件与音频，让音频处于播放状态，MMSSTV 就会处于一个“听”的状态，就可以解码出相应的图片。</p>
+<div class="info-block">
+<p>MMSSTV &amp; RX-SSTV 图像解码软件，<br>
+是用来解码国际空间站在 145.800Mhz 频率发送的声音的解码成图片的软件。<br>
+声音的来源，是能接收 145.800Mhz 频率信号的无线电台（车载台、手台等，就是类似小区保安拿的那种），<br>
+将声音播放给这两款软件&quot;听&quot;，就可以解码出相应的图片。</p>
+</div>
+<p><img src="/img/MISC/40.png" alt=""><br>
+图片中的文字<code>f7liavga{1M_0105n_cC@okmei_nFge!s}</code>，猜测栅栏密码</p>
+<div class="info-block">
+<p><strong>栅栏（之字形）重排会产生“看起来乱但字符未变”的结果</strong>：栅栏密码只改变字符位置，不改变字符本身（不像凯撒、替换会改变字符）。因此如果我们看到原字符集完整但顺序异常，栅栏是自然的怀疑对象。</p>
+</div>
+<p><img src="/img/MISC/41.png" alt=""><br>
+<font style="color:#D22D8D;">flag{M00nc@ke_Fes7iva1_15_Coming!}</font></p>
+<h3>steg 没有 py</h3>
+<p><img src="/img/MISC/42.png" alt=""><br>
+下载附件后，解压看到是一张图片<br>
+<img src="/img/MISC/43.png" alt=""><br>
+解题：</p>
+<h3>时间刺客！（图片基本属性）</h3>
+<p><img src="/img/MISC/44.png" alt=""><br>
+下载附件：<br>
+<img src="/img/MISC/45.png" alt=""><br>
+解题思路：<br>
+查看图片基础属性，修改时间上面有些异常<br>
+<img src="/img/MISC/46.png" alt=""><br>
+编写脚本提取时间戳</p>
+<pre><code class="language-python">import os
+#设置图片所在的目录路径（Windows 反斜杠要么双写 \\，要么用 r'' 原始字符串）
+img_dir_path = r&quot;F:\CTF\11.3\9\1c606f8f-372c-4519-8303-1a901c87934b\attachment\附件&quot;
+# 获取目录下的所有文件名
+img_dir = os.listdir(img_dir_path)
+flag = &quot;&quot;
+for image_name in img_dir:
+    # 拼接完整路径
+    image_path = os.path.join(img_dir_path, image_name)
+    # 获取文件修改时间戳（秒）
+    time_stamp = int(int(int(os.path.getmtime(image_path) * (10**9)) % (2**64 - 1)) / (10**9))
+    str_time_stamp = str(time_stamp)
+    print(f&quot;{image_name} -&gt; {str_time_stamp}&quot;)  # 打印文件名和时间戳
+    ascii_code = &quot;&quot;
+    for i in range(len(str_time_stamp)):
+        ascii_code += str_time_stamp[i]
+        if int(ascii_code) &gt; 127:
+            ascii_code = ascii_code[:-1]
+            flag += chr(int(ascii_code))
+            ascii_code = str_time_stamp[i]
+        elif i == len(str_time_stamp) - 1:
+            flag += chr(int(ascii_code))
+print(&quot;\n=== FLAG 结果 ===&quot;)
+print(flag)
+</code></pre>
+<p>直接再当前目录下的 cmd，输入 python <a target="_blank" rel="noopener" href="http://time.py">time.py</a><br>
+<img src="/img/MISC/47.png" alt=""><br>
+<font style="color:#D22D8D;">flag{T1m3_f1ie5}</font></p>
+<h3>看雪看雪看雪（基础属性-&gt;snow 解码）</h3>
+<p><img src="/img/MISC/48.png" alt=""><br>
+下载附件，只有一张图片，查看基础属性：时间、长宽高、详细信息....<br>
+看到照相机型号有些诡异<code>736e6f77212121</code>观察数据，最大的是 f，猜测是十六进制<br>
+<img src="/img/MISC/49.png" alt=""><br>
+这串字符转码思路：（16 进制到 ASCII 字符串）</p>
+<ul>
+<li>把那连串的十六进制字符（<code>736e6f77212121</code>） 拆成两位一组：<code>73 6e 6f 77 21 21 21</code>。</li>
+<li>每组十六进制转成十进制（即每个字节的数值）。</li>
+<li>发现得到的每个数都小于 128 → 说明它们落在 ASCII 可显示字符范围 → 把这些数按 ASCII 表转成字符。</li>
+<li>转换后的字符连起来就是 <code>snow!!!</code>。<br>
+直接编写一个 py 脚本，帮我们转码，最后输出一个 snow ，去提交 flag,并不是最终答案</li>
+</ul>
+<pre><code class="language-python"># -*- coding: utf-8 -*-
+# 题目：将十六进制字符串转为 ASCII 字符串
+# 定义函数：十六进制 → 十进制列表
+def solution(s):
+    &quot;&quot;&quot;
+    将输入的十六进制字符串（'736e6f77212121'）
+    每2个字符为一组，转换为对应的十进制整数（即字节值）。
+    &quot;&quot;&quot;
+    i = 0
+    list1 = []  # 用于存储十进制结果
+    while i &lt; len(s):
+        str1 = s[i:i+2]          # 每次取2个十六进制字符
+        c = int(str1, 16)        # 转换为十进制整数
+        list1.append(c)          # 加入结果列表
+        i += 2                   # 前进两位
+    return list1
+# 一串十六进制字符串
+str_1 = '736e6f77212121'
+#输出原字符串
+print(&quot;原字符串：&quot;, str_1)
+# 调用函数，将十六进制转成十进制列表
+b = solution(str_1)
+# 打印结果1：十进制列表
+print(&quot;十进制列表：&quot;, b)
+# 打印结果2：将十进制列表转为 ASCII 字符串
+# chr() 将数字转为对应的 ASCII 字符
+flag = ''.join(chr(x) for x in b)
+print(&quot;转换为 ASCII 后的结果：&quot;, flag)
+</code></pre>
+<p><img src="/img/MISC/50.png" alt=""><br>
+还有一种叫 SNOW 隐写术，关于这个密文，有一个工具，点击以下链接，获取<br>
+<a target="_blank" rel="noopener" href="https://darkside.com.au/snow/">SNOW 解码工具</a></p>
+<div class="info-block">
+<p><strong>Snow 隐写</strong> 是一种古老但巧妙的 <strong>文本隐写技术</strong>，<br>
+通过在 <strong>纯文本文件（如 .txt）</strong> 的 <strong>空格和制表符（tab）</strong> 中隐藏信息。<br>
+名称 “<strong>Snow</strong>”（雪）来自于“文本中的空白像雪一样覆盖信息”的比喻。<br>
+普通文本看起来比如这样：<br>
+<code>Hello, this is a message.</code><br>
+但 Snow 隐写会在行尾或单词间加上不可见空白字符（space/tab），这些空白按特定规则编码成二进制：<br>
+<code>Hello, this is a message.␣␣␉␣␣␉␉␣␣</code><br>
+（上面的 ␣ 表示空格，␉ 表示制表符）<br>
+这些空白组合编码成 0/1，再转成 ASCII 或加密文本，从而隐藏信息。</p>
+</div>
+<p><img src="/img/MISC/51.png" alt=""><br>
+使用 7zip 查看压缩包，发现了其他的文件，只要右键点击查看了（很多 UP 都没说这点）前三个连在一起是 <font style="color:#DF2A3F;">他朝若是同淋雪 </font> ，这是 key，第四个是 flag，需要 SNOW.exe 解码的<br>
+<img src="/img/MISC/52.png" alt=""><br>
+<font style="color:#D22D8D;"></font><br>
+把第四个文本中的文字全部复制（CTRL+A），包括空格，这也是解密的关键，你也可以点击文件另存为<br>
+再 SNOW 工具上使用 CMD，注意输入的格式<br>
+<code>-C</code> 表示解码（decode） -p 表示 password ，后面写密码<br>
+<code>SNOW.exe -C -p 他朝若是同淋雪 F:\CTF\11.3\10\misc.jpg_flag.txt</code><br>
+<img src="/img/MISC/53.png" alt=""><br>
+<font style="color:#D22D8D;">flag{Sn0w_M@n!!!!!!!}</font></p>
+<h3>流量分析 2（流量中的异常包 flag/test）</h3>
+<p><img src="/img/MISC/54.png" alt=""><br>
+打开文件查看统计-&gt;协议分级 情况：正常<br>
+“协议分级”是 Wireshark 的一种统计树状图，展示不同协议在抓包中出现的层次关系与占比，用来分析流量结构和发现异常。<br>
+<img src="/img/MISC/55.png" alt=""></p>
+<div class="info-block">
+<p>每一层的缩进表示“被包含”的关系：</p>
+<ul>
+<li>Ethernet 是最外层。</li>
+<li>里面封装了 IPv4。</li>
+<li>IPv4 又封装了 TCP 或 UDP。</li>
+<li>TCP 之上可能是 HTTP。<br>
+所以它体现了<strong>网络协议的封装结构</strong>，也说明在你的抓包文件中，哪类协议出现得多、哪类少。</li>
+</ul>
+</div>
+<p>再往下翻数据包，发现可以文件 test.txt<br>
+<img src="/img/MISC/56.png" alt=""><br>
+可以输入<code>frame contains &quot;test.txt&quot;</code>，进行过滤数据包<br>
+备注： 在整个数据帧中查找任意地方包含 “test.txt” 字符串的包。<br>
+<img src="/img/MISC/57.png" alt=""><br>
+接着我点击文件导出 http 即可<br>
+<img src="/img/MISC/58.png" alt=""><br>
+之后保存全部<br>
+<img src="/img/MISC/59.png" alt=""><br>
+打开全部 test，合并到一个上，即可看到 flag，少了 ag，自己补上<br>
+<img src="/img/MISC/60.png" alt=""><br>
+<font style="color:#D22D8D;">flag{17uaji1l}</font></p>
+<h3>nice_bgm（音频 private_bit 隐藏）</h3>
+<p><img src="/img/MISC/61.png" alt=""><br>
+下载附件是一个 MP3 文件（名侦探柯南背景音乐）<br>
+查看基础信息，无诡异之处<br>
+<img src="/img/MISC/62.png" alt=""><br>
+再用 binwalk 分离文件，没有东西，<code>python3 -m binwalk --run-as=root -e 1.mp3</code><br>
+<img src="/img/MISC/63.png" alt=""><br>
+我们再查看一下音频的频谱图，没啥异常</p>
+<pre><code class="language-python">import numpy as np
+import matplotlib.pyplot as plt
+from scipy.io import wavfile
+from pydub import AudioSegment
+#1.读取 MP3 文件并转换为 WAV 格式
+audio = AudioSegment.from_file(&quot;1.mp3&quot;, format=&quot;mp3&quot;)
+audio = audio.set_channels(1)  # 转为单声道
+audio.export(&quot;temp.wav&quot;, format=&quot;wav&quot;)
+#2. 读取 WAV 文件
+fs, data = wavfile.read(&quot;temp.wav&quot;)
+#3.快速傅里叶变换（FFT）
+N = len(data)
+fft_data = np.fft.fft(data)
+freqs = np.fft.fftfreq(N, 1/fs)
+#4.只取正频部分（实信号对称）
+half_N = N // 2
+freqs = freqs[:half_N]
+amplitude = np.abs(fft_data[:half_N]) / N
+#5.绘图
+plt.figure(figsize=(10, 6))
+plt.plot(freqs, amplitude)
+plt.title(&quot;Frequency Spectrum of 1.mp3&quot;)
+plt.xlabel(&quot;Frequency (Hz)&quot;)
+plt.ylabel(&quot;Amplitude&quot;)
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+</code></pre>
+<p><img src="/img/MISC/64.png" alt=""><br>
+接着我们召唤 010editor 来分析一波，注意打开运行模块（alt+4）<br>
+咱们开始先看一个正常的 mp3 文件的模板结果注意<code>private_bit</code>,这个字段的值全都是 0，就是未经修改过的。<br>
+<img src="/img/MISC/65.png" alt=""></p>
+<div class="info-block">
+<h2>private_bit 是什么？</h2>
+<p>在 MP3 的帧头（frame header）里，有一位叫 <strong>private_bit</strong> 的字段。<br>
+它的官方定义非常简洁——甚至有点敷衍：<br>
+“这一位不被标准定义，可由编码器（或其他程序）自由使用。”<br>
+译成直白的话就是：<br>
+<strong>这是 MP3 标准留给厂商、工具、玩家的“自由位”，它没有固定用途，你想写什么就写什么。</strong><br>
+它本来 <em>不应该影响音频播放</em>。</p>
+<h2>为什么你会觉得它被“隐藏信息”使用？</h2>
+<p>因为在正常、干净、常规编码器输出的 MP3 里：<br>
+<strong>private_bit 通常保持为 0。</strong><br>
+MP3 标准允许它为 1，但常规编码器一般不会去动它，除非：</p>
+<ol>
+<li>编码器内部有自己的标识用途（非常少见）。</li>
+<li>有某个程序故意在 MP3 的每帧里塞点信息（CTF、隐写、某些 DRM、厂商私有元数据）。</li>
+<li>用于 steganography 的工具动过它（常见于 CTF 隐写题）。<br>
+你会“觉得有问题”，本质原因是：<br>
+你看到一段音频，多帧 private_bit 本应为 0，却出现大量 1，而且呈现某种规律——这是异常现象。<br>
+在音频标准里，<strong>没有任何理由让一个轻度、普通 MP3 文件把 private_bit 随机置 1</strong>。</li>
+</ol>
+</div>
+<p>接着我们打开题目的 1.mp3 文件，查看 private_bit 字段，我们可以注意到他的大多数的值都为 1，就可以猜测他在音频的帧里面隐藏了信息。<br>
+好了我们就有思路了：搞一个 python 脚本，批量扫描 MP3 文件的每帧 <code>private_bit</code> 并把 bit 流拼成二进制/ASCII。<br>
+第一帧的地址 注意“开始”的一栏 399D0<br>
+<img src="/img/MISC/66.png" alt=""><br>
+编写 python 脚本</p>
+<pre><code class="language-python">import textwrap
+list_private_bit = []
+#帧序列开头的地址
+first_frame_index = int(&quot;399D0&quot;, 16)
+with open(&quot;1.mp3&quot;, &quot;rb&quot;) as f:
+    #将文件指针移动到第一帧开头
+    f.seek(first_frame_index)
+    #因为从010Editor上看到总共有5910帧
+    for i in range(5911):
+        #每一帧的帧头部数据占4字节，而私有位和padding位恰好在第三字节的
+        data = f.read(4)[2]
+        #提取私有位并添加到列表中
+        list_private_bit.append(data &amp; 0b00000001)
+        #提取padding位 = (data &gt;&gt; 1) &amp; 0b00000001
+        #如果padding位为0，则说明该帧大小为417字节，否则为418字节；方便文件指针精准定位到下一帧的开头
+        if padding_bit == 0:
+            first_frame_index += 417
+        else:
+            first_frame_index += 418
+        f.seek(first_frame_index)
+#处理提取完成后的私有位，转为文本后输出得到flag
+list_private_bit_str = list(map(str, list_private_bit))
+bits_wrapped = textwrap.wrap(&quot;&quot;.join(list_private_bit_str), 8)
+flag = &quot;&quot;
+for words in bits_wrapped:
+    flag += chr(int(words, 2))
+print(flag)
+</code></pre>
+<p><img src="/img/MISC/67.png" alt=""><br>
+<font style="color:#D22D8D;">flag{0k4_YOu_Seem_s0_cl3ver_t0_find_f1ag!}</font></p>
+<h3>fakezip（压缩包头文件）</h3>
+<p><img src="/img/MISC/68.png" alt=""><br>
+首先下载附件，再解压，文件的时候，发现是个加密的 flag.png<br>
+<img src="/img/MISC/69.png" alt=""><br>
+我们尝试使用 fcrackzip 工具解密，<br>
+<code>fcrackzip -u -D -p /usr/share/wordlists/rockyou.txt '/root/桌面/0cb6f418-26ab-40ec-86db-ec7134b27e67.zip' </code></p>
+<div class="info-block">
+<p>用 rockyou 字典做字典攻击，且每尝试一个密码都会用 <code>unzip</code> 去验证能否成功解压。</p>
+<ul>
+<li>fcrackzip：工具名，用于破解 ZIP 文件密码（纯 CPU、单线程程序，常见于 Kali）。</li>
+<li>-u：使用 unzip 来验证密码是否正确（比仅做内部校验更可靠；会尝试解压测试）。</li>
+<li>-D：使用字典模式（dictionary attack）。配合 -p 使用。</li>
+<li>-p /usr/share/wordlists/rockyou.txt：指定字典文件（这里用 Kali 默认的 rockyou.txt）。</li>
+<li>'/root/桌面/0cb6f418-....zip'：要破解的 ZIP 文件路径（单引号是为了处理路径中的空格或特殊字符）。</li>
+</ul>
+</div>
+<p>文件已经 corrupted ，也就是损坏了<br>
+<img src="/img/MISC/70.png" alt=""><br>
+接着使用 010editor ，确认压缩包的加密是否为真（有伪加密的情况）</p>
+<div class="info-block">
+<p>补充知识点：<br>
+<img src="/img/MISC/71.png" alt=""><br>
+zip 源文件的数据区，特征码 50 4B 03 04<br>
+<img src="/img/MISC/72.png" alt=""><br>
+这是 zip 源文件的目录区，特征码 50 4B 01 02</p>
+</div>
+<p>注意到我框中的 01 了吗？数据区与目录区后面的框中的字符<br>
+都为 01，为真加密；<br>
+都为 00，为未加密；<br>
+这边举个例子，我是拿了个文本加密前后对比<br>
+<img src="/img/MISC/73.png" alt=""><br>
+真加密的压缩包，若直接更改 01 变 00，里面的内容会不正常<br>
+<img src="/img/MISC/74.png" alt=""><br>
+但是题目中的压缩包不一定了，咱们试试<br>
+<img src="/img/MISC/75.png" alt=""><br>
+<img src="/img/MISC/76.png" alt=""><br>
+就是这样的一个思路，直接可以解出 flag<br>
+<img src="/img/MISC/77.png" alt=""><br>
+<font style="color:#D22D8D;">flag{39281de6-fe64-11ea-adc1-0242ac120002}</font></p>
+<h3>Check（图片 LSB（最低有效位）隐写+HTML）</h3>
+<p><img src="/img/MISC/78.png" alt=""><br>
+下载附件，可以正常解压，是一个图片，<br>
+<img src="/img/MISC/79.png" alt=""><br>
+直接使用 010editor 查看一下，文件头与文件尾，都没问题<br>
+若任意一处不符合，则该文件要么被破坏、要么被伪装为 PNG。<br>
+<img src="/img/MISC/80.png" alt=""><br>
+使用 kali 直接使用 zsteg 工具<code>zsteg -a check.png</code></p>
+<div class="info-block">
+<p>zsteg 的工具作用<br>
+自动检测 LSB（最低有效位）隐写。<br>
+可分析隐藏在每个颜色通道（R、G、B、Alpha）的二进制信息。<br>
+能识别隐藏文本、ZIP、PNG、base64 等。</p>
+</div>
+<p>发现那条字符串的 HTML 实体：它就是 flag 的字节码。<br>
+<img src="/img/MISC/81.png" alt=""><br>
+也可以使用 windons 版的 StegSolve 进行图片分析，在 Order setting 的选项中，可以随意点（不知道的话，自己可以随意试试）然后保存去查看文件即可<br>
+<img src="/img/MISC/82.png" alt=""><br>
+这个文件中用文本打开，查看是否有可读文字<br>
+<img src="/img/MISC/83.png" alt=""><br>
+复制下来，这文字是 HTMl 编码的，也可以用随波逐流一键解码，搜索 flag/ctf/CTF/Key</p>
+<div class="info-block">
+<p>要快速判断是不是 HTML 编码：</p>
+<ul>
+<li>看有没有 <code>&amp;</code> 开头、<code>;</code> 结尾；</li>
+<li>看中间是不是 <code>#</code> 加数字，或者某种单词（lt、gt、amp 等）；</li>
+</ul>
+</div>
+<pre><code class="language-python"># decode_entities.py
+s = &quot;&amp;#x66;&amp;#x6c;&amp;#x61;&amp;#x67;&amp;#x7b;&amp;#x68;&amp;#x30;&amp;#x77;&amp;#x5f;&amp;#x34;&amp;#x62;&amp;#x6f;&amp;#x75;&amp;#x54;&amp;#x5f;&amp;#x65;&amp;#x6e;&amp;#x63;&amp;#x30;&amp;#x64;&amp;#x65;&amp;#x5f;&amp;#x34;&amp;#x6e;&amp;#x64;&amp;#x5f;&amp;#x70;&amp;#x6e;&amp;#x47;&amp;#x7d;m&quot;
+import re
+chars = re.findall(r'&amp;#x([0-9a-fA-F]+);', s)
+print(''.join(chr(int(h,16)) for h in chars))
+# 输出: flag{h0w_4bouT_enc0de_4nd_pnG}
+</code></pre>
+<p><img src="/img/MISC/84.png" alt=""><br>
+<font style="color:#D22D8D;">flag{h0w_4bouT_enc0de_4nd_pnG}</font></p>
+<h3>wire1（SQL 注入+ascii）</h3>
+<p><img src="/img/MISC/85.png" alt=""><br>
+一开始我只看到了 text/html,他也是 HTTP 流量，误打误撞的在导出的时候，发现了关于 flag 的语句，<br>
+<img src="/img/MISC/86.png" alt=""><br>
+过滤一下<code>frame contains &quot;flag&quot;</code>然后继续观察，这是一个 SQL 注入语句。</p>
+<div class="info-block">
+<p>一个小技巧<br>
+若你不清楚 wireshark 的过滤语句怎么写时，先找流量包中的疑点，然后观察这些疑点流浪包的共同点是什么，这题的共同点是 GET，那就点开这条流量包，右击 GET，选择作为过滤器，即可</p>
+</div>
+<p><img src="/img/MISC/87.png" alt=""><br>
+<code>frame contains &quot;flag&quot;</code><br>
+<img src="/img/MISC/88.png" alt=""><br>
+导出的时候，继续观察，在大小的一栏，总会在一堆 720 长度中出现 704 长度的流量包</p>
+<div class="info-block">
+<p>备注：<br>
+<code>720</code> / <code>704</code><strong>不是标准 HTTP 状态码</strong>（标准是 200、404、500 等），所以常见含义是<strong>响应长度（字节数）或抓包工具显示的数据长度</strong>。在 CTF/流量题中，你看到“注入失败 720；注入成功 704”的印象，非常符合“当条件为真/假，服务器返回的页面大小不同”这一典型现象。</p>
+</div>
+<p><img src="/img/MISC/89.png" alt=""></p>
+<div class="info-block">
+<p>请求行（SQL 注入）：<br>
+<code>GET /ctf/Less-5/?id=1'%20and%20ascii(substr((select%20flag%20from%20t),1,1))=95--+ HTTP/1.1</code><br>
+逐段解释：</p>
+<ul>
+<li><code>id=1'</code><br>
+把一个单引号插入到原来的 <code>id=1</code> 参数后，试图结束应用原本的 SQL 字符串/数值字面量，进入注入位置。</li>
+<li><code>%20</code> 是 URL 编码的空格（space）。</li>
+<li><code>and ascii(substr((select flag from t),1,1))=95</code><br>
+这是布尔判断，用来询问数据库：<strong>table <strong><code>**t**</code></strong> 中 <strong><code>**flag**</code></strong> 的第 1 个字符的 ASCII 值是否等于 95？</strong> - <code>select flag from t</code>：取出 flag（注意：如果表或列名不同，需要相应调整）。 - <code>substr(...,1,1)</code>：取第 1 个字符（不同 DBMS 关键字可能是 <code>substring()</code>、<code>substr()</code>、<code>SUBSTRING()</code> 等）。 - <code>ascii(...)</code>：返回字符的 ASCII 值（某些 DBMS 使用 <code>ascii()</code>，有些用 <code>ord()</code>）。 - <code>=95</code>：判断是否等于 95（ASCII 95 即 <code>_</code> 下划线）。</li>
+<li><code>--+</code><br>
+SQL 注释，把后面的原查询剩余部分注释掉。<code>+</code> 只是 URL 编码里的空格占位常见写法（等价于空格），也有用 <code>/*``*/</code> 等方式。</li>
+</ul>
+</div>
+<p>把注入成功的语句 704 合并在一起，进行十进制转 ascii 码，上面的注入语句有提示了。<br>
+<code>102 108 97 103 123 119 49 114 101 115 104 65 82 75 95 101 122 95 49 115 110 116 105 116 125</code><br>
+<img src="/img/MISC/90.png" alt=""><br>
+<font style="color:#D22D8D;">flag{w1reshARK_ez_1sntit}</font></p>
+<h3>Encode（解码）</h3>
+<p><img src="/img/MISC/91.png" alt=""><br>
+下载附件，是一个密文<br>
+<img src="/img/MISC/92.png" alt=""><br>
+<code>4O595954494Q32515046324757595N534R52415653334357474R4N575955544R4O5N4Q46434S4O59474253464Q5N444R4Q51334557524O5N4S424944473542554O595N44534O324R49565746515532464O49345649564O464R4R494543504N35</code><br>
+解密顺序：ROT13--&gt;base16--&gt;base32--&gt;base64--&gt;base64--&gt;base85<br>
+我密码不是很好，真的看不出来是 rot 编码，接下来就是一个 base 套娃了（题目有提示，随波逐流直接秒了）</p>
+<div class="info-block">
+<p><strong>ROT13</strong>（“rotate by 13 places”）是一种古老的、非常简单的**凯撒位移密码（Caesar cipher）**变体。<br>
+👉 原理：<br>
+把所有的 <strong>英文字母（A-Z / a-z）</strong> 在字母表中向后移动 13 位。<br>
+超过 Z 则回到 A 开始。<br>
+📌 <strong>注意</strong>：</p>
+<ul>
+<li>只对 <strong>字母</strong> 起作用；</li>
+<li><strong>数字、符号</strong>、<strong>大小写</strong> 不变；</li>
+<li>加密两次（ROT13(ROT13(x))) 会还原原文。</li>
+</ul>
+</div>
+<p><img src="/img/MISC/93.png" alt=""><br>
+<img src="/img/MISC/94.png" alt=""><br>
+<font style="color:#D22D8D;">flag{W0w_y0u_c4n_rea11y_enc0d1ng!}</font></p>
+<h3>1-misc（压缩包密码）</h3>
+<p><img src="/img/MISC/95.png" alt=""><br>
+<img src="/img/MISC/96.png" alt=""><br>
+<img src="/img/MISC/97.png" alt=""><br>
+使用 archpr 工具 直接暴力破解了，密码<code>20001228</code><br>
+<img src="/img/MISC/98.png" alt=""><br>
+输入 20001228 密码，成功揭开密码<br>
+<img src="/img/MISC/99.png" alt=""><br>
+使用 7zip 打开压缩包，这边注意到 CRC 相同，然后使用明文攻击</p>
+<div class="info-block">
+<p>CRC32（循环冗余校验，32 位）是一种常用的<strong>校验和算法</strong>，用来检测数据在传输或存储中是否被破坏。对同一字节序列，CRC32 相同==》 嵌套压缩包里出现了“<strong>相同内容的文件</strong>”被重复压缩/加密<br>
+这给攻击者提供了<strong>已知明文</strong>的机会：你已经知道（或能获得）某一份文件的明文内容，而另一份加密文件对应的就是相同的明文。<br>
+“明文攻击”是密码学里的一类攻击模型，常见类型有：</p>
+<ul>
+<li>已知明文攻击（Known-plaintext attack，KPA）：攻击者知道（或能获得）某些明文及其对应密文，利用这些对来恢复密钥或解密其它密文。</li>
+<li>选择明文攻击（Chosen-plaintext attack，CPA）：攻击者可以选择任意明文并得到其密文。</li>
+<li>选择密文攻击（Chosen-ciphertext attack，CCA）：攻击者可以提交密文并得到相应的明文（或部分信息）。<br>
+这里属于 已知明文攻击（known-plaintext）：因为你通过解出外层压缩包得到了一个明文图片（或至少得到了该图片的完整内容），而同 CRC32 的图片在另一个受保护的压缩包中对应相同的明文 → 这就是已知明文。</li>
+</ul>
+</div>
+<p><img src="/img/MISC/100.png" alt=""><br>
+注意执行明文攻击时，需要使用相同文件类型<br>
+<img src="/img/MISC/101.png" alt=""><br>
+将 fakeflag.jpg 压缩成 zip 格式，确保 CRC32 相同<br>
+<img src="/img/MISC/102.png" alt=""><br>
+一开始我使用 kali 与 7zip 压缩，都会在明文攻击时以下弹出 ARCHPR 错误<br>
+<img src="/img/MISC/103.png" alt=""><br>
+这题是使用 winrar 进行压缩，就可以成功<br>
+<img src="/img/MISC/104.png" alt=""><br>
+<img src="/img/MISC/105.png" alt=""><br>
+有提示，没有密码，那就是伪密码<br>
+<img src="/img/MISC/106.png" alt=""><br>
+直接投入 010 editor 简单修改一下，在解压出来，虽然会显示压缩包损坏，但是 flag.txt 被解压出来了<br>
+zip 源文件的数据区，特征码 50 4B 03 04<br>
+zip 源文件的目录区，特征码 50 4B 01 02<br>
+只要把头文件后面的奇数改为 00 即可，如果不知道改哪个，都去试试就行，保存文件，然后点击压缩包里的 flag 文件，若能打开 flag 就是修改成功了，不然还是会跳输入密码的弹窗的<br>
+<img src="/img/MISC/107.png" alt=""><br>
+<img src="/img/MISC/108.png" alt=""><br>
+<font style="color:#D22D8D;">flag{159c6275f0015c037e70a118f25b9a99}</font></p>
+<h3>碎纸机 11（图片合并）</h3>
+<p><img src="/img/MISC/109.png" alt=""><br>
+有 50 张图片，直接合并在一起看看<br>
+<img src="/img/MISC/110.png" alt=""><br>
+直接全选拖进去<a target="_blank" rel="noopener" href="https://cdkm.com/cn/merge-image">图片合并</a>，注意按照日期排序，自己多试试，就知道了<br>
+<img src="/img/MISC/111.png" alt=""><br>
+使用 python 合并，注意修改图片路径</p>
+<table>
+<thead>
+<tr>
+<th>模式名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mtime_asc</code></td>
+<td>按修改时间升序（旧 → 新）</td>
+</tr>
+<tr>
+<td><code>mtime_desc</code></td>
+<td>按修改时间降序（新 → 旧）</td>
+</tr>
+<tr>
+<td><code>ctime_asc</code></td>
+<td>按创建时间升序</td>
+</tr>
+<tr>
+<td><code>ctime_desc</code></td>
+<td>按创建时间降序</td>
+</tr>
+<tr>
+<td><code>size_asc</code></td>
+<td>按文件大小升序</td>
+</tr>
+<tr>
+<td><code>size_desc</code></td>
+<td>按文件大小降序</td>
+</tr>
+<tr>
+<td><code>name_asc</code></td>
+<td>按文件名字典序升序</td>
+</tr>
+<tr>
+<td><code>name_desc</code></td>
+<td>按文件名字典序降序</td>
+</tr>
+<tr>
+<td><code>numeric_name</code></td>
+<td>按文件名中的数字排序（推荐用于 1.png, 2.png, 10.png）</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">from PIL import Image
+import os
+# 定义要拼接的文件夹路径
+folder_path = './images'
+# 获取所有图片文件
+image_files = [f for f in os.listdir(folder_path) if f.lower().endswith(('.jpg', '.png'))]
+# ==============================
+# 选择排序方式（根据需要修改）
+# ==============================
+sort_mode = &quot;name_asc&quot;   # 可选项：mtime_asc / mtime_desc / name_asc / name_desc / size_asc / size_desc / ctime_asc / ctime_desc / numeric_name
+# 根据排序方式定义 key
+if sort_mode == &quot;mtime_asc&quot;:
+    # 按修改时间升序
+    key_func = lambda f: os.path.getmtime(os.path.join(folder_path, f))
+    reverse = False
+elif sort_mode == &quot;mtime_desc&quot;:
+    # 按修改时间降序
+    key_func = lambda f: os.path.getmtime(os.path.join(folder_path, f))
+    reverse = True
+elif sort_mode == &quot;ctime_asc&quot;:
+    # 按创建时间升序
+    key_func = lambda f: os.path.getctime(os.path.join(folder_path, f))
+    reverse = False
+elif sort_mode == &quot;ctime_desc&quot;:
+    # 按创建时间降序
+    key_func = lambda f: os.path.getctime(os.path.join(folder_path, f))
+    reverse = True
+elif sort_mode == &quot;size_asc&quot;:
+    # 按文件大小升序
+    key_func = lambda f: os.path.getsize(os.path.join(folder_path, f))
+    reverse = False
+elif sort_mode == &quot;size_desc&quot;:
+    # 按文件大小降序
+    key_func = lambda f: os.path.getsize(os.path.join(folder_path, f))
+    reverse = True
+elif sort_mode == &quot;name_desc&quot;:
+    # 按文件名降序
+    key_func = lambda f: f
+    reverse = True
+elif sort_mode == &quot;numeric_name&quot;:
+    # 按数字命名排序（例如 1.png, 2.png, 10.png）
+    key_func = lambda f: int(''.join(filter(str.isdigit, f)) or 0)
+    reverse = False
+else:
+    # 默认：按文件名升序
+    key_func = lambda f: f
+    reverse = False
+# 执行排序
+image_files = sorted(image_files, key=key_func, reverse=reverse)
+print(&quot;排序方式:&quot;, sort_mode)
+print(&quot;排序结果:&quot;, image_files)
+# 计算拼接后图片尺寸
+images = [Image.open(os.path.join(folder_path, img)) for img in image_files]
+widths, heights = zip(*(i.size for i in images))
+total_width = sum(widths)
+max_height = max(heights)
+# 创建新图像并拼接
+new_image = Image.new('RGB', (total_width, max_height))
+x_offset = 0
+for im in images:
+    new_image.paste(im, (x_offset, 0))
+    x_offset += im.width
+# 保存输出文件
+output_path = os.path.join(folder_path, 'out.png')
+new_image.save(output_path)
+print(f&quot;拼接完成：{output_path}&quot;)
+</code></pre>
+<p><img src="/img/MISC/112.png" alt=""><br>
+最后合并的图片展示<br>
+<img src="/img/MISC/113.png" alt=""><br>
+使用 QR Research 进行扫描<br>
+<img src="/img/MISC/114.png" alt=""><br>
+<font style="color:#D22D8D;">flag{You Can Repair A Picture From Splices Baesd On Entropy}</font></p>
+<h3>Let_god_knows（图片+Red plane）</h3>
+<p><img src="/img/MISC/115.png" alt=""><br>
+下载附件，可知是一张图片.bmp<br>
+<img src="/img/MISC/116.png" alt=""><br>
+观察图片基础属性，再用 binwalk 与 foremost 进行文件提取，未发现异常。<br>
+接着咱们使用 StegSolve 工具,进入 StegSolve 界面时，首先看一下 file Format（文件格式分析），可以看到给出提示，<br>
+Color table computed start: 36(normally 0x36, if not then possible hidden data at that point)<br>
+<img src="/img/MISC/117.png" alt=""><br>
+我们点击界面下面的箭头，一个一个观察，你会在 Red plane 0 的地方，发现“道”字上面的二维码。直接保存下来</p>
+<div class="info-block">
+<h3>Red plane 0 是什么</h3>
+<ul>
+<li>“Red plane 0” 就是 <strong>红色通道的第 0 位（最低位）</strong>。</li>
+<li>这意味着：StegSolve 显示的是每个像素的红色分量的最低一位（LSB），并把这位的值（0 或 1）渲染成黑（0）或白（1）。<br>
+很多隐写技术（LSB 隐写）就是利用了人眼对颜色微小变化不敏感的特性——<br>
+<strong>修改像素的最低一位不会影响肉眼看到的颜色，但能携带二进制信息</strong>。</li>
+</ul>
+</div>
+<p><img src="/img/MISC/118.png" alt=""><br>
+裁剪一下图片，只需要使用 CQR 工具扫描二维码即可获取 flag<br>
+<img src="/img/MISC/119.png" alt=""><br>
+<font style="color:#D22D8D;">flag{Ok@y!G0d_know5_n0w}</font></p>
+<h3>misc2-1（图片逆序输出）</h3>
+<p><img src="/img/MISC/120.png" alt=""><br>
+下载附件，一张打不开的是图片，查看基础属性，无异常<br>
+<img src="/img/MISC/121.png" alt=""><br>
+放入 010editor 中，发现反序字母，可以使用 python 脚本直接跑出来<br>
+<img src="/img/MISC/122.png" alt=""></p>
+<pre><code class="language-python"># 更安全的按块处理（不会一次性读完整个文件）
+with open('task_flag.jpg', 'rb') as fin, open('out.jpg', 'wb') as fout:
+    while True:
+        chunk = fin.read(4)        # 读最多4字节
+        if not chunk:
+            break
+        fout.write(chunk[::-1])    # 写入反转后的字节
+</code></pre>
+<pre><code class="language-python"># 以二进制模式 ('rb') 打开 task_flag.jpg，
+# 一次性把整个文件读进内存，f1 是 bytes 类型，包含整个文件内容
+f1 = open('task_flag.jpg', 'rb').read()
+f1_len = len(f1)#得到文件字节长度（整数）。
+f2 = open('out.jpg', 'ab') #以二进制追加模式 ('ab') 打开（或创建）out.jpg，写入的数据会被追加到文件末尾（如果多次运行，会不断追加）。
+i = 0
+while i &lt; f1_len:
+    #f1[i:i+4]：从 f1 中取出从 i 开始的至多 4 字节
+    #[::-1]将这段 bytes 反转（字节顺序倒置）
+    f2.write(f1[i:i+4][::-1])
+    #用 i 作为偏移，每次步进 4 字节，循环遍历 f1 的所有字节块（按 4 字节一组）。
+    i = i + 4
+f2.close()#关闭输出文件句柄。
+</code></pre>
+<p>使用 PuzzleSolver 工具进行文件逆向，他会输出一个文件夹，在其中直接可以看到 flag<br>
+<img src="/img/MISC/123.png" alt=""><br>
+<img src="/img/MISC/124.png" alt=""><br>
+我们打开逆向后的图片，可以看到正序的<code>Adobe Photoshop CS6  (Windows) 2018:10:22 10:07:45</code><br>
+<img src="/img/MISC/125.png" alt=""><br>
+<font style="color:#D22D8D;">flag{F098996689560BBB1B566EBC10D5E564}</font></p>
+</div>          
+          <nav class="post-nav">
+    
+    <a class="post-nav-item post-nav-prev" href="/2025/12/21/School/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/">
+      <div class="nav-arrow">&lt;&nbsp;NEWER</div>
+      <span class="post-title">计算机组成期末复习</span>
+    </a>
+    
+    
+    <a class="post-nav-item post-nav-next" href="/2025/11/23/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/tags%E4%B8%8Ecategories%E7%9A%843D%E9%A1%B5%E9%9D%A2/">
+      <div class="nav-arrow">OLDER&nbsp;&gt;</div>
+      <span class="post-title">tags与categories的3D页面</span>
+    </a>
+    
+  </nav>
+
+   </main>
+</div>
+
+  <footer class="footer">
+  <small class="footer_copyright">
+    <div id="bottom-inner">
+      © Site by 光田云恒<br>
+
+    </div>
+  </small>
+</footer>
+
+<!-- jQuery -->
+<script src="//cdn.bootcss.com/jquery/2.2.2/jquery.min.js"></script>
+
+<!-- Bootstrap 核心 JS -->
+<script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+
+
+    
+      <script src="/js/main.js"></script>
+    
+  
+  <script>
+    window.FPConfig = {
+      delay: 0,
+      ignoreKeywords: [],
+      maxRPS: 3,
+      hoverDelay: 50,
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+  document.body.classList.add('loaded');
+});
+
+  </script>
+</body>
+</html>

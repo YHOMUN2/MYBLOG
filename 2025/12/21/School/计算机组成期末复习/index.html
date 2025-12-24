@@ -1,0 +1,491 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <link rel='stylesheet' href='https://chinese-fonts-cdn.deno.dev/packages/lxgwwenkai/dist/LXGWWenKai-Bold/result.css' />
+  <link rel='stylesheet' href='https://chinese-fonts-cdn.deno.dev/packages/jhlst/dist/%E4%BA%AC%E8%8F%AF%E8%80%81%E5%AE%8B%E4%BD%93v2_002/result.css' />  
+  
+
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>计算机组成期末复习 [ 光田云恒 ]</title>
+
+  <link rel="icon" href="/img/favicon.ico">
+
+
+    <meta name="author" content="光田云恒">
+
+
+    <meta name="subtitle" content="技术 · 安全 · 随笔">
+
+
+    <meta name="Description" content="记录代码、渗透、随想">
+
+
+
+  <link rel="alternate" href="/atom.xml " title="光田云恒" type="application/atom+xml">
+
+
+  
+    <link rel="stylesheet" href="/css/main.css">
+  
+
+
+<!-- CbSearch 依赖 Bootstrap CSS -->
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+
+<script defer>
+  // 离开页面时标题变“光田云恒”，返回页面时标题恢复
+//   document.addEventListener('visibilitychange', function () {
+//   if (document.visibilityState == 'hidden') {
+//       normal_title = document.title;
+//       document.title = '光田云恒';
+//   } else document.title = normal_title;
+// });
+
+</script>
+  <body data-theme="light" class="notransition">
+    <script defer>
+      const body = document.body;
+      const data = body.getAttribute("data-theme");
+      const initTheme = (state) => {
+        if (state === "dark") {
+          body.setAttribute("data-theme", "dark");
+        } else if (state === "light") {
+          body.removeAttribute("data-theme");
+        } else {
+          localStorage.setItem("theme", data);
+        }
+      };
+   
+      initTheme(localStorage.getItem("theme"));
+      
+      setTimeout(() => body.classList.remove("notransition"), 75);
+    </script>
+  <div class="navbar" role="navigation">
+  <nav class="menu">
+    <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+    <label for="menu-trigger">
+      <span class="menu-icon">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 512 512"
+        >
+          <path
+            d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"
+          />
+        </svg>
+      </span>
+    </label>
+    <a id="mode">
+      <svg
+        class="mode-sunny"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 512 512"
+      >
+        <title>LIGHT</title>
+        <line
+          x1="256"
+          y1="48"
+          x2="256"
+          y2="96"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="256"
+          y1="416"
+          x2="256"
+          y2="464"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="108.92"
+          x2="369.14"
+          y2="142.86"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="369.14"
+          x2="108.92"
+          y2="403.08"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="464"
+          y1="256"
+          x2="416"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="96"
+          y1="256"
+          x2="48"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="403.08"
+          x2="369.14"
+          y2="369.14"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="142.86"
+          x2="108.92"
+          y2="108.92"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <circle
+          cx="256"
+          cy="256"
+          r="80"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+      </svg>
+      <svg
+        class="mode-moon"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 512 512"
+      >
+        <title>DARK</title>
+        <line
+          x1="256"
+          y1="48"
+          x2="256"
+          y2="96"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="256"
+          y1="416"
+          x2="256"
+          y2="464"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="108.92"
+          x2="369.14"
+          y2="142.86"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="369.14"
+          x2="108.92"
+          y2="403.08"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="464"
+          y1="256"
+          x2="416"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="96"
+          y1="256"
+          x2="48"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="403.08"
+          x2="369.14"
+          y2="369.14"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="142.86"
+          x2="108.92"
+          y2="108.92"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <circle
+          cx="256"
+          cy="256"
+          r="80"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+      </svg>
+    </a>
+    <!-- 已移除：靠近深/浅色切换的冗余搜索按钮与悬浮搜索面板（按需求可恢复） -->
+    <div class="trigger">
+      <div class="trigger-container">
+        <!-- 菜单项 -->
+            
+        <a class="menu-link " href="/"
+          > 主页</a
+        >
+            
+        <a class="menu-link " href="/tags/"
+          > 标签</a
+        >
+            
+        <a class="menu-link " href="/categories/"
+          > 类别</a
+        >
+            
+        <a class="menu-link " href="/archives/"
+          > 档案馆</a
+        >
+            
+        <a class="menu-link " href="/about/"
+          > 关于</a
+        >
+        
+      </div>
+    </div>
+  </nav>
+</div>
+
+  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up " ></i></button>
+<button id="toggleButton"><i class="fa-solid fa-chart-bar " ></i></button>
+<div id="overlay" class="overlay">
+  <div class="content">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">1、计算机系统概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">2、数据信息的表示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">3、运算方法和运算器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">4、存储系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">5、指令系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">6、中央处理器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">7、指令流水线</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">8、总线系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">9、输入输出系统</span></a></li></ol>
+    <button id="closeButton"><i class="fa-solid fa-circle-xmark"></i></button>
+  </div>
+</div>
+<div class="wrapper post">
+  <head>
+    <!-- 引入 Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <meta name="generator" content="Hexo 8.1.1"></head>
+
+
+
+  <main class="page-content" aria-label="Content">
+      <header class="header">
+        
+          <div class="tags">
+            <a href="/tags/%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/" class="tag"># 期末复习</a><a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/" class="tag"># 计算机组成</a>
+          </div>
+        
+        <h1 class="header-title" itemprop="headline">计算机组成期末复习</h1>
+          <div class="post-meta">
+            最后更新: <time>2025年12月21日</time>
+            作者: <span itemprop="author">
+              <span itemprop="name">光田云恒</span>
+            </span>
+            字数: <span class="post-count">1.8k</span>
+            预计阅读时间: <span class="post-count">6min</span> 
+          </div>       
+        </header>
+          <div class="page-content"><h3>1、计算机系统概述</h3>
+<p>冯・诺依曼计算机的特点是什么？</p>
+<div class="info-block">
+<p>1.存储程序和程序控制：<br>
+存储程序：将解题的步骤编制成程序，然后将程序和运行程序所需要的数据以二进制的形式存放到存储器中，方便执行。<br>
+程序控制：计算机中的控制器逐条取出存储器中的指令并按顺序执行，控制各功能部件进行相应的操作，完成数据的加工处理。<br>
+2.指令和数据以二进制形式存储<br>
+3.“五大部件”：存储器、控制器、控制器、输入设备、输出设备</p>
+</div>
+<p>冯诺依曼机说明各部件的功能和性能指标。<br>
+计算机系统的层次结构是如何划分的？这样划分的意义是什么？各层次在计算机系统中有什么作用？<br>
+冯诺依曼结构计算机的基本思想是什么？按此思想设计的计算机硬件系统应当由哪些部件组成？各有什么作用？</p>
+<h3>2、数据信息的表示</h3>
+<p>由 3 个 “1” 和 5 个 “0” 组成的 8 位二进制补码，能表示的最小整数是多少？为什么计算机中采用二进制进行数据的表示和运算？</p>
+<h3>3、运算方法和运算器</h3>
+<p>已知 [x] 补 = 1.1001，[y] 补 = 1.1110，用变形补码求 2 [x] 补 + 1/2 [y] 补，同时指出运算结果是否溢出。<br>
+已知 [x] 补和 [y] 补，计算下列各题。<br>
+(1)[x] 补 = 0.11011，[y] 补 = 1.01011，求 [x+y] 补和 [x-y] 补。<br>
+(2)[x] 补 = 1.01010，[y] 补 = 1.00100，求 [x+y] 补和 [x-y] 补。<br>
+移位运算和乘法及除法运算有何关系？</p>
+<h3>4、存储系统</h3>
+<p>主存的地址寄存器和数据寄存器各自的作用是什么？设一个 1MB 容量的存储器，字为32位，问:<br>
+(1) 按字节编址，地址寄存器和数据寄存器各几位？编址范围为多大？(2) 按字编址，地址寄存器和数据寄存器各几位？编址范围为多大？用一个 512Kx8 位的 Flash 存储芯片组成一个 4Mx32 位的半导体只读存储器，存储器按字编址，试回答以下问题:<br>
+(1) 该存储器的数据级数和地址线数分别为多少？<br>
+(2) 共需要几片这样的存储芯片？<br>
+(3) 说明每根地址线的作用。<br>
+什么是动态存储器？<br>
+什么是静态存储器？<br>
+计算机系统中采用层次化存储体系结构的目的是什么？其体系结构中包含什么部件？对于 32KB 容量的存储器，若按 16 位字编址，其地址寄存器应是多少位？数据寄存器是多少位？<br>
+用 4 个 32Kx8 位 SRAM 存储芯片可设计出哪几种不同容量和字长的存储器？画出相应设计图并完成与 CPU 的连接。<br>
+用 32Kx8 位 RAM 芯片和 64Kx4 位 ROM 芯片设计 256Kx8 位存储器。其中，从30000H到 3FFFFH 的地址空间为只读存储区，其他为可读、可写存储区。完成存储器与CPU的连接。<br>
+某计算机字长为 16 位，主存容量为 128Kx16 位，请用 16Kx8 位的静态RAM芯片和32Kx16 位的 ROM 芯片为该机设计一个主存储器。要求 18000H~IFFFFH 为ROM区，其余为 RAM 区。</p>
+<h3>5、指令系统</h3>
+<p>指令和数据都存在主存中，计算机是如何区分它们的？<br>
+某计算机指令系统若采用定长操作码和可变长指令码格式，请回答以下问题:<br>
+(1) 采用什么寻址方式指令码长度最短？什么寻址方式指令码长度最长？(2) 采用什么寻址方式执行速度最快？什么寻址方式执行速度最慢？(3) 若指令系统采用定长指令码格式，那么采用什么寻址方式执行速度最快？什么是定长指令和变长指令，其区别是什么？<br>
+设寄存器 R 中的数值为 1000H，地址为 1000H 的存储单元中存储的内容为2000H，地址为 2000H 的存储单元中存储的内容为 3000H，PC 的值为 4000H，问以下寻址方式下访问到的操作数的值是什么？并解释原因。<br>
+（1）寄存器寻址 R；<br>
+（2）寄存器间接寻址（R）；<br>
+（3）直接寻址 1000H；<br>
+（4）间接寻址（1000H）；<br>
+（5）相对寻址－2000H（PC）。<br>
+什么叫指令？什么叫指令系统？<br>
+计算机中为什么要设置多种操作数寻址方式？<br>
+操作数寻址方式在指令中如何表示？<br>
+基址寻址和变址寻址的作用是什么？分析它们的异同点。<br>
+指令的地址码与指令中的操作码含义有何不同？<br>
+根据操作数所在的位置，在空格处填写其寻址方式。<br>
+(1) 操作数在指令中为______寻址方式。<br>
+(2) 操作数地址 (主存) 在指令中为______寻址方式<br>
+(3) 操作数在寄存器中为______寻址方式。<br>
+(4) 操作数地址在寄存器中为______寻址方式。<br>
+某计算机字长为 16 位，运算器为 16 位，有 16 个通用寄存器，8 种寻址方式，主存为128KW, 指令中操作数地址码由寻址方式字段和寄存器号字段组成。请回答下列问题。(1) 单操作数指令最多有多少条？<br>
+(2) 双操作数指令最多有多少条？<br>
+(3) 直接寻址的范围多大？<br>
+(4) 变址寻址的范围多大？</p>
+<h3>6、中央处理器</h3>
+<p>RISC 处理器有何特点？<br>
+CPU 的基本功能是什么？从实现其功能的角度分析，它应由哪些部件组成？CPU 内部有哪些寄存器？功能分别是什么？哪些是程序员可见的？哪些是必需的？什么是取指周期？取指周期内应完成哪些操作？<br>
+计算机为什么要设置时序系统？说明指令周期、机器周期和时钟周期的含义。简述传统三级时序和现代时序的差异。<br>
+比较单周期 MIPS 处理器与多周期 MIPS 处理器的差异。<br>
+组合逻辑控制器与微程序控制器各有什么特点？</p>
+<h3>7、指令流水线</h3>
+<p>简述指令流水线的特点</p>
+<h3>8、总线系统</h3>
+<p>计算机系统为什么采用总线结构？<br>
+比较单总线、双总线、三总线结构的特点？<br>
+总线的信息传送方式有哪几种，各有什么特点？</p>
+<h3>9、输入输出系统</h3>
+<p>什么是中断？什么是中断源？常见的中断源有哪几种？<br>
+什么是 DMA?有何先进之处<br>
+中断处理过程包括哪些操作步骤？<br>
+什么是多重中断？实现多重中断的必要条件是什么？<br>
+简述中断系统中采用屏蔽的作用。<br>
+主机与各种 I/O 设备之间交换信息的方式有几种？各有何特点？<br>
+CPU 和外部设备之间如何连接？<br>
+CPU 和外部设备信息交换的控制方式有哪些？各有什么特点？</p>
+</div>          
+          <nav class="post-nav">
+    
+    
+    <a class="post-nav-item post-nav-next" href="/2025/11/23/Sundry/Misc/">
+      <div class="nav-arrow">OLDER&nbsp;&gt;</div>
+      <span class="post-title">MISC</span>
+    </a>
+    
+  </nav>
+
+   </main>
+</div>
+
+  <footer class="footer">
+  <small class="footer_copyright">
+    <div id="bottom-inner">
+      © Site by 光田云恒<br>
+
+    </div>
+  </small>
+</footer>
+
+<!-- jQuery -->
+<script src="//cdn.bootcss.com/jquery/2.2.2/jquery.min.js"></script>
+
+<!-- Bootstrap 核心 JS -->
+<script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+
+
+    
+      <script src="/js/main.js"></script>
+    
+  
+  <script>
+    window.FPConfig = {
+      delay: 0,
+      ignoreKeywords: [],
+      maxRPS: 3,
+      hoverDelay: 50,
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+  document.body.classList.add('loaded');
+});
+
+  </script>
+</body>
+</html>

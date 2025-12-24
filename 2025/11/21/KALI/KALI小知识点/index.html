@@ -1,0 +1,563 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <link rel='stylesheet' href='https://chinese-fonts-cdn.deno.dev/packages/lxgwwenkai/dist/LXGWWenKai-Bold/result.css' />
+  <link rel='stylesheet' href='https://chinese-fonts-cdn.deno.dev/packages/jhlst/dist/%E4%BA%AC%E8%8F%AF%E8%80%81%E5%AE%8B%E4%BD%93v2_002/result.css' />  
+  
+
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KALI小知识点 [ 光田云恒 ]</title>
+
+  <link rel="icon" href="/img/favicon.ico">
+
+
+    <meta name="author" content="光田云恒">
+
+
+    <meta name="subtitle" content="技术 · 安全 · 随笔">
+
+
+    <meta name="Description" content="记录代码、渗透、随想">
+
+
+
+  <link rel="alternate" href="/atom.xml " title="光田云恒" type="application/atom+xml">
+
+
+  
+    <link rel="stylesheet" href="/css/main.css">
+  
+
+
+<!-- CbSearch 依赖 Bootstrap CSS -->
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+
+<script defer>
+  // 离开页面时标题变“光田云恒”，返回页面时标题恢复
+//   document.addEventListener('visibilitychange', function () {
+//   if (document.visibilityState == 'hidden') {
+//       normal_title = document.title;
+//       document.title = '光田云恒';
+//   } else document.title = normal_title;
+// });
+
+</script>
+  <body data-theme="light" class="notransition">
+    <script defer>
+      const body = document.body;
+      const data = body.getAttribute("data-theme");
+      const initTheme = (state) => {
+        if (state === "dark") {
+          body.setAttribute("data-theme", "dark");
+        } else if (state === "light") {
+          body.removeAttribute("data-theme");
+        } else {
+          localStorage.setItem("theme", data);
+        }
+      };
+   
+      initTheme(localStorage.getItem("theme"));
+      
+      setTimeout(() => body.classList.remove("notransition"), 75);
+    </script>
+  <div class="navbar" role="navigation">
+  <nav class="menu">
+    <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+    <label for="menu-trigger">
+      <span class="menu-icon">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 512 512"
+        >
+          <path
+            d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"
+          />
+        </svg>
+      </span>
+    </label>
+    <a id="mode">
+      <svg
+        class="mode-sunny"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 512 512"
+      >
+        <title>LIGHT</title>
+        <line
+          x1="256"
+          y1="48"
+          x2="256"
+          y2="96"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="256"
+          y1="416"
+          x2="256"
+          y2="464"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="108.92"
+          x2="369.14"
+          y2="142.86"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="369.14"
+          x2="108.92"
+          y2="403.08"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="464"
+          y1="256"
+          x2="416"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="96"
+          y1="256"
+          x2="48"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="403.08"
+          x2="369.14"
+          y2="369.14"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="142.86"
+          x2="108.92"
+          y2="108.92"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <circle
+          cx="256"
+          cy="256"
+          r="80"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+      </svg>
+      <svg
+        class="mode-moon"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 512 512"
+      >
+        <title>DARK</title>
+        <line
+          x1="256"
+          y1="48"
+          x2="256"
+          y2="96"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="256"
+          y1="416"
+          x2="256"
+          y2="464"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="108.92"
+          x2="369.14"
+          y2="142.86"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="369.14"
+          x2="108.92"
+          y2="403.08"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="464"
+          y1="256"
+          x2="416"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="96"
+          y1="256"
+          x2="48"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="403.08"
+          x2="369.14"
+          y2="369.14"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="142.86"
+          x2="108.92"
+          y2="108.92"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <circle
+          cx="256"
+          cy="256"
+          r="80"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+      </svg>
+    </a>
+    <!-- 已移除：靠近深/浅色切换的冗余搜索按钮与悬浮搜索面板（按需求可恢复） -->
+    <div class="trigger">
+      <div class="trigger-container">
+        <!-- 菜单项 -->
+            
+        <a class="menu-link " href="/"
+          > 主页</a
+        >
+            
+        <a class="menu-link " href="/tags/"
+          > 标签</a
+        >
+            
+        <a class="menu-link " href="/categories/"
+          > 类别</a
+        >
+            
+        <a class="menu-link " href="/archives/"
+          > 档案馆</a
+        >
+            
+        <a class="menu-link " href="/about/"
+          > 关于</a
+        >
+        
+      </div>
+    </div>
+  </nav>
+</div>
+
+  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up " ></i></button>
+<button id="toggleButton"><i class="fa-solid fa-chart-bar " ></i></button>
+<div id="overlay" class="overlay">
+  <div class="content">
+    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-text">🧩 一、文件属性查看</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-text">🧮 二、zsteg</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-text">🔍 三、binwalk</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-text">🧰 四、outguess</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-text">🎨 五、stegsolve</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">设置 kali 中文</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">pip 与 pipx</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">kali 默认字典位置</span></a></li></ol>
+    <button id="closeButton"><i class="fa-solid fa-circle-xmark"></i></button>
+  </div>
+</div>
+<div class="wrapper post">
+  <head>
+    <!-- 引入 Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <meta name="generator" content="Hexo 8.1.1"></head>
+
+
+
+  <main class="page-content" aria-label="Content">
+      <header class="header">
+        
+          <div class="tags">
+            <a href="/tags/%E9%9A%90%E5%86%99/" class="tag"># 隐写</a><a href="/tags/dict/" class="tag"># dict</a>
+          </div>
+        
+        <h1 class="header-title" itemprop="headline">KALI小知识点</h1>
+          <div class="post-meta">
+            最后更新: <time>2025年11月25日</time>
+            作者: <span itemprop="author">
+              <span itemprop="name">光田云恒</span>
+            </span>
+            字数: <span class="post-count">1.3k</span>
+            预计阅读时间: <span class="post-count">5min</span> 
+          </div>       
+        </header>
+          <div class="page-content"><h4>🧩 一、文件属性查看</h4>
+<div class="info-block">
+<p>目的：发现最基本的线索。</p>
+<p>🔧 常用方式<br>
+file image.jpg<br>
+exiftool image.jpg<br>
+strings image.jpg | less</p>
+<p>📘 作用<br>
+file：查看文件真实格式（有时文件扩展名被伪装）。<br>
+exiftool：读取 EXIF 元数据，常用于 JPEG、PNG。可发现隐藏信息、作者、GPS、注释等。<br>
+strings：提取文件中的可打印字符串，有时能直接看到 flag 或提示。</p>
+<p>🧠 小技巧<br>
+有时 flag 会藏在 EXIF 的 Comment 或 UserComment 字段。<br>
+伪装格式的情况要重点查：比如 .jpg 实际上是 .zip。</p>
+</div>
+<h4>🧮 二、zsteg</h4>
+<div class="info-block">
+<p>用于分析 PNG、BMP 等无损图片的像素隐写。<br>
+🔧 使用方法<br>
+<code>zsteg image.png</code><br>
+<code>zsteg -a image.png</code></p>
+<p>📘 作用<br>
+自动检测 LSB（最低有效位）隐写。<br>
+可分析隐藏在每个颜色通道（R、G、B、Alpha）的二进制信息。<br>
+能识别隐藏文本、ZIP、PNG、base64 等。</p>
+<p>🧠 小技巧<br>
+zsteg -a 是自动模式，检查所有常见隐写方式。<br>
+如果是 PNG 文件 且 zsteg 没发现，说明可能不是像素隐写。</p>
+</div>
+<div class="info-block">
+<p>🪞bit-plane<br>
+一张图片的每个像素（Pixel）由几个通道组成，比如：<br>
+RGB 三通道（Red、Green、Blue）<br>
+每个通道通常是 <strong>8 位（bit）</strong>，即取值范围 0–255。<br>
+每个像素的二进制位，可以按位拆成 8 个“平面”：<br>
+<strong>第 1 位平面（bit 7）</strong>：最高位（Most Significant Bit，MSB）<br>
+<strong>第 8 位平面（bit 0）</strong>：最低位（Least Significant Bit，LSB）<br>
+<img src="/img/%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/bit-plane.png" alt=""><br>
+<strong>高位平面 (bit7-bit4)</strong>：决定图片主要明暗、颜色信息。<br>
+<strong>低位平面 (bit3-bit0)</strong>：变化较小，人眼不敏感 → 常被用来藏信息。</p>
+<p>👉 <strong>LSB 位平面（特别是 bit0 或 bit1）</strong><br>
+经常能看到隐藏的信息，例如：<br>
+隐藏文字（例如 flag、二维码）<br>
+隐藏图形、logo、另一张图片轮廓<br>
+因为隐写常常修改 LSB 位，人眼几乎看不出变化，但提取出来时很明显。</p>
+</div>
+<h4>🔍 三、binwalk</h4>
+<div class="info-block">
+<p>主要分析文件结构、分离隐藏文件。<br>
+🔧 使用方法<br>
+<code>binwalk image.jpg</code><br>
+<code>binwalk -e image.jpg  # 自动提取嵌入文件</code></p>
+<p>📘 作用<br>
+检测是否在图片中嵌入了其他文件（例如 ZIP、RAR、PNG、MP3 等）。<br>
+可提取嵌套文件（如“图片中藏压缩包”）。</p>
+<p>🧠 小技巧<br>
+如果 binwalk 提取出了 .zip、.rar、.txt 文件，要继续递归分析。<br>
+xxd 或 hexdump 可辅助查看十六进制结构。</p>
+</div>
+<h4>🧰 四、outguess</h4>
+<div class="info-block">
+<p>针对 JPEG 图片的隐写分析工具。<br>
+🔧 使用方法<br>
+<code>outguess -r image.jpg output.txt</code><br>
+（如果知道密码，可以加 -k &quot;password&quot;）</p>
+<p>📘 作用<br>
+从 JPEG 图像中提取由 OutGuess 工具隐藏的信息。<br>
+是 CTF JPEG 隐写的常用检查工具。</p>
+<p>🧠 小技巧<br>
+通常只对 JPEG 格式 有效。<br>
+如果 outguess 没结果，可以试 steghide。</p>
+</div>
+<h4>🎨 五、stegsolve</h4>
+<div class="info-block">
+<p>图像可视化分析工具（图形界面）。<br>
+🔧 启动方式<br>
+<code>java -jar StegSolve.jar</code></p>
+<p>📘 作用<br>
+可查看图像的每个颜色通道（R/G/B/A）及其组合。<br>
+可检测 LSB 隐写（通过 bit plane）。<br>
+可通过“Analyze → File Format”检查尾部额外数据。</p>
+<p>🧠 小技巧<br>
+打开后可以逐个切换通道查看隐藏文字或二维码。<br>
+“Frame Browser”可用于查看多帧 GIF。</p>
+</div>
+<h3>设置 kali 中文</h3>
+<p>编辑 /root/.profile 文件（部分按照网上教程设置中文后不生效，就是因为没有设置这一步）</p>
+<pre><code class="language-javascript">#修改前
+LANG=C
+LANGUAGE=C
+#修改后
+LANG=zh_CN.UTF-8
+LANGUAGE=zh_CN:zh
+</code></pre>
+<p><img src="/img/%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/kali-zh.png" alt=""></p>
+<h3>pip 与 pipx</h3>
+<p><strong>pip</strong> 是 Python 的默认包管理工具，用来<strong>安装、升级、卸载 Python 包</strong>。<br>
+<strong>pipx</strong> 是一个专门用于安装和运行 <strong>Python 命令行工具（CLI 应用）</strong> 的工具。<br>
+它的主要作用是：<br>
+让每个独立的命令行工具都安装在各自的隔离虚拟环境中，互不干扰。<br>
+要删除使用 pipx 安装的软件包，请使用 <code>pipx uninstall package_name</code> 命令。</p>
+<h3>kali 默认字典位置</h3>
+<p><img src="/img/%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/kali-dict.png" alt=""></p>
+<div class="info-block">
+<p>kali 默认字典位置<br>
+dirb -&gt; /usr/share/dirb/wordlists<br>
+dirbuster -&gt; /usr/share/dirbuster/wordlists<br>
+dnsmap.txt -&gt; /usr/share/dnsmap/wordlist_TLAs.txt<br>
+fasttrack.txt -&gt; /usr/share/set/src/fasttrack/wordlist.txt<br>
+fern-wifi -&gt; /usr/share/fern-wifi-cracker/extras/wordlists<br>
+john.lst -&gt; /usr/share/john/password.lst<br>
+legion -&gt; /usr/share/legion/wordlists<br>
+metasploit -&gt; /usr/share/metasploit-framework/data/wordlists<br>
+nmap.lst -&gt; /usr/share/nmap/nselib/data/passwords.lstrockyou.txt<br>
+sqlmap.txt -&gt; /usr/share/sqlmap/data/txt/wordlist.txt<br>
+wfuzz -&gt; /usr/share/wfuzz/wordlist<br>
+wifite.txt -&gt; /usr/share/dict/wordlist-probable.txt</p>
+</div>
+<div class="info-block">
+<p>常见字典：<br>
+枚举 CGI 服务<br>
+路径: ./seclists/Discovery/Web_Content/cgis.txt<br>
+用途: 用于枚举 Web 应用中的 CGI 脚本。</p>
+<p>路径枚举大字典<br>
+路径: ./seclists/Discovery/Web_Content/directory-list-2.3-medium.txt<br>
+用途: 用于路径枚举，较为全面，是 HackTheBox 和 OSCP 常用的大字典。</p>
+<p>常见目录字典<br>
+路径:<br>
+/usr/share/dirb/wordlists/common.txt<br>
+/usr/share/seclists/Discovery/Web_Content/common.txt<br>
+/usr/share/seclists/Discovery/Web_Content/raft-medium-directories-lowercase.txt<br>
+用途: 这些字典适用于常见目录的枚举，帮助发现常见的 Web 应用目录和文件。</p>
+<p>扩展名字典<br>
+路径: /usr/share/seclists/Discovery/Web_Content/raft-large-extensions.txt<br>
+用途: 用于枚举常见的文件扩展名，帮助识别网站中可能存在的文件类型。</p>
+<p>Fuzzing 字典<br>
+路径:<br>
+/usr/share/seclists/Fuzzing/alphanum-case-extra.txt<br>
+/usr/share/seclists/Fuzzing/special-chars.txt<br>
+用途: 用于 fuzz 测试时输入特殊字符，查找可能的漏洞。</p>
+<p>LFI 漏洞字典<br>
+路径: /usr/share/seclists/Fuzzing/LFI/LFI-gracefulsecurity-linux.txt<br>
+用途: 专门用于本地文件包含（LFI）漏洞的测试，帮助渗透测试人员检查目标系统是否存在文件包含漏洞。</p>
+</div>
+</div>          
+          <nav class="post-nav">
+    
+    <a class="post-nav-item post-nav-prev" href="/2025/11/21/hello-world/">
+      <div class="nav-arrow">&lt;&nbsp;NEWER</div>
+      <span class="post-title">Hello</span>
+    </a>
+    
+    
+    <a class="post-nav-item post-nav-next" href="/2025/11/21/KALI/kali%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
+      <div class="nav-arrow">OLDER&nbsp;&gt;</div>
+      <span class="post-title">Kali常用命令分类</span>
+    </a>
+    
+  </nav>
+
+   </main>
+</div>
+
+  <footer class="footer">
+  <small class="footer_copyright">
+    <div id="bottom-inner">
+      © Site by 光田云恒<br>
+
+    </div>
+  </small>
+</footer>
+
+<!-- jQuery -->
+<script src="//cdn.bootcss.com/jquery/2.2.2/jquery.min.js"></script>
+
+<!-- Bootstrap 核心 JS -->
+<script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+
+
+    
+      <script src="/js/main.js"></script>
+    
+  
+  <script>
+    window.FPConfig = {
+      delay: 0,
+      ignoreKeywords: [],
+      maxRPS: 3,
+      hoverDelay: 50,
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+  document.body.classList.add('loaded');
+});
+
+  </script>
+</body>
+</html>

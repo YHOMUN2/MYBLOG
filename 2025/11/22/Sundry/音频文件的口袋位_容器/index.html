@@ -1,0 +1,486 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <link rel='stylesheet' href='https://chinese-fonts-cdn.deno.dev/packages/lxgwwenkai/dist/LXGWWenKai-Bold/result.css' />
+  <link rel='stylesheet' href='https://chinese-fonts-cdn.deno.dev/packages/jhlst/dist/%E4%BA%AC%E8%8F%AF%E8%80%81%E5%AE%8B%E4%BD%93v2_002/result.css' />  
+  
+
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>音频文件的口袋位/容器 [ 光田云恒 ]</title>
+
+  <link rel="icon" href="/img/favicon.ico">
+
+
+    <meta name="author" content="光田云恒">
+
+
+    <meta name="subtitle" content="技术 · 安全 · 随笔">
+
+
+    <meta name="Description" content="记录代码、渗透、随想">
+
+
+
+  <link rel="alternate" href="/atom.xml " title="光田云恒" type="application/atom+xml">
+
+
+  
+    <link rel="stylesheet" href="/css/main.css">
+  
+
+
+<!-- CbSearch 依赖 Bootstrap CSS -->
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+
+<script defer>
+  // 离开页面时标题变“光田云恒”，返回页面时标题恢复
+//   document.addEventListener('visibilitychange', function () {
+//   if (document.visibilityState == 'hidden') {
+//       normal_title = document.title;
+//       document.title = '光田云恒';
+//   } else document.title = normal_title;
+// });
+
+</script>
+  <body data-theme="light" class="notransition">
+    <script defer>
+      const body = document.body;
+      const data = body.getAttribute("data-theme");
+      const initTheme = (state) => {
+        if (state === "dark") {
+          body.setAttribute("data-theme", "dark");
+        } else if (state === "light") {
+          body.removeAttribute("data-theme");
+        } else {
+          localStorage.setItem("theme", data);
+        }
+      };
+   
+      initTheme(localStorage.getItem("theme"));
+      
+      setTimeout(() => body.classList.remove("notransition"), 75);
+    </script>
+  <div class="navbar" role="navigation">
+  <nav class="menu">
+    <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+    <label for="menu-trigger">
+      <span class="menu-icon">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 512 512"
+        >
+          <path
+            d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"
+          />
+        </svg>
+      </span>
+    </label>
+    <a id="mode">
+      <svg
+        class="mode-sunny"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 512 512"
+      >
+        <title>LIGHT</title>
+        <line
+          x1="256"
+          y1="48"
+          x2="256"
+          y2="96"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="256"
+          y1="416"
+          x2="256"
+          y2="464"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="108.92"
+          x2="369.14"
+          y2="142.86"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="369.14"
+          x2="108.92"
+          y2="403.08"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="464"
+          y1="256"
+          x2="416"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="96"
+          y1="256"
+          x2="48"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="403.08"
+          x2="369.14"
+          y2="369.14"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="142.86"
+          x2="108.92"
+          y2="108.92"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <circle
+          cx="256"
+          cy="256"
+          r="80"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+      </svg>
+      <svg
+        class="mode-moon"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 512 512"
+      >
+        <title>DARK</title>
+        <line
+          x1="256"
+          y1="48"
+          x2="256"
+          y2="96"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="256"
+          y1="416"
+          x2="256"
+          y2="464"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="108.92"
+          x2="369.14"
+          y2="142.86"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="369.14"
+          x2="108.92"
+          y2="403.08"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="464"
+          y1="256"
+          x2="416"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="96"
+          y1="256"
+          x2="48"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="403.08"
+          x2="369.14"
+          y2="369.14"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="142.86"
+          x2="108.92"
+          y2="108.92"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <circle
+          cx="256"
+          cy="256"
+          r="80"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+      </svg>
+    </a>
+    <!-- 已移除：靠近深/浅色切换的冗余搜索按钮与悬浮搜索面板（按需求可恢复） -->
+    <div class="trigger">
+      <div class="trigger-container">
+        <!-- 菜单项 -->
+            
+        <a class="menu-link " href="/"
+          > 主页</a
+        >
+            
+        <a class="menu-link " href="/tags/"
+          > 标签</a
+        >
+            
+        <a class="menu-link " href="/categories/"
+          > 类别</a
+        >
+            
+        <a class="menu-link " href="/archives/"
+          > 档案馆</a
+        >
+            
+        <a class="menu-link " href="/about/"
+          > 关于</a
+        >
+        
+      </div>
+    </div>
+  </nav>
+</div>
+
+  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up " ></i></button>
+<button id="toggleButton"><i class="fa-solid fa-chart-bar " ></i></button>
+<div id="overlay" class="overlay">
+  <div class="content">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">概览（快速清单）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">1) MP3 —— private_bit 与 ID3 元数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">2) AAC（ADTS &#x2F; MP4 封装）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">3) WAV &#x2F; RIFF 容器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">4) FLAC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">5) Ogg &#x2F; Vorbis &#x2F; Opus</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">6) MP4 &#x2F; M4A（箱&#x2F;atom 结构）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">7) WMA &#x2F; ASF</span></a></li></ol></li></ol>
+    <button id="closeButton"><i class="fa-solid fa-circle-xmark"></i></button>
+  </div>
+</div>
+<div class="wrapper post">
+  <head>
+    <!-- 引入 Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <meta name="generator" content="Hexo 8.1.1"></head>
+
+
+
+  <main class="page-content" aria-label="Content">
+      <header class="header">
+        
+          <div class="tags">
+            <a href="/tags/%E9%9A%90%E5%86%99/" class="tag"># 隐写</a>
+          </div>
+        
+        <h1 class="header-title" itemprop="headline">音频文件的口袋位/容器</h1>
+          <div class="post-meta">
+            最后更新: <time>2025年11月25日</time>
+            作者: <span itemprop="author">
+              <span itemprop="name">光田云恒</span>
+            </span>
+            字数: <span class="post-count">903</span>
+            预计阅读时间: <span class="post-count">3min</span> 
+          </div>       
+        </header>
+          <div class="page-content"><h1>概览（快速清单）</h1>
+<ul>
+<li>MP3：<code>private_bit</code>（每帧 1 bit）、帧头的保留/厂商位、ID3（TXXX、COMM 等自定义帧）。</li>
+<li>AAC（ADTS）：ADTS header 的 <code>private bit</code>、<code>copyright</code>/<code>original</code> 等小位；在 MP4 容器里还可用 atoms（<code>udta</code>/<code>free</code>/<code>meta</code>/<code>ilst</code>）。</li>
+<li>WAV/RIFF：自定义 chunk（<code>LIST</code>/<code>INFO</code>/<code>JUNK</code>/自定义四字码），还有可用的 padding 区块。</li>
+<li>FLAC：metadata blocks（<code>PADDING</code>、<code>APPLICATION</code>、<code>VORBIS_COMMENT</code> 等），可放大量数据且不改动音频帧。</li>
+<li>Ogg/Opus/Vorbis：Vorbis comment（vendor + comments），以及容器 header 中未用字节。</li>
+<li>MP4/M4A：atom/box（<code>free</code>、<code>udta</code>、<code>meta</code>、<code>ilst</code> 等）用于存放任意元数据；<code>free</code>/<code>skip</code> 可作隐写空间。</li>
+<li>WMA/ASF：ASF objects（metadata objects、custom GUID/object）可以包含任意数据。<br>
+下面逐项展开，附上“为什么能隐写”、容量/可检测性、以及实操提示（如何读/写/寻找）。</li>
+</ul>
+<hr>
+<h2>1) MP3 —— <code>private_bit</code> 与 ID3 元数据</h2>
+<ul>
+<li><strong>能藏在哪里</strong>：每个 MP3 帧头里有 1 个 <code>private_bit</code>（encoder 可自由使用）；另外文件开头/结尾或独立区域的 ID3v2 标签（TXXX、COMM、自定义 frame）可以存放大量文本或二进制。</li>
+<li><strong>为什么可用</strong>：<code>private_bit</code> 不影响解码；ID3 标签属于容器级元数据，播放器通常忽略其具体内容。</li>
+<li><strong>容量</strong>：<code>private_bit</code> 很小（每帧 1 bit，约 20–50 bits/s），ID3 可放数 KB 到数 MB。</li>
+<li><strong>检测/提取</strong>：遍历帧头读取该 bit（查找 0xFFF 同步字，解析 4 字节帧头）；读取 ID3 则用 mutagen/eyeD3/ffprobe 即可。</li>
+<li><strong>风险</strong>：直接修改大量 ID3 很显眼（文件大小变、标签可见），但 <code>private_bit</code> 更隐蔽（需专门工具解析）。</li>
+</ul>
+<hr>
+<h2>2) AAC（ADTS / MP4 封装）</h2>
+<ul>
+<li><strong>能藏在哪里</strong>：
+<ul>
+<li><strong>ADTS header</strong> 有一个 <code>private bit</code>，以及若干控制位（copyright/original/home），这些位通常固定但可被利用。</li>
+<li>当 AAC 存在于 MP4/M4A 容器中时，容器的 atoms（如 <code>udta</code>、<code>free</code>、<code>meta</code>、<code>ilst</code>）是更大的隐写区。</li>
+</ul>
+</li>
+<li><strong>容量</strong>：ADTS private bit 同 MP3 每帧 1 bit；MP4 atoms 容量大（KB–MB）。</li>
+<li><strong>检测/提取</strong>：解析 ADTS 帧头（同步字查找），或用 mp4dump/ffprobe/AtomicParsley 查看 atoms。</li>
+</ul>
+<hr>
+<h2>3) WAV / RIFF 容器</h2>
+<ul>
+<li><strong>能藏在哪里</strong>：RIFF 文件由若干 chunk 组成：<code>fmt </code>、<code>data</code>、<code>LIST</code>、<code>INFO</code>、<code>JUNK</code>、自定义四字 ID chunk（fourcc）。你可以放 <code>JUNK</code> 或新增自定义 chunk，或者把信息放在 <code>LIST/INFO</code> 元数据字段。</li>
+<li><strong>优点</strong>：修改 chunk 不影响 PCM 数据的解码；播放器仍能正常播放。</li>
+<li><strong>容量</strong>：可以很大（取决于 chunk 大小），通常 KB–MB。</li>
+<li><strong>检测/提取</strong>：用 <code>xxd</code>、<code>riffinfo</code>、<code>sox</code> 或 Python 的 <code>wave</code>/<code>struct</code> 直接解析 chunk 结构查看未识别 chunk。</li>
+</ul>
+<hr>
+<h2>4) FLAC</h2>
+<ul>
+<li><strong>能藏在哪里</strong>：FLAC 的 metadata block 很灵活：<code>VORBIS_COMMENT</code>（标签），<code>PADDING</code>（可保留大量空位），<code>APPLICATION</code>（供专用程序使用）。这些都在音频编码数据前后，不改变音频帧。</li>
+<li><strong>优点</strong>：标准就支持 padding 与应用块，合法且不影响解码。</li>
+<li><strong>检测/提取</strong>：<code>metaflac --list</code> 或 FLAC API 可读出各 block；<code>PADDING</code> 可被填充自定义数据。</li>
+</ul>
+<hr>
+<h2>5) Ogg / Vorbis / Opus</h2>
+<ul>
+<li><strong>能藏在哪里</strong>：Vorbis comment（任意字段/值），以及 Ogg 页（page）头部的空字节或 vendor 字符串。Opus 在 Ogg 容器内同理。</li>
+<li><strong>优点</strong>：常用于标签/元数据，解析工具普遍支持。</li>
+<li><strong>检测/提取</strong>：<code>vorbiscomment -l</code>、<code>ogginfo</code>、或用 <code>pyogg</code>、<code>mutagen</code> 读取。</li>
+</ul>
+<hr>
+<h2>6) MP4 / M4A（箱/atom 结构）</h2>
+<ul>
+<li><strong>能藏在哪里</strong>：MP4 是基于 box/atom 的层级容器。常用的隐写点：<code>free</code>（空白）、<code>skip</code>、<code>udta</code>（user data）、<code>meta/ilst</code>（iTunes 元数据），以及任意自定义 box。</li>
+<li><strong>优点</strong>：容量大、结构化、播放器通常忽略未知 box。</li>
+<li><strong>检测/提取</strong>：<code>mp4dump</code>/<code>mp4box -diso</code>/<code>ffprobe</code> 可列出 atoms。</li>
+</ul>
+<hr>
+<h2>7) WMA / ASF</h2>
+<ul>
+<li><strong>能藏在哪里</strong>：ASF 容器的 “objects”（每个 object 有 GUID），可以存任意元数据、自定义对象或 padding。</li>
+<li><strong>检测/提取</strong>：用专门的 ASF/WMA 解析库查看 object 列表。</li>
+</ul>
+</div>          
+          <nav class="post-nav">
+    
+    <a class="post-nav-item post-nav-prev" href="/2025/11/22/PHP/PHP%E6%94%AF%E6%8C%81%E7%9A%84%E7%BC%96%E7%A0%81/">
+      <div class="nav-arrow">&lt;&nbsp;NEWER</div>
+      <span class="post-title">PHP支持的编码</span>
+    </a>
+    
+    
+    <a class="post-nav-item post-nav-next" href="/2025/11/21/Sundry/Wireshark%E8%BF%87%E6%BB%A4%E8%AF%AD%E6%B3%95/">
+      <div class="nav-arrow">OLDER&nbsp;&gt;</div>
+      <span class="post-title">Wireshark过滤语法</span>
+    </a>
+    
+  </nav>
+
+   </main>
+</div>
+
+  <footer class="footer">
+  <small class="footer_copyright">
+    <div id="bottom-inner">
+      © Site by 光田云恒<br>
+
+    </div>
+  </small>
+</footer>
+
+<!-- jQuery -->
+<script src="//cdn.bootcss.com/jquery/2.2.2/jquery.min.js"></script>
+
+<!-- Bootstrap 核心 JS -->
+<script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+
+
+    
+      <script src="/js/main.js"></script>
+    
+  
+  <script>
+    window.FPConfig = {
+      delay: 0,
+      ignoreKeywords: [],
+      maxRPS: 3,
+      hoverDelay: 50,
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+  document.body.classList.add('loaded');
+});
+
+  </script>
+</body>
+</html>

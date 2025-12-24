@@ -1,0 +1,545 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <link rel='stylesheet' href='https://chinese-fonts-cdn.deno.dev/packages/lxgwwenkai/dist/LXGWWenKai-Bold/result.css' />
+  <link rel='stylesheet' href='https://chinese-fonts-cdn.deno.dev/packages/jhlst/dist/%E4%BA%AC%E8%8F%AF%E8%80%81%E5%AE%8B%E4%BD%93v2_002/result.css' />  
+  
+
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hexo 项目结构 [ 光田云恒 ]</title>
+
+  <link rel="icon" href="/img/favicon.ico">
+
+
+    <meta name="author" content="光田云恒">
+
+
+    <meta name="subtitle" content="技术 · 安全 · 随笔">
+
+
+    <meta name="Description" content="记录代码、渗透、随想">
+
+
+
+  <link rel="alternate" href="/atom.xml " title="光田云恒" type="application/atom+xml">
+
+
+  
+    <link rel="stylesheet" href="/css/main.css">
+  
+
+
+<!-- CbSearch 依赖 Bootstrap CSS -->
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+
+<script defer>
+  // 离开页面时标题变“光田云恒”，返回页面时标题恢复
+//   document.addEventListener('visibilitychange', function () {
+//   if (document.visibilityState == 'hidden') {
+//       normal_title = document.title;
+//       document.title = '光田云恒';
+//   } else document.title = normal_title;
+// });
+
+</script>
+  <body data-theme="light" class="notransition">
+    <script defer>
+      const body = document.body;
+      const data = body.getAttribute("data-theme");
+      const initTheme = (state) => {
+        if (state === "dark") {
+          body.setAttribute("data-theme", "dark");
+        } else if (state === "light") {
+          body.removeAttribute("data-theme");
+        } else {
+          localStorage.setItem("theme", data);
+        }
+      };
+   
+      initTheme(localStorage.getItem("theme"));
+      
+      setTimeout(() => body.classList.remove("notransition"), 75);
+    </script>
+  <div class="navbar" role="navigation">
+  <nav class="menu">
+    <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+    <label for="menu-trigger">
+      <span class="menu-icon">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 512 512"
+        >
+          <path
+            d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"
+          />
+        </svg>
+      </span>
+    </label>
+    <a id="mode">
+      <svg
+        class="mode-sunny"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 512 512"
+      >
+        <title>LIGHT</title>
+        <line
+          x1="256"
+          y1="48"
+          x2="256"
+          y2="96"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="256"
+          y1="416"
+          x2="256"
+          y2="464"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="108.92"
+          x2="369.14"
+          y2="142.86"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="369.14"
+          x2="108.92"
+          y2="403.08"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="464"
+          y1="256"
+          x2="416"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="96"
+          y1="256"
+          x2="48"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="403.08"
+          x2="369.14"
+          y2="369.14"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="142.86"
+          x2="108.92"
+          y2="108.92"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <circle
+          cx="256"
+          cy="256"
+          r="80"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+      </svg>
+      <svg
+        class="mode-moon"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 512 512"
+      >
+        <title>DARK</title>
+        <line
+          x1="256"
+          y1="48"
+          x2="256"
+          y2="96"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="256"
+          y1="416"
+          x2="256"
+          y2="464"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="108.92"
+          x2="369.14"
+          y2="142.86"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="369.14"
+          x2="108.92"
+          y2="403.08"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="464"
+          y1="256"
+          x2="416"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="96"
+          y1="256"
+          x2="48"
+          y2="256"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="403.08"
+          y1="403.08"
+          x2="369.14"
+          y2="369.14"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <line
+          x1="142.86"
+          y1="142.86"
+          x2="108.92"
+          y2="108.92"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+        <circle
+          cx="256"
+          cy="256"
+          r="80"
+          style="
+            stroke-linecap: round;
+            stroke-miterlimit: 10;
+            stroke-width: 32px;
+          "
+        />
+      </svg>
+    </a>
+    <!-- 已移除：靠近深/浅色切换的冗余搜索按钮与悬浮搜索面板（按需求可恢复） -->
+    <div class="trigger">
+      <div class="trigger-container">
+        <!-- 菜单项 -->
+            
+        <a class="menu-link " href="/"
+          > 主页</a
+        >
+            
+        <a class="menu-link " href="/tags/"
+          > 标签</a
+        >
+            
+        <a class="menu-link " href="/categories/"
+          > 类别</a
+        >
+            
+        <a class="menu-link " href="/archives/"
+          > 档案馆</a
+        >
+            
+        <a class="menu-link " href="/about/"
+          > 关于</a
+        >
+        
+      </div>
+    </div>
+  </nav>
+</div>
+
+  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up " ></i></button>
+<button id="toggleButton"><i class="fa-solid fa-chart-bar " ></i></button>
+<div id="overlay" class="overlay">
+  <div class="content">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">📄 _config.yml（全局配置）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">📁 themes&#x2F;</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">📁 source&#x2F;</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">📁 scaffolds&#x2F;</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">📁 public&#x2F;</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">📁 node_modules&#x2F;</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">📄 package.json</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">📄 package-lock.json</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">📄 db.json</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">📁 .github&#x2F;</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text">📄 .gitignore</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">📌 最关键的几个你需要记住的目录</span></a></li></ol>
+    <button id="closeButton"><i class="fa-solid fa-circle-xmark"></i></button>
+  </div>
+</div>
+<div class="wrapper post">
+  <head>
+    <!-- 引入 Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <meta name="generator" content="Hexo 8.1.1"></head>
+
+
+
+  <main class="page-content" aria-label="Content">
+      <header class="header">
+        
+          <div class="tags">
+            <a href="/tags/HEXO/" class="tag"># HEXO</a><a href="/tags/BLOG/" class="tag"># BLOG</a><a href="/tags/MARKDOWN/" class="tag"># MARKDOWN</a>
+          </div>
+        
+        <h1 class="header-title" itemprop="headline">Hexo 项目结构</h1>
+          <div class="post-meta">
+            最后更新: <time>2025年11月22日</time>
+            作者: <span itemprop="author">
+              <span itemprop="name">光田云恒</span>
+            </span>
+            字数: <span class="post-count">703</span>
+            预计阅读时间: <span class="post-count">2min</span> 
+          </div>       
+        </header>
+          <div class="page-content"><h2>📄 <code>_config.yml</code>（全局配置）</h2>
+<p>这是 <strong>Hexo 主配置文件</strong>，你最常改的就是它。</p>
+<p>实际要改的典型配置：</p>
+<ul>
+<li><code>title</code> / <code>subtitle</code>：博客名</li>
+<li><code>theme</code>：你要用的主题名称</li>
+<li><code>url</code>：你部署到 GitHub Pages 或服务器时的域名</li>
+<li><code>deploy</code>: Git 部署参数</li>
+</ul>
+<p>你现在正在改 <code>theme: next</code>，就属于这里。</p>
+<hr>
+<h2>📁 <code>themes/</code></h2>
+<p>放主题的目录。</p>
+<p>每个主题就是一个独立项目，比如：</p>
+<pre><code class="language-plain">themes/
+  ├─ next/
+  ├─ yilia-plus/
+  └─ butterfly/
+</code></pre>
+<p>你只需在 <code>_config.yml</code> 写：</p>
+<pre><code class="language-plain">theme: next
+</code></pre>
+<p>就能切换主题。</p>
+<p><strong>主题不是 npm 包，是 Git 项目</strong>，所以你可以：</p>
+<pre><code class="language-plain">cd themes/next
+git pull
+</code></pre>
+<p>来更新主题。</p>
+<hr>
+<h2>📁 <code>source/</code></h2>
+<p>你的文章内容放这里。</p>
+<p>里面一般有：</p>
+<pre><code class="language-plain">source/
+  ├─ _posts/      # Markdown文章都放在这里
+  ├─ images/      # 图片
+  └─ about/       # 独立页面
+</code></pre>
+<p>当你执行：</p>
+<pre><code class="language-plain">hexo new post &quot;标题&quot;
+</code></pre>
+<p>它会自动生成：</p>
+<pre><code class="language-plain">source/_posts/标题.md
+</code></pre>
+<p>你基本 90% 时间都在改这里。</p>
+<hr>
+<h2>📁 <code>scaffolds/</code></h2>
+<p>Hexo 新建文章时用的 <strong>模板</strong>。</p>
+<p>比如你执行：</p>
+<pre><code class="language-plain">hexo new page &quot;about&quot;
+</code></pre>
+<p>它会按照 scaffolds 模板生成初始内容。</p>
+<p>你几乎不会改它，但 CTF 或自动化脚本想自定义文章头部格式时会用。</p>
+<hr>
+<h2>📁 <code>public/</code></h2>
+<p>执行：</p>
+<pre><code class="language-plain">hexo generate   # 或 hexo g
+</code></pre>
+<p>Hexo 会把整个博客编译成静态网页输出到这里。</p>
+<p>里面都是 HTML / CSS / JS 等最终结果。</p>
+<p>你部署（上传）到 GitHub Pages 或服务器时，就是把这个目录里的内容上传。</p>
+<p>你不要手动修改它，每次 hexo g 都会被覆盖。</p>
+<hr>
+<h2>📁 <code>node_modules/</code></h2>
+<p>npm 装的依赖都在这，比如：</p>
+<ul>
+<li>hexo</li>
+<li>hexo-server</li>
+<li>hexo-generator-*</li>
+<li>主题依赖</li>
+</ul>
+<p>这个目录通常几百 MB，很大。<br>
+不用管它，不要动它。</p>
+<hr>
+<h2>📄 <code>package.json</code></h2>
+<p>Hexo 项目的依赖声明文件。</p>
+<p>包含：</p>
+<ul>
+<li>hexo 的版本</li>
+<li>hexo 插件</li>
+<li>你主题需要的 npm 包</li>
+</ul>
+<p>有时主题要求你装额外插件，就会在这里出现：</p>
+<pre><code class="language-plain">&quot;hexo-renderer-marked&quot;: &quot;^5.0.0&quot;
+</code></pre>
+<hr>
+<h2>📄 <code>package-lock.json</code></h2>
+<p>npm 的锁定文件，用来保证依赖版本固定。</p>
+<p>不用管它。</p>
+<hr>
+<h2>📄 <code>db.json</code></h2>
+<p>这是 Hexo 的“缓存数据库”。</p>
+<p>存储：</p>
+<ul>
+<li>上次生成时的文件状态</li>
+<li>文章索引</li>
+<li>主题资源缓存</li>
+</ul>
+<p>当内容不更新时，Hexo 可以跳过部分生成过程，提高性能。</p>
+<p>如果你出现异常，可以删除它再重新编译：</p>
+<pre><code class="language-plain">hexo clean
+</code></pre>
+<p>Hexo 会自动重建。</p>
+<hr>
+<h2>📁 <code>.github/</code></h2>
+<p>这是 GitHub workflow 用的，自动部署（CI/CD）会用到。</p>
+<p>如果你看到它，大概率主题或 starter 模板帮你放进去的。</p>
+<hr>
+<h2>📄 <code>.gitignore</code></h2>
+<p>Git 忽略规则。<br>
+常见内容：</p>
+<pre><code class="language-plain">node_modules/
+public/
+db.json
+</code></pre>
+<p>这些不会被上传到 GitHub。</p>
+<hr>
+<h1>📌 最关键的几个你需要记住的目录</h1>
+<p>按实际使用频率排序：</p>
+<ol>
+<li><strong>source/</strong> → 你写文章的地方</li>
+<li><strong>themes/</strong> → 放主题</li>
+<li><strong>_config.yml</strong> → 配置全局设置（例如切主题）</li>
+<li><strong>public/</strong> → 生成后的最终网页（用来部署）</li>
+<li><strong>scaffolds/</strong> → 新文章模板（一般不碰）</li>
+</ol>
+<p>其它都是底层设施，不需要你手动管理。</p>
+</div>          
+          <nav class="post-nav">
+    
+    <a class="post-nav-item post-nav-prev" href="/2025/11/23/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/tags%E4%B8%8Ecategories%E7%9A%843D%E9%A1%B5%E9%9D%A2/">
+      <div class="nav-arrow">&lt;&nbsp;NEWER</div>
+      <span class="post-title">tags与categories的3D页面</span>
+    </a>
+    
+    
+    <a class="post-nav-item post-nav-next" href="/2025/11/22/PHP/PHP%E8%BF%87%E6%BB%A4/">
+      <div class="nav-arrow">OLDER&nbsp;&gt;</div>
+      <span class="post-title">PHP过滤</span>
+    </a>
+    
+  </nav>
+
+   </main>
+</div>
+
+  <footer class="footer">
+  <small class="footer_copyright">
+    <div id="bottom-inner">
+      © Site by 光田云恒<br>
+
+    </div>
+  </small>
+</footer>
+
+<!-- jQuery -->
+<script src="//cdn.bootcss.com/jquery/2.2.2/jquery.min.js"></script>
+
+<!-- Bootstrap 核心 JS -->
+<script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+
+
+    
+      <script src="/js/main.js"></script>
+    
+  
+  <script>
+    window.FPConfig = {
+      delay: 0,
+      ignoreKeywords: [],
+      maxRPS: 3,
+      hoverDelay: 50,
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+  document.body.classList.add('loaded');
+});
+
+  </script>
+</body>
+</html>
