@@ -1,162 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>KALI小知识点</title>
-    <url>/2025/11/21/KALI/KALI%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/</url>
-    <content><![CDATA[🧩 一、文件属性查看
-
-目的：发现最基本的线索。
-🔧 常用方式
-file image.jpg
-exiftool image.jpg
-strings image.jpg | less
-📘 作用
-file：查看文件真实格式（有时文件扩展名被伪装）。
-exiftool：读取 EXIF 元数据，常用于 JPEG、PNG。可发现隐藏信息、作者、GPS、注释等。
-strings：提取文件中的可打印字符串，有时能直接看到 flag 或提示。
-🧠 小技巧
-有时 flag 会藏在 EXIF 的 Comment 或 UserComment 字段。
-伪装格式的情况要重点查：比如 .jpg 实际上是 .zip。
-
-🧮 二、zsteg
-
-用于分析 PNG、BMP 等无损图片的像素隐写。
-🔧 使用方法
-zsteg image.png
-zsteg -a image.png
-📘 作用
-自动检测 LSB（最低有效位）隐写。
-可分析隐藏在每个颜色通道（R、G、B、Alpha）的二进制信息。
-能识别隐藏文本、ZIP、PNG、base64 等。
-🧠 小技巧
-zsteg -a 是自动模式，检查所有常见隐写方式。
-如果是 PNG 文件 且 zsteg 没发现，说明可能不是像素隐写。
-
-
-🪞bit-plane
-一张图片的每个像素（Pixel）由几个通道组成，比如：
-RGB 三通道（Red、Green、Blue）
-每个通道通常是 8 位（bit），即取值范围 0–255。
-每个像素的二进制位，可以按位拆成 8 个“平面”：
-第 1 位平面（bit 7）：最高位（Most Significant Bit，MSB）
-第 8 位平面（bit 0）：最低位（Least Significant Bit，LSB）
-
-高位平面 (bit7-bit4)：决定图片主要明暗、颜色信息。
-低位平面 (bit3-bit0)：变化较小，人眼不敏感 → 常被用来藏信息。
-👉 LSB 位平面（特别是 bit0 或 bit1）
-经常能看到隐藏的信息，例如：
-隐藏文字（例如 flag、二维码）
-隐藏图形、logo、另一张图片轮廓
-因为隐写常常修改 LSB 位，人眼几乎看不出变化，但提取出来时很明显。
-
-🔍 三、binwalk
-
-主要分析文件结构、分离隐藏文件。
-🔧 使用方法
-binwalk image.jpg
-binwalk -e image.jpg  # 自动提取嵌入文件
-📘 作用
-检测是否在图片中嵌入了其他文件（例如 ZIP、RAR、PNG、MP3 等）。
-可提取嵌套文件（如“图片中藏压缩包”）。
-🧠 小技巧
-如果 binwalk 提取出了 .zip、.rar、.txt 文件，要继续递归分析。
-xxd 或 hexdump 可辅助查看十六进制结构。
-
-🧰 四、outguess
-
-针对 JPEG 图片的隐写分析工具。
-🔧 使用方法
-outguess -r image.jpg output.txt
-（如果知道密码，可以加 -k &quot;password&quot;）
-📘 作用
-从 JPEG 图像中提取由 OutGuess 工具隐藏的信息。
-是 CTF JPEG 隐写的常用检查工具。
-🧠 小技巧
-通常只对 JPEG 格式 有效。
-如果 outguess 没结果，可以试 steghide。
-
-🎨 五、stegsolve
-
-图像可视化分析工具（图形界面）。
-🔧 启动方式
-java -jar StegSolve.jar
-📘 作用
-可查看图像的每个颜色通道（R/G/B/A）及其组合。
-可检测 LSB 隐写（通过 bit plane）。
-可通过“Analyze → File Format”检查尾部额外数据。
-🧠 小技巧
-打开后可以逐个切换通道查看隐藏文字或二维码。
-“Frame Browser”可用于查看多帧 GIF。
-
-设置 kali 中文
-编辑 /root/.profile 文件（部分按照网上教程设置中文后不生效，就是因为没有设置这一步）
-#修改前
-LANG=C
-LANGUAGE=C
-#修改后
-LANG=zh_CN.UTF-8
-LANGUAGE=zh_CN:zh
-
-
-pip 与 pipx
-pip 是 Python 的默认包管理工具，用来安装、升级、卸载 Python 包。
-pipx 是一个专门用于安装和运行 Python 命令行工具（CLI 应用） 的工具。
-它的主要作用是：
-让每个独立的命令行工具都安装在各自的隔离虚拟环境中，互不干扰。
-要删除使用 pipx 安装的软件包，请使用 pipx uninstall package_name 命令。
-kali 默认字典位置
-
-
-kali 默认字典位置
-dirb -&gt; /usr/share/dirb/wordlists
-dirbuster -&gt; /usr/share/dirbuster/wordlists
-dnsmap.txt -&gt; /usr/share/dnsmap/wordlist_TLAs.txt
-fasttrack.txt -&gt; /usr/share/set/src/fasttrack/wordlist.txt
-fern-wifi -&gt; /usr/share/fern-wifi-cracker/extras/wordlists
-john.lst -&gt; /usr/share/john/password.lst
-legion -&gt; /usr/share/legion/wordlists
-metasploit -&gt; /usr/share/metasploit-framework/data/wordlists
-nmap.lst -&gt; /usr/share/nmap/nselib/data/passwords.lstrockyou.txt
-sqlmap.txt -&gt; /usr/share/sqlmap/data/txt/wordlist.txt
-wfuzz -&gt; /usr/share/wfuzz/wordlist
-wifite.txt -&gt; /usr/share/dict/wordlist-probable.txt
-
-
-常见字典：
-枚举 CGI 服务
-路径: ./seclists/Discovery/Web_Content/cgis.txt
-用途: 用于枚举 Web 应用中的 CGI 脚本。
-路径枚举大字典
-路径: ./seclists/Discovery/Web_Content/directory-list-2.3-medium.txt
-用途: 用于路径枚举，较为全面，是 HackTheBox 和 OSCP 常用的大字典。
-常见目录字典
-路径:
-/usr/share/dirb/wordlists/common.txt
-/usr/share/seclists/Discovery/Web_Content/common.txt
-/usr/share/seclists/Discovery/Web_Content/raft-medium-directories-lowercase.txt
-用途: 这些字典适用于常见目录的枚举，帮助发现常见的 Web 应用目录和文件。
-扩展名字典
-路径: /usr/share/seclists/Discovery/Web_Content/raft-large-extensions.txt
-用途: 用于枚举常见的文件扩展名，帮助识别网站中可能存在的文件类型。
-Fuzzing 字典
-路径:
-/usr/share/seclists/Fuzzing/alphanum-case-extra.txt
-/usr/share/seclists/Fuzzing/special-chars.txt
-用途: 用于 fuzz 测试时输入特殊字符，查找可能的漏洞。
-LFI 漏洞字典
-路径: /usr/share/seclists/Fuzzing/LFI/LFI-gracefulsecurity-linux.txt
-用途: 专门用于本地文件包含（LFI）漏洞的测试，帮助渗透测试人员检查目标系统是否存在文件包含漏洞。
-
-]]></content>
-      <categories>
-        <category>KALI</category>
-      </categories>
-      <tags>
-        <tag>隐写</tag>
-        <tag>dict</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Hello</title>
     <url>/2025/11/21/hello-world/</url>
     <content><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
@@ -178,196 +22,6 @@ $ hexo deploy
 
 More info: Deployment
 ]]></content>
-  </entry>
-  <entry>
-    <title>PHP支持的编码</title>
-    <url>/2025/11/22/PHP/PHP%E6%94%AF%E6%8C%81%E7%9A%84%E7%BC%96%E7%A0%81/</url>
-    <content><![CDATA[The following character encodings are supported in this PHP extension
-UTF-32BE*
-UTF-32LE*
-UTF-16*
-UTF-16BE*
-UTF-16LE*
-UTF-7
-UTF7-IMAP
-UTF-8*
-ASCII*
-EUC-JP*
-SJIS*
-eucJP-win*
-SJIS-win*
-ISO-2022-JP
-ISO-2022-JP-MS
-CP932
-CP51932
-SJIS-mac (alias: MacJapanese)
-SJIS-Mobile#DOCOMO (alias: SJIS-DOCOMO)
-SJIS-Mobile#KDDI (alias: SJIS-KDDI)
-SJIS-Mobile#SOFTBANK (alias: SJIS-SOFTBANK)
-UTF-8-Mobile#DOCOMO (alias: UTF-8-DOCOMO)
-UTF-8-Mobile#KDDI-A
-UTF-8-Mobile#KDDI-B (alias: UTF-8-KDDI)
-UTF-8-Mobile#SOFTBANK (alias: UTF-8-SOFTBANK)
-ISO-2022-JP-MOBILE#KDDI (alias: ISO-2022-JP-KDDI)
-JIS
-JIS-ms
-CP50220
-CP50220raw
-CP50221
-CP50222
-ISO-8859-1*
-ISO-8859-2*
-ISO-8859-3*
-ISO-8859-4*
-ISO-8859-5*
-ISO-8859-6*
-ISO-8859-7*
-ISO-8859-8*
-ISO-8859-9*
-ISO-8859-10*
-ISO-8859-13*
-ISO-8859-14*
-ISO-8859-15*
-ISO-8859-16*
-byte2be
-byte2le
-byte4be
-byte4le
-BASE64
-HTML-ENTITIES (alias: HTML)
-7bit
-8bit
-EUC-CN*
-CP936
-GB18030
-HZ
-EUC-TW*
-CP950
-BIG-5*
-EUC-KR*
-UHC (alias: CP949)
-ISO-2022-KR
-Windows-1251 (alias: CP1251)
-Windows-1252 (alias: CP1252)
-CP866 (alias: IBM866)
-KOI8-R*
-KOI8-U*
-ArmSCII-8 (alias: ArmSCII8)
-
-]]></content>
-      <categories>
-        <category>PHP</category>
-      </categories>
-      <tags>
-        <tag>PHP</tag>
-        <tag>编码</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>PHP过滤</title>
-    <url>/2025/11/22/PHP/PHP%E8%BF%87%E6%BB%A4/</url>
-    <content><![CDATA[一、convert 系列（最常用）
-1. convert.base64-encode
-用途：读取 PHP 源码
-php://filter/read=convert.base64-encode/resource=index.php
-
-2. convert.base64-decode
-用途：写入文件时用于反向解密 payload（配合 write 模式）
-3. convert.quoted-printable-encode
-用途：输出编码后的文本，绕某些过滤器
-4. convert.quoted-printable-decode
-用途：有时用于 payload 构造（较少见）
-5. convert.iconv.*
-把字符集转换，比如：
-convert.iconv.UTF-7.UTF-8
-convert.iconv.utf-8.utf-16le
-
-用途：绕字符过滤、绕黑名单
-例子：UTF-7 绕过滤器，导致 payload “变相逃脱”过滤。
-二、string 系列（文本转换）
-6. string.rot13
-用途：输出 ROT13 变换后的文本，少见但可玩
-7. string.tolower
-用途：把文件内容全部变成小写
-例子：绕大小写过滤器
-8. string.toupper
-用途：同上，把内容变成大写
-9. string.strip_tags
-用途：移除 HTML 标签
-攻击场景有限
-10. string.strip
-用途：去掉空格等字符
-11. string.trim
-用途：裁剪前后空白字符
-这些在题目中 有时用于绕过滤器对关键字的匹配（特别是大小写敏感时）。
-三、zlib 流系列（压缩类）
-12. zlib.inflate
-用途：解压 DEFLATE
-13. zlib.deflate
-用途：压缩成 DEFLATE
-14. zlib.encode
-15. zlib.decode
-用途同上，某些服务器上有奇奇怪怪的文件压缩策略时可以利用
-四、string.__ 多字符替换系列*（很少有人知道）
-16. string.camelize
-17. string.capitalize
-18. string.lowercase
-19. string.uppercase
-这些不常用于攻击，但在绕黑名单时有奇效。
-例如黑名单禁止 &quot;php&quot;，但你可以：
-php://filter/read=string.uppercase/resource=phP.php
-
-把文件内容强制转换为大写，返回源码不受影响。
-五、特殊或冷门但可玩性极高的过滤器
-20. convert.iconv.UCS-4LE.UTF-8
-用途：字符字节分离技巧
-（在某些题目里可以利用多字节字符绕关键词检测）
-21. convert.iconv.UTF-8.UTF-7
-用途：UTF-7 常用于绕过 &lt;script&gt; 过滤或关键字过滤
-在 LFI 中有时能“变形”敏感关键字
-22. string.strip_low
-用途：去掉 ASCII &lt;32 的字符
-有时可以让 payload“洗干净”
-23. string.strip_high
-用途：去掉 ASCII &gt;127 的字符
-常用于 Unicode 绕过攻击链
-六、组合过滤器（真正的黑魔法）
-过滤器可以无限连，用 | 组合：
-php://filter/read=string.toupper|string.rot13|convert.base64-encode/resource=index.php
-
-你会得到：
-
-index.php → 转大写
-再 rot13
-最后 base64 编码输出
-
-组合可以帮助：
-
-绕 WAF
-绕黑名单
-让敏感字符变成“无害”的样子
-混淆源码
-躲避简单检测
-
-七、终极必杀技：链式 filter 评论执行绕过（真正危险）
-很多 CTF 里用：
-php://filter/string.rot13/resource=php://input
-
-配合 POST 数据 rot13 编码后的 payload：
-你就能让 PHP 执行解码后的 payload
-→ 直接 RCE
-例如 payload rot13 后变成 cevags(&quot;hello&quot;);
-（rot13 的 print）
-传入 filter → 还原成 print → 执行。
-这就是经典的 php://input RCE + filter 解码。
-]]></content>
-      <categories>
-        <category>PHP</category>
-      </categories>
-      <tags>
-        <tag>PHP</tag>
-        <tag>过滤</tag>
-      </tags>
   </entry>
   <entry>
     <title>Kali常用命令分类</title>
@@ -858,6 +512,352 @@ createdomuser 创建用户访问
       <tags>
         <tag>命令</tag>
         <tag>语法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PHP支持的编码</title>
+    <url>/2025/11/22/PHP/PHP%E6%94%AF%E6%8C%81%E7%9A%84%E7%BC%96%E7%A0%81/</url>
+    <content><![CDATA[The following character encodings are supported in this PHP extension
+UTF-32BE*
+UTF-32LE*
+UTF-16*
+UTF-16BE*
+UTF-16LE*
+UTF-7
+UTF7-IMAP
+UTF-8*
+ASCII*
+EUC-JP*
+SJIS*
+eucJP-win*
+SJIS-win*
+ISO-2022-JP
+ISO-2022-JP-MS
+CP932
+CP51932
+SJIS-mac (alias: MacJapanese)
+SJIS-Mobile#DOCOMO (alias: SJIS-DOCOMO)
+SJIS-Mobile#KDDI (alias: SJIS-KDDI)
+SJIS-Mobile#SOFTBANK (alias: SJIS-SOFTBANK)
+UTF-8-Mobile#DOCOMO (alias: UTF-8-DOCOMO)
+UTF-8-Mobile#KDDI-A
+UTF-8-Mobile#KDDI-B (alias: UTF-8-KDDI)
+UTF-8-Mobile#SOFTBANK (alias: UTF-8-SOFTBANK)
+ISO-2022-JP-MOBILE#KDDI (alias: ISO-2022-JP-KDDI)
+JIS
+JIS-ms
+CP50220
+CP50220raw
+CP50221
+CP50222
+ISO-8859-1*
+ISO-8859-2*
+ISO-8859-3*
+ISO-8859-4*
+ISO-8859-5*
+ISO-8859-6*
+ISO-8859-7*
+ISO-8859-8*
+ISO-8859-9*
+ISO-8859-10*
+ISO-8859-13*
+ISO-8859-14*
+ISO-8859-15*
+ISO-8859-16*
+byte2be
+byte2le
+byte4be
+byte4le
+BASE64
+HTML-ENTITIES (alias: HTML)
+7bit
+8bit
+EUC-CN*
+CP936
+GB18030
+HZ
+EUC-TW*
+CP950
+BIG-5*
+EUC-KR*
+UHC (alias: CP949)
+ISO-2022-KR
+Windows-1251 (alias: CP1251)
+Windows-1252 (alias: CP1252)
+CP866 (alias: IBM866)
+KOI8-R*
+KOI8-U*
+ArmSCII-8 (alias: ArmSCII8)
+
+]]></content>
+      <categories>
+        <category>PHP</category>
+      </categories>
+      <tags>
+        <tag>PHP</tag>
+        <tag>编码</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>KALI小知识点</title>
+    <url>/2025/11/21/KALI/KALI%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/</url>
+    <content><![CDATA[🧩 一、文件属性查看
+
+目的：发现最基本的线索。
+🔧 常用方式
+file image.jpg
+exiftool image.jpg
+strings image.jpg | less
+📘 作用
+file：查看文件真实格式（有时文件扩展名被伪装）。
+exiftool：读取 EXIF 元数据，常用于 JPEG、PNG。可发现隐藏信息、作者、GPS、注释等。
+strings：提取文件中的可打印字符串，有时能直接看到 flag 或提示。
+🧠 小技巧
+有时 flag 会藏在 EXIF 的 Comment 或 UserComment 字段。
+伪装格式的情况要重点查：比如 .jpg 实际上是 .zip。
+
+🧮 二、zsteg
+
+用于分析 PNG、BMP 等无损图片的像素隐写。
+🔧 使用方法
+zsteg image.png
+zsteg -a image.png
+📘 作用
+自动检测 LSB（最低有效位）隐写。
+可分析隐藏在每个颜色通道（R、G、B、Alpha）的二进制信息。
+能识别隐藏文本、ZIP、PNG、base64 等。
+🧠 小技巧
+zsteg -a 是自动模式，检查所有常见隐写方式。
+如果是 PNG 文件 且 zsteg 没发现，说明可能不是像素隐写。
+
+
+🪞bit-plane
+一张图片的每个像素（Pixel）由几个通道组成，比如：
+RGB 三通道（Red、Green、Blue）
+每个通道通常是 8 位（bit），即取值范围 0–255。
+每个像素的二进制位，可以按位拆成 8 个“平面”：
+第 1 位平面（bit 7）：最高位（Most Significant Bit，MSB）
+第 8 位平面（bit 0）：最低位（Least Significant Bit，LSB）
+
+高位平面 (bit7-bit4)：决定图片主要明暗、颜色信息。
+低位平面 (bit3-bit0)：变化较小，人眼不敏感 → 常被用来藏信息。
+👉 LSB 位平面（特别是 bit0 或 bit1）
+经常能看到隐藏的信息，例如：
+隐藏文字（例如 flag、二维码）
+隐藏图形、logo、另一张图片轮廓
+因为隐写常常修改 LSB 位，人眼几乎看不出变化，但提取出来时很明显。
+
+🔍 三、binwalk
+
+主要分析文件结构、分离隐藏文件。
+🔧 使用方法
+binwalk image.jpg
+binwalk -e image.jpg  # 自动提取嵌入文件
+📘 作用
+检测是否在图片中嵌入了其他文件（例如 ZIP、RAR、PNG、MP3 等）。
+可提取嵌套文件（如“图片中藏压缩包”）。
+🧠 小技巧
+如果 binwalk 提取出了 .zip、.rar、.txt 文件，要继续递归分析。
+xxd 或 hexdump 可辅助查看十六进制结构。
+
+🧰 四、outguess
+
+针对 JPEG 图片的隐写分析工具。
+🔧 使用方法
+outguess -r image.jpg output.txt
+（如果知道密码，可以加 -k &quot;password&quot;）
+📘 作用
+从 JPEG 图像中提取由 OutGuess 工具隐藏的信息。
+是 CTF JPEG 隐写的常用检查工具。
+🧠 小技巧
+通常只对 JPEG 格式 有效。
+如果 outguess 没结果，可以试 steghide。
+
+🎨 五、stegsolve
+
+图像可视化分析工具（图形界面）。
+🔧 启动方式
+java -jar StegSolve.jar
+📘 作用
+可查看图像的每个颜色通道（R/G/B/A）及其组合。
+可检测 LSB 隐写（通过 bit plane）。
+可通过“Analyze → File Format”检查尾部额外数据。
+🧠 小技巧
+打开后可以逐个切换通道查看隐藏文字或二维码。
+“Frame Browser”可用于查看多帧 GIF。
+
+设置 kali 中文
+编辑 /root/.profile 文件（部分按照网上教程设置中文后不生效，就是因为没有设置这一步）
+#修改前
+LANG=C
+LANGUAGE=C
+#修改后
+LANG=zh_CN.UTF-8
+LANGUAGE=zh_CN:zh
+
+
+pip 与 pipx
+pip 是 Python 的默认包管理工具，用来安装、升级、卸载 Python 包。
+pipx 是一个专门用于安装和运行 Python 命令行工具（CLI 应用） 的工具。
+它的主要作用是：
+让每个独立的命令行工具都安装在各自的隔离虚拟环境中，互不干扰。
+要删除使用 pipx 安装的软件包，请使用 pipx uninstall package_name 命令。
+kali 默认字典位置
+
+
+kali 默认字典位置
+dirb -&gt; /usr/share/dirb/wordlists
+dirbuster -&gt; /usr/share/dirbuster/wordlists
+dnsmap.txt -&gt; /usr/share/dnsmap/wordlist_TLAs.txt
+fasttrack.txt -&gt; /usr/share/set/src/fasttrack/wordlist.txt
+fern-wifi -&gt; /usr/share/fern-wifi-cracker/extras/wordlists
+john.lst -&gt; /usr/share/john/password.lst
+legion -&gt; /usr/share/legion/wordlists
+metasploit -&gt; /usr/share/metasploit-framework/data/wordlists
+nmap.lst -&gt; /usr/share/nmap/nselib/data/passwords.lstrockyou.txt
+sqlmap.txt -&gt; /usr/share/sqlmap/data/txt/wordlist.txt
+wfuzz -&gt; /usr/share/wfuzz/wordlist
+wifite.txt -&gt; /usr/share/dict/wordlist-probable.txt
+
+
+常见字典：
+枚举 CGI 服务
+路径: ./seclists/Discovery/Web_Content/cgis.txt
+用途: 用于枚举 Web 应用中的 CGI 脚本。
+路径枚举大字典
+路径: ./seclists/Discovery/Web_Content/directory-list-2.3-medium.txt
+用途: 用于路径枚举，较为全面，是 HackTheBox 和 OSCP 常用的大字典。
+常见目录字典
+路径:
+/usr/share/dirb/wordlists/common.txt
+/usr/share/seclists/Discovery/Web_Content/common.txt
+/usr/share/seclists/Discovery/Web_Content/raft-medium-directories-lowercase.txt
+用途: 这些字典适用于常见目录的枚举，帮助发现常见的 Web 应用目录和文件。
+扩展名字典
+路径: /usr/share/seclists/Discovery/Web_Content/raft-large-extensions.txt
+用途: 用于枚举常见的文件扩展名，帮助识别网站中可能存在的文件类型。
+Fuzzing 字典
+路径:
+/usr/share/seclists/Fuzzing/alphanum-case-extra.txt
+/usr/share/seclists/Fuzzing/special-chars.txt
+用途: 用于 fuzz 测试时输入特殊字符，查找可能的漏洞。
+LFI 漏洞字典
+路径: /usr/share/seclists/Fuzzing/LFI/LFI-gracefulsecurity-linux.txt
+用途: 专门用于本地文件包含（LFI）漏洞的测试，帮助渗透测试人员检查目标系统是否存在文件包含漏洞。
+
+]]></content>
+      <categories>
+        <category>KALI</category>
+      </categories>
+      <tags>
+        <tag>隐写</tag>
+        <tag>dict</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PHP过滤</title>
+    <url>/2025/11/22/PHP/PHP%E8%BF%87%E6%BB%A4/</url>
+    <content><![CDATA[一、convert 系列（最常用）
+1. convert.base64-encode
+用途：读取 PHP 源码
+php://filter/read=convert.base64-encode/resource=index.php
+
+2. convert.base64-decode
+用途：写入文件时用于反向解密 payload（配合 write 模式）
+3. convert.quoted-printable-encode
+用途：输出编码后的文本，绕某些过滤器
+4. convert.quoted-printable-decode
+用途：有时用于 payload 构造（较少见）
+5. convert.iconv.*
+把字符集转换，比如：
+convert.iconv.UTF-7.UTF-8
+convert.iconv.utf-8.utf-16le
+
+用途：绕字符过滤、绕黑名单
+例子：UTF-7 绕过滤器，导致 payload “变相逃脱”过滤。
+二、string 系列（文本转换）
+6. string.rot13
+用途：输出 ROT13 变换后的文本，少见但可玩
+7. string.tolower
+用途：把文件内容全部变成小写
+例子：绕大小写过滤器
+8. string.toupper
+用途：同上，把内容变成大写
+9. string.strip_tags
+用途：移除 HTML 标签
+攻击场景有限
+10. string.strip
+用途：去掉空格等字符
+11. string.trim
+用途：裁剪前后空白字符
+这些在题目中 有时用于绕过滤器对关键字的匹配（特别是大小写敏感时）。
+三、zlib 流系列（压缩类）
+12. zlib.inflate
+用途：解压 DEFLATE
+13. zlib.deflate
+用途：压缩成 DEFLATE
+14. zlib.encode
+15. zlib.decode
+用途同上，某些服务器上有奇奇怪怪的文件压缩策略时可以利用
+四、string.__ 多字符替换系列*（很少有人知道）
+16. string.camelize
+17. string.capitalize
+18. string.lowercase
+19. string.uppercase
+这些不常用于攻击，但在绕黑名单时有奇效。
+例如黑名单禁止 &quot;php&quot;，但你可以：
+php://filter/read=string.uppercase/resource=phP.php
+
+把文件内容强制转换为大写，返回源码不受影响。
+五、特殊或冷门但可玩性极高的过滤器
+20. convert.iconv.UCS-4LE.UTF-8
+用途：字符字节分离技巧
+（在某些题目里可以利用多字节字符绕关键词检测）
+21. convert.iconv.UTF-8.UTF-7
+用途：UTF-7 常用于绕过 &lt;script&gt; 过滤或关键字过滤
+在 LFI 中有时能“变形”敏感关键字
+22. string.strip_low
+用途：去掉 ASCII &lt;32 的字符
+有时可以让 payload“洗干净”
+23. string.strip_high
+用途：去掉 ASCII &gt;127 的字符
+常用于 Unicode 绕过攻击链
+六、组合过滤器（真正的黑魔法）
+过滤器可以无限连，用 | 组合：
+php://filter/read=string.toupper|string.rot13|convert.base64-encode/resource=index.php
+
+你会得到：
+
+index.php → 转大写
+再 rot13
+最后 base64 编码输出
+
+组合可以帮助：
+
+绕 WAF
+绕黑名单
+让敏感字符变成“无害”的样子
+混淆源码
+躲避简单检测
+
+七、终极必杀技：链式 filter 评论执行绕过（真正危险）
+很多 CTF 里用：
+php://filter/string.rot13/resource=php://input
+
+配合 POST 数据 rot13 编码后的 payload：
+你就能让 PHP 执行解码后的 payload
+→ 直接 RCE
+例如 payload rot13 后变成 cevags(&quot;hello&quot;);
+（rot13 的 print）
+传入 filter → 还原成 print → 执行。
+这就是经典的 php://input RCE + filter 解码。
+]]></content>
+      <categories>
+        <category>PHP</category>
+      </categories>
+      <tags>
+        <tag>PHP</tag>
+        <tag>过滤</tag>
       </tags>
   </entry>
   <entry>
@@ -1715,6 +1715,95 @@ flag{F098996689560BBB1B566EBC10D5E564}
       </tags>
   </entry>
   <entry>
+    <title>计算机组成期末复习</title>
+    <url>/2025/12/21/School/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/</url>
+    <content><![CDATA[1、计算机系统概述
+冯・诺依曼计算机的特点是什么？
+
+1.存储程序和程序控制：
+存储程序：将解题的步骤编制成程序，然后将程序和运行程序所需要的数据以二进制的形式存放到存储器中，方便执行。
+程序控制：计算机中的控制器逐条取出存储器中的指令并按顺序执行，控制各功能部件进行相应的操作，完成数据的加工处理。
+2.指令和数据以二进制形式存储
+3.“五大部件”：存储器、控制器、控制器、输入设备、输出设备
+
+冯诺依曼机说明各部件的功能和性能指标。
+计算机系统的层次结构是如何划分的？这样划分的意义是什么？各层次在计算机系统中有什么作用？
+冯诺依曼结构计算机的基本思想是什么？按此思想设计的计算机硬件系统应当由哪些部件组成？各有什么作用？
+2、数据信息的表示
+由 3 个 “1” 和 5 个 “0” 组成的 8 位二进制补码，能表示的最小整数是多少？为什么计算机中采用二进制进行数据的表示和运算？
+3、运算方法和运算器
+已知 [x] 补 = 1.1001，[y] 补 = 1.1110，用变形补码求 2 [x] 补 + 1/2 [y] 补，同时指出运算结果是否溢出。
+已知 [x] 补和 [y] 补，计算下列各题。
+(1)[x] 补 = 0.11011，[y] 补 = 1.01011，求 [x+y] 补和 [x-y] 补。
+(2)[x] 补 = 1.01010，[y] 补 = 1.00100，求 [x+y] 补和 [x-y] 补。
+移位运算和乘法及除法运算有何关系？
+4、存储系统
+主存的地址寄存器和数据寄存器各自的作用是什么？设一个 1MB 容量的存储器，字为32位，问:
+(1) 按字节编址，地址寄存器和数据寄存器各几位？编址范围为多大？(2) 按字编址，地址寄存器和数据寄存器各几位？编址范围为多大？用一个 512Kx8 位的 Flash 存储芯片组成一个 4Mx32 位的半导体只读存储器，存储器按字编址，试回答以下问题:
+(1) 该存储器的数据级数和地址线数分别为多少？
+(2) 共需要几片这样的存储芯片？
+(3) 说明每根地址线的作用。
+什么是动态存储器？
+什么是静态存储器？
+计算机系统中采用层次化存储体系结构的目的是什么？其体系结构中包含什么部件？对于 32KB 容量的存储器，若按 16 位字编址，其地址寄存器应是多少位？数据寄存器是多少位？
+用 4 个 32Kx8 位 SRAM 存储芯片可设计出哪几种不同容量和字长的存储器？画出相应设计图并完成与 CPU 的连接。
+用 32Kx8 位 RAM 芯片和 64Kx4 位 ROM 芯片设计 256Kx8 位存储器。其中，从30000H到 3FFFFH 的地址空间为只读存储区，其他为可读、可写存储区。完成存储器与CPU的连接。
+某计算机字长为 16 位，主存容量为 128Kx16 位，请用 16Kx8 位的静态RAM芯片和32Kx16 位的 ROM 芯片为该机设计一个主存储器。要求 18000H~IFFFFH 为ROM区，其余为 RAM 区。
+5、指令系统
+指令和数据都存在主存中，计算机是如何区分它们的？
+某计算机指令系统若采用定长操作码和可变长指令码格式，请回答以下问题:
+(1) 采用什么寻址方式指令码长度最短？什么寻址方式指令码长度最长？(2) 采用什么寻址方式执行速度最快？什么寻址方式执行速度最慢？(3) 若指令系统采用定长指令码格式，那么采用什么寻址方式执行速度最快？什么是定长指令和变长指令，其区别是什么？
+设寄存器 R 中的数值为 1000H，地址为 1000H 的存储单元中存储的内容为2000H，地址为 2000H 的存储单元中存储的内容为 3000H，PC 的值为 4000H，问以下寻址方式下访问到的操作数的值是什么？并解释原因。
+（1）寄存器寻址 R；
+（2）寄存器间接寻址（R）；
+（3）直接寻址 1000H；
+（4）间接寻址（1000H）；
+（5）相对寻址－2000H（PC）。
+什么叫指令？什么叫指令系统？
+计算机中为什么要设置多种操作数寻址方式？
+操作数寻址方式在指令中如何表示？
+基址寻址和变址寻址的作用是什么？分析它们的异同点。
+指令的地址码与指令中的操作码含义有何不同？
+根据操作数所在的位置，在空格处填写其寻址方式。
+(1) 操作数在指令中为______寻址方式。
+(2) 操作数地址 (主存) 在指令中为______寻址方式
+(3) 操作数在寄存器中为______寻址方式。
+(4) 操作数地址在寄存器中为______寻址方式。
+某计算机字长为 16 位，运算器为 16 位，有 16 个通用寄存器，8 种寻址方式，主存为128KW, 指令中操作数地址码由寻址方式字段和寄存器号字段组成。请回答下列问题。(1) 单操作数指令最多有多少条？
+(2) 双操作数指令最多有多少条？
+(3) 直接寻址的范围多大？
+(4) 变址寻址的范围多大？
+6、中央处理器
+RISC 处理器有何特点？
+CPU 的基本功能是什么？从实现其功能的角度分析，它应由哪些部件组成？CPU 内部有哪些寄存器？功能分别是什么？哪些是程序员可见的？哪些是必需的？什么是取指周期？取指周期内应完成哪些操作？
+计算机为什么要设置时序系统？说明指令周期、机器周期和时钟周期的含义。简述传统三级时序和现代时序的差异。
+比较单周期 MIPS 处理器与多周期 MIPS 处理器的差异。
+组合逻辑控制器与微程序控制器各有什么特点？
+7、指令流水线
+简述指令流水线的特点
+8、总线系统
+计算机系统为什么采用总线结构？
+比较单总线、双总线、三总线结构的特点？
+总线的信息传送方式有哪几种，各有什么特点？
+9、输入输出系统
+什么是中断？什么是中断源？常见的中断源有哪几种？
+什么是 DMA?有何先进之处
+中断处理过程包括哪些操作步骤？
+什么是多重中断？实现多重中断的必要条件是什么？
+简述中断系统中采用屏蔽的作用。
+主机与各种 I/O 设备之间交换信息的方式有几种？各有何特点？
+CPU 和外部设备之间如何连接？
+CPU 和外部设备信息交换的控制方式有哪些？各有什么特点？
+]]></content>
+      <categories>
+        <category>计算机组成</category>
+      </categories>
+      <tags>
+        <tag>期末复习</tag>
+        <tag>计算机组成</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Wireshark过滤语法</title>
     <url>/2025/11/21/Sundry/Wireshark%E8%BF%87%E6%BB%A4%E8%AF%AD%E6%B3%95/</url>
     <content><![CDATA[1. 捕获过滤器（Capture Filter）详解
@@ -2027,9 +2116,9 @@ Wireshark 支持变量绑定和条件过滤，可在高级脚本和命令行用�
         <category>Wireshark</category>
       </categories>
       <tags>
-        <tag>过滤</tag>
         <tag>命令</tag>
         <tag>语法</tag>
+        <tag>过滤</tag>
       </tags>
   </entry>
   <entry>
@@ -2108,95 +2197,6 @@ ADTS header 有一个 private bit，以及若干控制位（copyright/original/h
       </categories>
       <tags>
         <tag>隐写</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>计算机组成期末复习</title>
-    <url>/2025/12/21/School/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/</url>
-    <content><![CDATA[1、计算机系统概述
-冯・诺依曼计算机的特点是什么？
-
-1.存储程序和程序控制：
-存储程序：将解题的步骤编制成程序，然后将程序和运行程序所需要的数据以二进制的形式存放到存储器中，方便执行。
-程序控制：计算机中的控制器逐条取出存储器中的指令并按顺序执行，控制各功能部件进行相应的操作，完成数据的加工处理。
-2.指令和数据以二进制形式存储
-3.“五大部件”：存储器、控制器、控制器、输入设备、输出设备
-
-冯诺依曼机说明各部件的功能和性能指标。
-计算机系统的层次结构是如何划分的？这样划分的意义是什么？各层次在计算机系统中有什么作用？
-冯诺依曼结构计算机的基本思想是什么？按此思想设计的计算机硬件系统应当由哪些部件组成？各有什么作用？
-2、数据信息的表示
-由 3 个 “1” 和 5 个 “0” 组成的 8 位二进制补码，能表示的最小整数是多少？为什么计算机中采用二进制进行数据的表示和运算？
-3、运算方法和运算器
-已知 [x] 补 = 1.1001，[y] 补 = 1.1110，用变形补码求 2 [x] 补 + 1/2 [y] 补，同时指出运算结果是否溢出。
-已知 [x] 补和 [y] 补，计算下列各题。
-(1)[x] 补 = 0.11011，[y] 补 = 1.01011，求 [x+y] 补和 [x-y] 补。
-(2)[x] 补 = 1.01010，[y] 补 = 1.00100，求 [x+y] 补和 [x-y] 补。
-移位运算和乘法及除法运算有何关系？
-4、存储系统
-主存的地址寄存器和数据寄存器各自的作用是什么？设一个 1MB 容量的存储器，字为32位，问:
-(1) 按字节编址，地址寄存器和数据寄存器各几位？编址范围为多大？(2) 按字编址，地址寄存器和数据寄存器各几位？编址范围为多大？用一个 512Kx8 位的 Flash 存储芯片组成一个 4Mx32 位的半导体只读存储器，存储器按字编址，试回答以下问题:
-(1) 该存储器的数据级数和地址线数分别为多少？
-(2) 共需要几片这样的存储芯片？
-(3) 说明每根地址线的作用。
-什么是动态存储器？
-什么是静态存储器？
-计算机系统中采用层次化存储体系结构的目的是什么？其体系结构中包含什么部件？对于 32KB 容量的存储器，若按 16 位字编址，其地址寄存器应是多少位？数据寄存器是多少位？
-用 4 个 32Kx8 位 SRAM 存储芯片可设计出哪几种不同容量和字长的存储器？画出相应设计图并完成与 CPU 的连接。
-用 32Kx8 位 RAM 芯片和 64Kx4 位 ROM 芯片设计 256Kx8 位存储器。其中，从30000H到 3FFFFH 的地址空间为只读存储区，其他为可读、可写存储区。完成存储器与CPU的连接。
-某计算机字长为 16 位，主存容量为 128Kx16 位，请用 16Kx8 位的静态RAM芯片和32Kx16 位的 ROM 芯片为该机设计一个主存储器。要求 18000H~IFFFFH 为ROM区，其余为 RAM 区。
-5、指令系统
-指令和数据都存在主存中，计算机是如何区分它们的？
-某计算机指令系统若采用定长操作码和可变长指令码格式，请回答以下问题:
-(1) 采用什么寻址方式指令码长度最短？什么寻址方式指令码长度最长？(2) 采用什么寻址方式执行速度最快？什么寻址方式执行速度最慢？(3) 若指令系统采用定长指令码格式，那么采用什么寻址方式执行速度最快？什么是定长指令和变长指令，其区别是什么？
-设寄存器 R 中的数值为 1000H，地址为 1000H 的存储单元中存储的内容为2000H，地址为 2000H 的存储单元中存储的内容为 3000H，PC 的值为 4000H，问以下寻址方式下访问到的操作数的值是什么？并解释原因。
-（1）寄存器寻址 R；
-（2）寄存器间接寻址（R）；
-（3）直接寻址 1000H；
-（4）间接寻址（1000H）；
-（5）相对寻址－2000H（PC）。
-什么叫指令？什么叫指令系统？
-计算机中为什么要设置多种操作数寻址方式？
-操作数寻址方式在指令中如何表示？
-基址寻址和变址寻址的作用是什么？分析它们的异同点。
-指令的地址码与指令中的操作码含义有何不同？
-根据操作数所在的位置，在空格处填写其寻址方式。
-(1) 操作数在指令中为______寻址方式。
-(2) 操作数地址 (主存) 在指令中为______寻址方式
-(3) 操作数在寄存器中为______寻址方式。
-(4) 操作数地址在寄存器中为______寻址方式。
-某计算机字长为 16 位，运算器为 16 位，有 16 个通用寄存器，8 种寻址方式，主存为128KW, 指令中操作数地址码由寻址方式字段和寄存器号字段组成。请回答下列问题。(1) 单操作数指令最多有多少条？
-(2) 双操作数指令最多有多少条？
-(3) 直接寻址的范围多大？
-(4) 变址寻址的范围多大？
-6、中央处理器
-RISC 处理器有何特点？
-CPU 的基本功能是什么？从实现其功能的角度分析，它应由哪些部件组成？CPU 内部有哪些寄存器？功能分别是什么？哪些是程序员可见的？哪些是必需的？什么是取指周期？取指周期内应完成哪些操作？
-计算机为什么要设置时序系统？说明指令周期、机器周期和时钟周期的含义。简述传统三级时序和现代时序的差异。
-比较单周期 MIPS 处理器与多周期 MIPS 处理器的差异。
-组合逻辑控制器与微程序控制器各有什么特点？
-7、指令流水线
-简述指令流水线的特点
-8、总线系统
-计算机系统为什么采用总线结构？
-比较单总线、双总线、三总线结构的特点？
-总线的信息传送方式有哪几种，各有什么特点？
-9、输入输出系统
-什么是中断？什么是中断源？常见的中断源有哪几种？
-什么是 DMA?有何先进之处
-中断处理过程包括哪些操作步骤？
-什么是多重中断？实现多重中断的必要条件是什么？
-简述中断系统中采用屏蔽的作用。
-主机与各种 I/O 设备之间交换信息的方式有几种？各有何特点？
-CPU 和外部设备之间如何连接？
-CPU 和外部设备信息交换的控制方式有哪些？各有什么特点？
-]]></content>
-      <categories>
-        <category>计算机组成</category>
-      </categories>
-      <tags>
-        <tag>期末复习</tag>
-        <tag>计算机组成</tag>
       </tags>
   </entry>
   <entry>
