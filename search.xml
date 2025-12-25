@@ -24,246 +24,6 @@ More info: Deployment
 ]]></content>
   </entry>
   <entry>
-    <title>PHP支持的编码</title>
-    <url>/MYBLOG/2025/11/22/PHP/PHP%E6%94%AF%E6%8C%81%E7%9A%84%E7%BC%96%E7%A0%81/</url>
-    <content><![CDATA[The following character encodings are supported in this PHP extension
-UTF-32BE*
-UTF-32LE*
-UTF-16*
-UTF-16BE*
-UTF-16LE*
-UTF-7
-UTF7-IMAP
-UTF-8*
-ASCII*
-EUC-JP*
-SJIS*
-eucJP-win*
-SJIS-win*
-ISO-2022-JP
-ISO-2022-JP-MS
-CP932
-CP51932
-SJIS-mac (alias: MacJapanese)
-SJIS-Mobile#DOCOMO (alias: SJIS-DOCOMO)
-SJIS-Mobile#KDDI (alias: SJIS-KDDI)
-SJIS-Mobile#SOFTBANK (alias: SJIS-SOFTBANK)
-UTF-8-Mobile#DOCOMO (alias: UTF-8-DOCOMO)
-UTF-8-Mobile#KDDI-A
-UTF-8-Mobile#KDDI-B (alias: UTF-8-KDDI)
-UTF-8-Mobile#SOFTBANK (alias: UTF-8-SOFTBANK)
-ISO-2022-JP-MOBILE#KDDI (alias: ISO-2022-JP-KDDI)
-JIS
-JIS-ms
-CP50220
-CP50220raw
-CP50221
-CP50222
-ISO-8859-1*
-ISO-8859-2*
-ISO-8859-3*
-ISO-8859-4*
-ISO-8859-5*
-ISO-8859-6*
-ISO-8859-7*
-ISO-8859-8*
-ISO-8859-9*
-ISO-8859-10*
-ISO-8859-13*
-ISO-8859-14*
-ISO-8859-15*
-ISO-8859-16*
-byte2be
-byte2le
-byte4be
-byte4le
-BASE64
-HTML-ENTITIES (alias: HTML)
-7bit
-8bit
-EUC-CN*
-CP936
-GB18030
-HZ
-EUC-TW*
-CP950
-BIG-5*
-EUC-KR*
-UHC (alias: CP949)
-ISO-2022-KR
-Windows-1251 (alias: CP1251)
-Windows-1252 (alias: CP1252)
-CP866 (alias: IBM866)
-KOI8-R*
-KOI8-U*
-ArmSCII-8 (alias: ArmSCII8)
-
-]]></content>
-      <categories>
-        <category>PHP</category>
-      </categories>
-      <tags>
-        <tag>PHP</tag>
-        <tag>编码</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>KALI小知识点</title>
-    <url>/MYBLOG/2025/11/21/KALI/KALI%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/</url>
-    <content><![CDATA[🧩 一、文件属性查看
-
-目的：发现最基本的线索。
-🔧 常用方式
-file image.jpg
-exiftool image.jpg
-strings image.jpg | less
-📘 作用
-file：查看文件真实格式（有时文件扩展名被伪装）。
-exiftool：读取 EXIF 元数据，常用于 JPEG、PNG。可发现隐藏信息、作者、GPS、注释等。
-strings：提取文件中的可打印字符串，有时能直接看到 flag 或提示。
-🧠 小技巧
-有时 flag 会藏在 EXIF 的 Comment 或 UserComment 字段。
-伪装格式的情况要重点查：比如 .jpg 实际上是 .zip。
-
-🧮 二、zsteg
-
-用于分析 PNG、BMP 等无损图片的像素隐写。
-🔧 使用方法
-zsteg image.png
-zsteg -a image.png
-📘 作用
-自动检测 LSB（最低有效位）隐写。
-可分析隐藏在每个颜色通道（R、G、B、Alpha）的二进制信息。
-能识别隐藏文本、ZIP、PNG、base64 等。
-🧠 小技巧
-zsteg -a 是自动模式，检查所有常见隐写方式。
-如果是 PNG 文件 且 zsteg 没发现，说明可能不是像素隐写。
-
-
-🪞bit-plane
-一张图片的每个像素（Pixel）由几个通道组成，比如：
-RGB 三通道（Red、Green、Blue）
-每个通道通常是 8 位（bit），即取值范围 0–255。
-每个像素的二进制位，可以按位拆成 8 个“平面”：
-第 1 位平面（bit 7）：最高位（Most Significant Bit，MSB）
-第 8 位平面（bit 0）：最低位（Least Significant Bit，LSB）
-
-高位平面 (bit7-bit4)：决定图片主要明暗、颜色信息。
-低位平面 (bit3-bit0)：变化较小，人眼不敏感 → 常被用来藏信息。
-👉 LSB 位平面（特别是 bit0 或 bit1）
-经常能看到隐藏的信息，例如：
-隐藏文字（例如 flag、二维码）
-隐藏图形、logo、另一张图片轮廓
-因为隐写常常修改 LSB 位，人眼几乎看不出变化，但提取出来时很明显。
-
-🔍 三、binwalk
-
-主要分析文件结构、分离隐藏文件。
-🔧 使用方法
-binwalk image.jpg
-binwalk -e image.jpg  # 自动提取嵌入文件
-📘 作用
-检测是否在图片中嵌入了其他文件（例如 ZIP、RAR、PNG、MP3 等）。
-可提取嵌套文件（如“图片中藏压缩包”）。
-🧠 小技巧
-如果 binwalk 提取出了 .zip、.rar、.txt 文件，要继续递归分析。
-xxd 或 hexdump 可辅助查看十六进制结构。
-
-🧰 四、outguess
-
-针对 JPEG 图片的隐写分析工具。
-🔧 使用方法
-outguess -r image.jpg output.txt
-（如果知道密码，可以加 -k &quot;password&quot;）
-📘 作用
-从 JPEG 图像中提取由 OutGuess 工具隐藏的信息。
-是 CTF JPEG 隐写的常用检查工具。
-🧠 小技巧
-通常只对 JPEG 格式 有效。
-如果 outguess 没结果，可以试 steghide。
-
-🎨 五、stegsolve
-
-图像可视化分析工具（图形界面）。
-🔧 启动方式
-java -jar StegSolve.jar
-📘 作用
-可查看图像的每个颜色通道（R/G/B/A）及其组合。
-可检测 LSB 隐写（通过 bit plane）。
-可通过“Analyze → File Format”检查尾部额外数据。
-🧠 小技巧
-打开后可以逐个切换通道查看隐藏文字或二维码。
-“Frame Browser”可用于查看多帧 GIF。
-
-设置 kali 中文
-编辑 /root/.profile 文件（部分按照网上教程设置中文后不生效，就是因为没有设置这一步）
-#修改前
-LANG=C
-LANGUAGE=C
-#修改后
-LANG=zh_CN.UTF-8
-LANGUAGE=zh_CN:zh
-
-
-pip 与 pipx
-pip 是 Python 的默认包管理工具，用来安装、升级、卸载 Python 包。
-pipx 是一个专门用于安装和运行 Python 命令行工具（CLI 应用） 的工具。
-它的主要作用是：
-让每个独立的命令行工具都安装在各自的隔离虚拟环境中，互不干扰。
-要删除使用 pipx 安装的软件包，请使用 pipx uninstall package_name 命令。
-kali 默认字典位置
-
-
-kali 默认字典位置
-dirb -&gt; /usr/share/dirb/wordlists
-dirbuster -&gt; /usr/share/dirbuster/wordlists
-dnsmap.txt -&gt; /usr/share/dnsmap/wordlist_TLAs.txt
-fasttrack.txt -&gt; /usr/share/set/src/fasttrack/wordlist.txt
-fern-wifi -&gt; /usr/share/fern-wifi-cracker/extras/wordlists
-john.lst -&gt; /usr/share/john/password.lst
-legion -&gt; /usr/share/legion/wordlists
-metasploit -&gt; /usr/share/metasploit-framework/data/wordlists
-nmap.lst -&gt; /usr/share/nmap/nselib/data/passwords.lstrockyou.txt
-sqlmap.txt -&gt; /usr/share/sqlmap/data/txt/wordlist.txt
-wfuzz -&gt; /usr/share/wfuzz/wordlist
-wifite.txt -&gt; /usr/share/dict/wordlist-probable.txt
-
-
-常见字典：
-枚举 CGI 服务
-路径: ./seclists/Discovery/Web_Content/cgis.txt
-用途: 用于枚举 Web 应用中的 CGI 脚本。
-路径枚举大字典
-路径: ./seclists/Discovery/Web_Content/directory-list-2.3-medium.txt
-用途: 用于路径枚举，较为全面，是 HackTheBox 和 OSCP 常用的大字典。
-常见目录字典
-路径:
-/usr/share/dirb/wordlists/common.txt
-/usr/share/seclists/Discovery/Web_Content/common.txt
-/usr/share/seclists/Discovery/Web_Content/raft-medium-directories-lowercase.txt
-用途: 这些字典适用于常见目录的枚举，帮助发现常见的 Web 应用目录和文件。
-扩展名字典
-路径: /usr/share/seclists/Discovery/Web_Content/raft-large-extensions.txt
-用途: 用于枚举常见的文件扩展名，帮助识别网站中可能存在的文件类型。
-Fuzzing 字典
-路径:
-/usr/share/seclists/Fuzzing/alphanum-case-extra.txt
-/usr/share/seclists/Fuzzing/special-chars.txt
-用途: 用于 fuzz 测试时输入特殊字符，查找可能的漏洞。
-LFI 漏洞字典
-路径: /usr/share/seclists/Fuzzing/LFI/LFI-gracefulsecurity-linux.txt
-用途: 专门用于本地文件包含（LFI）漏洞的测试，帮助渗透测试人员检查目标系统是否存在文件包含漏洞。
-
-]]></content>
-      <categories>
-        <category>KALI</category>
-      </categories>
-      <tags>
-        <tag>隐写</tag>
-        <tag>dict</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Kali常用命令分类</title>
     <url>/MYBLOG/2025/11/21/KALI/kali%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[文件系统命令
@@ -755,6 +515,90 @@ createdomuser 创建用户访问
       </tags>
   </entry>
   <entry>
+    <title>PHP支持的编码</title>
+    <url>/MYBLOG/2025/11/22/PHP/PHP%E6%94%AF%E6%8C%81%E7%9A%84%E7%BC%96%E7%A0%81/</url>
+    <content><![CDATA[The following character encodings are supported in this PHP extension
+UTF-32BE*
+UTF-32LE*
+UTF-16*
+UTF-16BE*
+UTF-16LE*
+UTF-7
+UTF7-IMAP
+UTF-8*
+ASCII*
+EUC-JP*
+SJIS*
+eucJP-win*
+SJIS-win*
+ISO-2022-JP
+ISO-2022-JP-MS
+CP932
+CP51932
+SJIS-mac (alias: MacJapanese)
+SJIS-Mobile#DOCOMO (alias: SJIS-DOCOMO)
+SJIS-Mobile#KDDI (alias: SJIS-KDDI)
+SJIS-Mobile#SOFTBANK (alias: SJIS-SOFTBANK)
+UTF-8-Mobile#DOCOMO (alias: UTF-8-DOCOMO)
+UTF-8-Mobile#KDDI-A
+UTF-8-Mobile#KDDI-B (alias: UTF-8-KDDI)
+UTF-8-Mobile#SOFTBANK (alias: UTF-8-SOFTBANK)
+ISO-2022-JP-MOBILE#KDDI (alias: ISO-2022-JP-KDDI)
+JIS
+JIS-ms
+CP50220
+CP50220raw
+CP50221
+CP50222
+ISO-8859-1*
+ISO-8859-2*
+ISO-8859-3*
+ISO-8859-4*
+ISO-8859-5*
+ISO-8859-6*
+ISO-8859-7*
+ISO-8859-8*
+ISO-8859-9*
+ISO-8859-10*
+ISO-8859-13*
+ISO-8859-14*
+ISO-8859-15*
+ISO-8859-16*
+byte2be
+byte2le
+byte4be
+byte4le
+BASE64
+HTML-ENTITIES (alias: HTML)
+7bit
+8bit
+EUC-CN*
+CP936
+GB18030
+HZ
+EUC-TW*
+CP950
+BIG-5*
+EUC-KR*
+UHC (alias: CP949)
+ISO-2022-KR
+Windows-1251 (alias: CP1251)
+Windows-1252 (alias: CP1252)
+CP866 (alias: IBM866)
+KOI8-R*
+KOI8-U*
+ArmSCII-8 (alias: ArmSCII8)
+
+]]></content>
+      <categories>
+        <category>PHP</category>
+      </categories>
+      <tags>
+        <tag>PHP</tag>
+        <tag>编码</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>PHP过滤</title>
     <url>/MYBLOG/2025/11/22/PHP/PHP%E8%BF%87%E6%BB%A4/</url>
     <content><![CDATA[一、convert 系列（最常用）
@@ -861,6 +705,162 @@ php://filter/string.rot13/resource=php://input
       </tags>
   </entry>
   <entry>
+    <title>KALI小知识点</title>
+    <url>/MYBLOG/2025/11/21/KALI/KALI%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/</url>
+    <content><![CDATA[🧩 一、文件属性查看
+
+目的：发现最基本的线索。
+🔧 常用方式
+file image.jpg
+exiftool image.jpg
+strings image.jpg | less
+📘 作用
+file：查看文件真实格式（有时文件扩展名被伪装）。
+exiftool：读取 EXIF 元数据，常用于 JPEG、PNG。可发现隐藏信息、作者、GPS、注释等。
+strings：提取文件中的可打印字符串，有时能直接看到 flag 或提示。
+🧠 小技巧
+有时 flag 会藏在 EXIF 的 Comment 或 UserComment 字段。
+伪装格式的情况要重点查：比如 .jpg 实际上是 .zip。
+
+🧮 二、zsteg
+
+用于分析 PNG、BMP 等无损图片的像素隐写。
+🔧 使用方法
+zsteg image.png
+zsteg -a image.png
+📘 作用
+自动检测 LSB（最低有效位）隐写。
+可分析隐藏在每个颜色通道（R、G、B、Alpha）的二进制信息。
+能识别隐藏文本、ZIP、PNG、base64 等。
+🧠 小技巧
+zsteg -a 是自动模式，检查所有常见隐写方式。
+如果是 PNG 文件 且 zsteg 没发现，说明可能不是像素隐写。
+
+
+🪞bit-plane
+一张图片的每个像素（Pixel）由几个通道组成，比如：
+RGB 三通道（Red、Green、Blue）
+每个通道通常是 8 位（bit），即取值范围 0–255。
+每个像素的二进制位，可以按位拆成 8 个“平面”：
+第 1 位平面（bit 7）：最高位（Most Significant Bit，MSB）
+第 8 位平面（bit 0）：最低位（Least Significant Bit，LSB）
+
+高位平面 (bit7-bit4)：决定图片主要明暗、颜色信息。
+低位平面 (bit3-bit0)：变化较小，人眼不敏感 → 常被用来藏信息。
+👉 LSB 位平面（特别是 bit0 或 bit1）
+经常能看到隐藏的信息，例如：
+隐藏文字（例如 flag、二维码）
+隐藏图形、logo、另一张图片轮廓
+因为隐写常常修改 LSB 位，人眼几乎看不出变化，但提取出来时很明显。
+
+🔍 三、binwalk
+
+主要分析文件结构、分离隐藏文件。
+🔧 使用方法
+binwalk image.jpg
+binwalk -e image.jpg  # 自动提取嵌入文件
+📘 作用
+检测是否在图片中嵌入了其他文件（例如 ZIP、RAR、PNG、MP3 等）。
+可提取嵌套文件（如“图片中藏压缩包”）。
+🧠 小技巧
+如果 binwalk 提取出了 .zip、.rar、.txt 文件，要继续递归分析。
+xxd 或 hexdump 可辅助查看十六进制结构。
+
+🧰 四、outguess
+
+针对 JPEG 图片的隐写分析工具。
+🔧 使用方法
+outguess -r image.jpg output.txt
+（如果知道密码，可以加 -k &quot;password&quot;）
+📘 作用
+从 JPEG 图像中提取由 OutGuess 工具隐藏的信息。
+是 CTF JPEG 隐写的常用检查工具。
+🧠 小技巧
+通常只对 JPEG 格式 有效。
+如果 outguess 没结果，可以试 steghide。
+
+🎨 五、stegsolve
+
+图像可视化分析工具（图形界面）。
+🔧 启动方式
+java -jar StegSolve.jar
+📘 作用
+可查看图像的每个颜色通道（R/G/B/A）及其组合。
+可检测 LSB 隐写（通过 bit plane）。
+可通过“Analyze → File Format”检查尾部额外数据。
+🧠 小技巧
+打开后可以逐个切换通道查看隐藏文字或二维码。
+“Frame Browser”可用于查看多帧 GIF。
+
+设置 kali 中文
+编辑 /root/.profile 文件（部分按照网上教程设置中文后不生效，就是因为没有设置这一步）
+#修改前
+LANG=C
+LANGUAGE=C
+#修改后
+LANG=zh_CN.UTF-8
+LANGUAGE=zh_CN:zh
+
+
+pip 与 pipx
+pip 是 Python 的默认包管理工具，用来安装、升级、卸载 Python 包。
+pipx 是一个专门用于安装和运行 Python 命令行工具（CLI 应用） 的工具。
+它的主要作用是：
+让每个独立的命令行工具都安装在各自的隔离虚拟环境中，互不干扰。
+要删除使用 pipx 安装的软件包，请使用 pipx uninstall package_name 命令。
+kali 默认字典位置
+
+
+kali 默认字典位置
+dirb -&gt; /usr/share/dirb/wordlists
+dirbuster -&gt; /usr/share/dirbuster/wordlists
+dnsmap.txt -&gt; /usr/share/dnsmap/wordlist_TLAs.txt
+fasttrack.txt -&gt; /usr/share/set/src/fasttrack/wordlist.txt
+fern-wifi -&gt; /usr/share/fern-wifi-cracker/extras/wordlists
+john.lst -&gt; /usr/share/john/password.lst
+legion -&gt; /usr/share/legion/wordlists
+metasploit -&gt; /usr/share/metasploit-framework/data/wordlists
+nmap.lst -&gt; /usr/share/nmap/nselib/data/passwords.lstrockyou.txt
+sqlmap.txt -&gt; /usr/share/sqlmap/data/txt/wordlist.txt
+wfuzz -&gt; /usr/share/wfuzz/wordlist
+wifite.txt -&gt; /usr/share/dict/wordlist-probable.txt
+
+
+常见字典：
+枚举 CGI 服务
+路径: ./seclists/Discovery/Web_Content/cgis.txt
+用途: 用于枚举 Web 应用中的 CGI 脚本。
+路径枚举大字典
+路径: ./seclists/Discovery/Web_Content/directory-list-2.3-medium.txt
+用途: 用于路径枚举，较为全面，是 HackTheBox 和 OSCP 常用的大字典。
+常见目录字典
+路径:
+/usr/share/dirb/wordlists/common.txt
+/usr/share/seclists/Discovery/Web_Content/common.txt
+/usr/share/seclists/Discovery/Web_Content/raft-medium-directories-lowercase.txt
+用途: 这些字典适用于常见目录的枚举，帮助发现常见的 Web 应用目录和文件。
+扩展名字典
+路径: /usr/share/seclists/Discovery/Web_Content/raft-large-extensions.txt
+用途: 用于枚举常见的文件扩展名，帮助识别网站中可能存在的文件类型。
+Fuzzing 字典
+路径:
+/usr/share/seclists/Fuzzing/alphanum-case-extra.txt
+/usr/share/seclists/Fuzzing/special-chars.txt
+用途: 用于 fuzz 测试时输入特殊字符，查找可能的漏洞。
+LFI 漏洞字典
+路径: /usr/share/seclists/Fuzzing/LFI/LFI-gracefulsecurity-linux.txt
+用途: 专门用于本地文件包含（LFI）漏洞的测试，帮助渗透测试人员检查目标系统是否存在文件包含漏洞。
+
+]]></content>
+      <categories>
+        <category>KALI</category>
+      </categories>
+      <tags>
+        <tag>隐写</tag>
+        <tag>dict</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>计算机组成期末复习</title>
     <url>/MYBLOG/2025/12/21/School/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/</url>
     <content><![CDATA[1、计算机系统概述
@@ -950,725 +950,321 @@ CPU 和外部设备信息交换的控制方式有哪些？各有什么特点？
       </tags>
   </entry>
   <entry>
-    <title>Hexo 项目结构</title>
-    <url>/MYBLOG/2025/11/22/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/Hexo%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/</url>
-    <content><![CDATA[📄 _config.yml（全局配置）
-这是 Hexo 主配置文件，你最常改的就是它。
-实际要改的典型配置：
+    <title>Wireshark过滤语法</title>
+    <url>/MYBLOG/2025/11/21/Sundry/Wireshark%E8%BF%87%E6%BB%A4%E8%AF%AD%E6%B3%95/</url>
+    <content><![CDATA[1. 捕获过滤器（Capture Filter）详解
+捕获过滤器作用是在抓包开始前限制抓取数据包，基于 BPF（Berkeley Packet Filter）语法。它对数据流量起“网筛”作用，过滤掉不关心的包，节省空间和性能。常用在抓包前预过滤。
+1.1 基础语法结构
+捕获过滤器是基于简洁的关键词和运算符，形式类似：
+&lt;表达式&gt; [and|or|not &lt;表达式&gt;] ...
 
-title / subtitle：博客名
-theme：你要用的主题名称
-url：你部署到 GitHub Pages 或服务器时的域名
-deploy: Git 部署参数
+支持的基本关键词：
 
-你现在正在改 theme: next，就属于这里。
+1.2 逻辑运算符
 
-📁 themes/
-放主题的目录。
-每个主题就是一个独立项目，比如：
-themes/
-  ├─ next/
-  ├─ yilia-plus/
-  └─ butterfly/
+and：且
+or：或
+not：非
+示例：
+抓取源 IP 是 10.0.0.1 且目标端口为 80 的 TCP 流量：
 
-你只需在 _config.yml 写：
-theme: next
+src host 10.0.0.1 and tcp and dst port 80
 
-就能切换主题。
-主题不是 npm 包，是 Git 项目，所以你可以：
-cd themes/next
-git pull
+抓取所有 UDP 包或 ICMP 包：
+udp or icmp
 
-来更新主题。
-
-📁 source/
-你的文章内容放这里。
-里面一般有：
-source/
-  ├─ _posts/      # Markdown文章都放在这里
-  ├─ images/      # 图片
-  └─ about/       # 独立页面
-
-当你执行：
-hexo new post &quot;标题&quot;
-
-它会自动生成：
-source/_posts/标题.md
-
-你基本 90% 时间都在改这里。
-
-📁 scaffolds/
-Hexo 新建文章时用的 模板。
-比如你执行：
-hexo new page &quot;about&quot;
-
-它会按照 scaffolds 模板生成初始内容。
-你几乎不会改它，但 CTF 或自动化脚本想自定义文章头部格式时会用。
-
-📁 public/
-执行：
-hexo generate   # 或 hexo g
-
-Hexo 会把整个博客编译成静态网页输出到这里。
-里面都是 HTML / CSS / JS 等最终结果。
-你部署（上传）到 GitHub Pages 或服务器时，就是把这个目录里的内容上传。
-你不要手动修改它，每次 hexo g 都会被覆盖。
-
-📁 node_modules/
-npm 装的依赖都在这，比如：
-
-hexo
-hexo-server
-hexo-generator-*
-主题依赖
-
-这个目录通常几百 MB，很大。
-不用管它，不要动它。
-
-📄 package.json
-Hexo 项目的依赖声明文件。
-包含：
-
-hexo 的版本
-hexo 插件
-你主题需要的 npm 包
-
-有时主题要求你装额外插件，就会在这里出现：
-&quot;hexo-renderer-marked&quot;: &quot;^5.0.0&quot;
-
-
-📄 package-lock.json
-npm 的锁定文件，用来保证依赖版本固定。
-不用管它。
-
-📄 db.json
-这是 Hexo 的“缓存数据库”。
-存储：
-
-上次生成时的文件状态
-文章索引
-主题资源缓存
-
-当内容不更新时，Hexo 可以跳过部分生成过程，提高性能。
-如果你出现异常，可以删除它再重新编译：
-hexo clean
-
-Hexo 会自动重建。
-
-📁 .github/
-这是 GitHub workflow 用的，自动部署（CI/CD）会用到。
-如果你看到它，大概率主题或 starter 模板帮你放进去的。
-
-📄 .gitignore
-Git 忽略规则。
-常见内容：
-node_modules/
-public/
-db.json
-
-这些不会被上传到 GitHub。
-
-📌 最关键的几个你需要记住的目录
-按实际使用频率排序：
-
-source/ → 你写文章的地方
-themes/ → 放主题
-_config.yml → 配置全局设置（例如切主题）
-public/ → 生成后的最终网页（用来部署）
-scaffolds/ → 新文章模板（一般不碰）
-
-其它都是底层设施，不需要你手动管理。
-]]></content>
-      <categories>
-        <category>博客搭建</category>
-      </categories>
-      <tags>
-        <tag>HEXO</tag>
-        <tag>BLOG</tag>
-        <tag>MARKDOWN</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>tags与categories的3D页面</title>
-    <url>/MYBLOG/2025/11/23/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/tags%E4%B8%8Ecategories%E7%9A%843D%E9%A1%B5%E9%9D%A2/</url>
-    <content><![CDATA[Tags 页面
-&lt;%- partial('partials/header') %&gt;
-&lt;div class=&quot;wrapper&quot;&gt;
-  &lt;header class=&quot;header&quot;&gt;
-    &lt;h1 class=&quot;header-title center&quot;&gt;Tags&lt;/h1&gt;
-  &lt;/header&gt;
-  &lt;!-- 3D 标签球 --&gt;
-  &lt;div style=&quot;text-align:center; margin: 40px 0;&quot;&gt;
-    &lt;canvas id=&quot;tagCanvas&quot; width=&quot;450&quot; height=&quot;450&quot;&gt;&lt;/canvas&gt;
-    &lt;!-- Tag 列表（供 JS 读取，但隐藏） --&gt;
-    &lt;div id=&quot;tagList&quot; style=&quot;display:none;&quot;&gt;
-      &lt;% if (site.tags &amp;&amp; site.tags.length) { %&gt;
-        &lt;% site.tags.sort('name').each(function(tag){ %&gt;
-          &lt;a class=&quot;tag-item&quot; href=&quot;&lt;%- url_for(tag.path || ('/tags/' + tag.name + '/')) %&gt;&quot;&gt;&lt;%= tag.name %&gt;&lt;/a&gt;
-        &lt;% }) %&gt;
-      &lt;% } %&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
-&lt;script src=&quot;&lt;%- url_for('/js/tagcanvas.js') %&gt;&quot;&gt;&lt;/script&gt;
-&lt;script&gt;
-function getTagColor() {
-  return document.body.getAttribute('data-theme') === 'dark' ? '#eaeaea' : '#333';
-}
-document.addEventListener('DOMContentLoaded', function () {
-  if (typeof TagCanvas === 'undefined') return;
-  const items = document.querySelectorAll('#tagList .tag-item');
-  if (!items || items.length === 0) return;
-  const sphere = new TagCanvas('tagCanvas', {
-    radius: 180,
-    speed: 0.004,
-    font: '18px Arial',
-    color: getTagColor()
-  });
-  const observer = new MutationObserver(function () {
-    sphere.color = getTagColor();
-  });
-  observer.observe(document.body, { attributes: true });
-});
-&lt;/script&gt;
-&lt;%- partial('partials/foot') %&gt;
-
-Categories 页面
-&lt;%- partial('partials/header') %&gt;
-&lt;div class=&quot;wrapper&quot;&gt;
-  &lt;header class=&quot;header&quot;&gt;
-    &lt;h1 class=&quot;header-title center&quot;&gt;Categories&lt;/h1&gt;
-  &lt;/header&gt;
-  &lt;div style=&quot;text-align:center; margin: 40px 0;&quot;&gt;
-    &lt;canvas id=&quot;catCanvas&quot; width=&quot;450&quot; height=&quot;450&quot;&gt;&lt;/canvas&gt;
-    &lt;!-- 分类列表 --&gt;
-    &lt;div id=&quot;categoryList&quot; style=&quot;display:none;&quot;&gt;
-      &lt;% if (site.categories &amp;&amp; site.categories.length) { %&gt;
-        &lt;% site.categories.sort('name').each(function(cat){ %&gt;
-          &lt;a class=&quot;tag-item&quot; href=&quot;&lt;%- url_for(cat.path || ('/categories/' + cat.name + '/')) %&gt;&quot;&gt;&lt;%= cat.name %&gt;&lt;/a&gt;
-        &lt;% }) %&gt;
-      &lt;% } %&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
-&lt;script src=&quot;&lt;%- url_for('/js/tagcanvas.js') %&gt;&quot;&gt;&lt;/script&gt;
-&lt;script&gt;
-function getTagColor() {
-  return document.body.getAttribute('data-theme') === 'dark' ? '#eaeaea' : '#333';
-}
-document.addEventListener('DOMContentLoaded', function () {
-  if (typeof TagCanvas === 'undefined') return;
-  const items = document.querySelectorAll('#categoryList .tag-item');
-  if (!items || items.length === 0) return;
-  const sphere = new TagCanvas('catCanvas', {
-    radius: 180,
-    speed: 0.004,
-    font: '18px Arial',
-    color: getTagColor()
-  });
-  const observer = new MutationObserver(function () {
-    sphere.color = getTagColor();
-  });
-  observer.observe(document.body, { attributes: true });
-});
-&lt;/script&gt;
-&lt;%- partial('partials/foot') %&gt;
-
-]]></content>
-      <categories>
-        <category>博客搭建</category>
-      </categories>
-      <tags>
-        <tag>BLOG</tag>
-        <tag>JS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>搭建自己的非公开博客</title>
-    <url>/MYBLOG/2025/11/19/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E9%9D%9E%E5%85%AC%E5%BC%80%E5%8D%9A%E5%AE%A2/</url>
-    <content><![CDATA[VScode(开发环境)
-针对于编写现代 Web 和云应用的跨平台源代码编辑器，可在桌面上运行，并且可用于 Windows，macOS 和 Linux。
-Hexo（框架）
-Hexo 是一个快速、简单且功能强大的博客框架。你用 Markdown（或其他标记语言）写帖子，Hexo 会在几秒钟内生成带有漂亮主题的静态文件。
-本地环境
-Git
-Git 是一个开源的分布式版本控制系统，用于敏捷高效地处理任何或小或大的项目。
-注意配置 Git 环境
-右键--显示更多--Open Bash here
-
-
-Git Bash
-• 任何 Git 子命令都能用
-• 支持高级参数（--patch、--rebase-merges、--squash 等）
-• 能处理复杂脚本/自动化
-• 适合 CTF / DevOps / 深度开发
-GUI
-• 看得见历史和差异
-• 更适合初学者和简单日常操作
-• 复杂 rebase、工作树脚本、submodule 管理能力有限
-
-node.js
-
-一句话定位：
-一个让 JavaScript 脱离浏览器、跑在操作系统上的运行环境。
-它包含两部分：
-
-V8 引擎：负责执行 JS 代码（来自 Chrome）
-Node API：负责提供系统能力 - 文件读写（fs） - 网络（http/net） - 子进程（child_process） - 异步事件循环（event loop）
-
-
-安装 HEXO
-使用 CMD，命令行输入
-npm install -g hexo-cli
-
-安装 hexo 框架
-
-创建自己的 MyBlog 文件夹（注意文件夹内部一定要空的，不然后续可能报错）
-在自己的文件夹下右击，打开open git bash here输入命令安装（默认位置即可，方面后续配置，不建议修改）
-输入
-hexo init
-
-给你自动搭一个完整的博客项目骨架，本质就是 初始化一个 Hexo 项目目录，让你不用手动创建文件夹、配置文件和依赖。
-这一句代码其实包含了以下手动三步骤
-① 创建 Hexo 的标准目录结构
-它会生成像下面这样的目录：
-myblog/
-├─ \_config.yml # 项目配置
-├─ package.json # Node 依赖说明
-├─ source/ # 文章放这里
-├─ themes/ # 主题目录
-├─ scaffolds/ # 新建文章的模板
-└─ node_modules/ # （后面由 npm 自动填充）
-
-这是一个完整的 Hexo 博客项目框架。
-② 从 Hexo 官方仓库拉模板
-实际上 Hexo init 背后做的事情类似：
-git clone https://github.com/hexojs/hexo-starter.git
-
-但你无需手动 clone，Hexo 会自动处理好 starter 模板。
-③ 自动安装依赖（npm install）
-Hexo 会在新项目目录里跑：
-npm install
-
-装好运行 Hexo 所需要的 Node 模块，比如：
-
-hexo
-hexo-cli
-hexo-renderer-ejs
-hexo-server
-hexo-generator-index
-等等
-
-这步很关键，否则你没法 hexo g / hexo s。
-之后 MyBlog 会下载很多文件
-
-右击---Open Git Bash here---输入 hexo -v
-验证 Hexo 是否安装正常
-
-输入
-hero s
-
-
-在你的浏览器中打开 http://localhost:4000/，就可以看到以下页面
-
-报错解决方式
-如果你使用 Windows PowerShell，应该会报错，如果使用 CMD，那就不会报错了。
-
-那我一定要使用 Windows PowerShell，怎么办？ 包有解决办法的。
-短期（ 只对当前窗口生效）
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-
-长期有效（ 允许当前用户执行脚本）
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
-
-然后再输入 hexo s ，就可以成功了
-若你不在 MyBlog 文件夹下，也会报错。
-安装/卸载插件，请在 MyBlog 根目录下操作，就是在 MyBlog 中执行
-
-markdown-it 配置文件格式错了？
-YAML 要对齐，有缩进错误时 Hexo 直接报错或不渲染。改动后先 hexo clean 再跑。
-网页中导航栏无法固定？
-首先是给 main.css 文件的 .navbar 添加属性 position: fixed; 看看成功没。
-如果还是没成功，可能是被其他 CSS 文件或样式覆盖。
-直接在里面在添加一句 position: fixed !important;
-要是还是不行，请把 .navbar 样式全部移到 main.css 文件的底部。
-
-安装个性化主题
-主题安装
-打开 hexo 的主题官网Themes
-
-下载自己喜欢的主题，我这边选择了hexo-theme-Klise-enhanced
-
-他的主页也有一些安装步骤
-你需要下载一个字数统计插件:
-npm install hexo-wordcount --save
-
-安装主题文件
-git clone https://github.com/g0dmao/hexo-theme-Klise-enhanced.git
-
-
-将主题根目录的_config.hexo-theme-Klise-enhanced.yml 移动到博客根目录。你可以打开该文件进行主题的一些配置。
-下面图片已经移动后的样子，就是再 MyBlog 文件夹中
-
-在博客配置文件_config.yml（根目录）中启用主题。
-
-打开主题文件夹下的 source\css\main.css 在头部修改，可以自定义明暗模式下不同的背景，已做好注释。
-
-打开主题文件夹下的 layout\layout.ejs 修改 document.title 即可。
-  document.addEventListener('visibilitychange', function () &#123;
-  if (document.visibilityState == 'hidden') &#123;
-      normal_title = document.title;
-      document.title = '点一下';
-  &#125; else document.title = normal_title;
-&#125;);
-
-
-安装三个插件 （可选）
-Hexo 插件都是 npm 包，直接安装即可。
-(1) 安装 markdown-it 渲染器
-先卸载默认 renderer（可选，但推荐，避免冲突）：
-npm uninstall hexo-renderer-marked
-
-安装 markdown-it 渲染器：
-npm install hexo-renderer-markdown-it-plus --save
-
-然后在你的 Hexo 全局配置 _config.yml 中加入 markdown-it 配置（推荐项）：
-markdown:
-  preset: default
-  render:
-    html: true
-  plugins:
-    - markdown-it-container
-
-不加这些插件也能跑，只是体验没那么好。
-是不是发现复制上去的代码报错了，咱们接着解决，在根目录创建 hexo-schema.json，
-
-Hexo JSON Schema 并不是 Hexo 系统内部的东西，而是给 VS Code / 编辑器 用的配套“智能提示规则文件”。
-有点像是：“告诉编辑器，Hexo 的 _config.yml 里有哪些合法字段，它们是什么类型，这样编辑器就能给你自动补全、检查错误。”
-可以把它理解为：
-Hexo 配置文件的类型说明书（给编辑器看的，不是给 Hexo 本身看的）
-
-
-然后在根目录创建一个.vccode 文件夹，里面再创建一个 settings.jso，复制过去之后，注意右击代码，进行格式化文档。
-&#123;
-    &quot;$schema&quot;: &quot;http://json-schema.org/draft-07/schema#&quot;,
-    &quot;title&quot;: &quot;Hexo Configuration Schema&quot;,
-    &quot;type&quot;: &quot;object&quot;,
-    &quot;properties&quot;: &#123;
-    &quot;title&quot;: &#123;
-      &quot;type&quot;: &quot;string&quot;
-    &#125;,
-    &quot;subtitle&quot;: &#123;
-      &quot;type&quot;: &quot;string&quot;
-    &#125;,
-    &quot;description&quot;: &#123;
-      &quot;type&quot;: &quot;string&quot;
-    &#125;,
-    &quot;keywords&quot;: &#123;
-      &quot;type&quot;: [&quot;string&quot;, &quot;array&quot;],
-      &quot;items&quot;: &#123;
-        &quot;type&quot;: &quot;string&quot;
-      &#125;
-    &#125;,
-    &quot;author&quot;: &#123;
-      &quot;type&quot;: &quot;string&quot;
-    &#125;,
-    &quot;language&quot;: &#123;
-      &quot;type&quot;: &quot;string&quot;
-    &#125;,
-    &quot;timezone&quot;: &#123;
-      &quot;type&quot;: &quot;string&quot;
-    &#125;,
-    &quot;url&quot;: &#123;
-      &quot;type&quot;: &quot;string&quot;
-    &#125;,
-    &quot;permalink&quot;: &#123;
-      &quot;type&quot;: &quot;string&quot;
-    &#125;,
-    &quot;permalink_defaults&quot;: &#123;
-      &quot;type&quot;: &quot;object&quot;
-    &#125;,
-    &quot;pretty_urls&quot;: &#123;
-      &quot;type&quot;: &quot;object&quot;,
-      &quot;properties&quot;: &#123;
-        &quot;trailing_index&quot;: &#123;
-          &quot;type&quot;: &quot;boolean&quot;
-        &#125;,
-        &quot;trailing_html&quot;: &#123;
-          &quot;type&quot;: &quot;boolean&quot;
-        &#125;
-      &#125;
-    &#125;,
-    &quot;source_dir&quot;: &#123;
-      &quot;type&quot;: &quot;string&quot;
-    &#125;,
-    &quot;public_dir&quot;: &#123;
-      &quot;type&quot;: &quot;string&quot;
-    &#125;,
-    &quot;tag_dir&quot;: &#123;
-      &quot;type&quot;: &quot;string&quot;
-    &#125;,
-    &quot;archive_dir&quot;: &#123;
-      &quot;type&quot;: &quot;string&quot;
-    &#125;,
-    &quot;category_dir&quot;: &#123;
-      &quot;type&quot;: &quot;string&quot;
-    &#125;,
-    &quot;i18n_dir&quot;: &#123;
-      &quot;type&quot;: &quot;string&quot;
-    &#125;,
-    &quot;new_post_name&quot;: &#123;
-      &quot;type&quot;: &quot;string&quot;
-    &#125;,
-    &quot;default_layout&quot;: &#123;
-      &quot;type&quot;: &quot;string&quot;
-    &#125;,
-    &quot;titlecase&quot;: &#123;
-      &quot;type&quot;: &quot;boolean&quot;
-    &#125;,
-    &quot;external_link&quot;: &#123;
-      &quot;type&quot;: &quot;object&quot;,
-      &quot;properties&quot;: &#123;
-        &quot;enable&quot;: &#123;
-          &quot;type&quot;: &quot;boolean&quot;
-        &#125;,
-        &quot;field&quot;: &#123;
-          &quot;type&quot;: &quot;string&quot;
-        &#125;,
-        &quot;exclude&quot;: &#123;
-          &quot;type&quot;: &quot;string&quot;
-        &#125;
-      &#125;
-    &#125;,
-    &quot;filename_case&quot;: &#123;
-      &quot;type&quot;: &quot;number&quot;
-    &#125;,
-    &quot;render_drafts&quot;: &#123;
-      &quot;type&quot;: &quot;boolean&quot;
-    &#125;,
-    &quot;post_asset_folder&quot;: &#123;
-      &quot;type&quot;: &quot;boolean&quot;
-    &#125;,
-    &quot;relative_link&quot;: &#123;
-      &quot;type&quot;: &quot;boolean&quot;
-    &#125;,
-    &quot;future&quot;: &#123;
-      &quot;type&quot;: &quot;boolean&quot;
-    &#125;,
-    &quot;syntax_highlighter&quot;: &#123;
-      &quot;type&quot;: &quot;string&quot;
-    &#125;,
-    &quot;highlight&quot;: &#123;
-      &quot;type&quot;: &quot;object&quot;,
-      &quot;properties&quot;: &#123;
-        &quot;enable&quot;: &#123;
-          &quot;type&quot;: &quot;boolean&quot;
-        &#125;,
-        &quot;line_number&quot;: &#123;
-          &quot;type&quot;: &quot;boolean&quot;
-        &#125;,
-        &quot;auto_detect&quot;: &#123;
-          &quot;type&quot;: &quot;boolean&quot;
-        &#125;,
-        &quot;tab_replace&quot;: &#123;
-          &quot;type&quot;: &quot;string&quot;
-        &#125;,
-        &quot;wrap&quot;: &#123;
-          &quot;type&quot;: &quot;boolean&quot;
-        &#125;,
-        &quot;hljs&quot;: &#123;
-          &quot;type&quot;: &quot;boolean&quot;
-        &#125;
-      &#125;
-    &#125;,
-    &quot;prismjs&quot;: &#123;
-      &quot;type&quot;: &quot;object&quot;,
-      &quot;properties&quot;: &#123;
-        &quot;preprocess&quot;: &#123;
-          &quot;type&quot;: &quot;boolean&quot;
-        &#125;,
-        &quot;line_number&quot;: &#123;
-          &quot;type&quot;: &quot;boolean&quot;
-        &#125;,
-        &quot;tab_replace&quot;: &#123;
-          &quot;type&quot;: &quot;string&quot;
-        &#125;
-      &#125;
-    &#125;,
-    &quot;index_generator&quot;: &#123;
-      &quot;type&quot;: &quot;object&quot;,
-      &quot;properties&quot;: &#123;
-        &quot;path&quot;: &#123;
-          &quot;type&quot;: &quot;string&quot;
-        &#125;,
-        &quot;per_page&quot;: &#123;
-          &quot;type&quot;: &quot;number&quot;
-        &#125;,
-        &quot;order_by&quot;: &#123;
-          &quot;type&quot;: &quot;string&quot;
-        &#125;
-      &#125;
-    &#125;,
-    &quot;category_map&quot;: &#123;
-      &quot;type&quot;: &quot;object&quot;
-    &#125;,
-    &quot;tag_map&quot;: &#123;
-      &quot;type&quot;: &quot;object&quot;
-    &#125;,
-    &quot;date_format&quot;: &#123;
-      &quot;type&quot;: &quot;string&quot;
-    &#125;,
-    &quot;time_format&quot;: &#123;
-      &quot;type&quot;: &quot;string&quot;
-    &#125;,
-    &quot;updated_option&quot;: &#123;
-      &quot;type&quot;: &quot;string&quot;
-    &#125;,
-    &quot;per_page&quot;: &#123;
-      &quot;type&quot;: &quot;number&quot;
-    &#125;,
-    &quot;pagination_dir&quot;: &#123;
-      &quot;type&quot;: &quot;string&quot;
-    &#125;,
-    &quot;include&quot;: &#123;
-      &quot;type&quot;: [&quot;array&quot;, &quot;string&quot;],
-      &quot;items&quot;: &#123;
-        &quot;type&quot;: &quot;string&quot;
-      &#125;
-    &#125;,
-    &quot;exclude&quot;: &#123;
-      &quot;type&quot;: [&quot;array&quot;, &quot;string&quot;],
-      &quot;items&quot;: &#123;
-        &quot;type&quot;: &quot;string&quot;
-      &#125;
-    &#125;,
-    &quot;ignore&quot;: &#123;
-      &quot;type&quot;: [&quot;array&quot;, &quot;string&quot;],
-      &quot;items&quot;: &#123;
-        &quot;type&quot;: &quot;string&quot;
-      &#125;
-    &#125;,
-    &quot;theme&quot;: &#123;
-      &quot;type&quot;: &quot;string&quot;
-    &#125;,
-    &quot;deploy&quot;: &#123;
-      &quot;type&quot;: [&quot;object&quot;, &quot;array&quot;],
-      &quot;items&quot;: &#123;
-        &quot;type&quot;: &quot;object&quot;
-      &#125;,
-      &quot;properties&quot;: &#123;
-        &quot;type&quot;: &#123;
-          &quot;type&quot;: &quot;string&quot;
-        &#125;,
-        &quot;repo&quot;: &#123;
-          &quot;type&quot;: [&quot;string&quot;, &quot;object&quot;]
-        &#125;,
-        &quot;branch&quot;: &#123;
-          &quot;type&quot;: &quot;string&quot;
-        &#125;,
-        &quot;message&quot;: &#123;
-          &quot;type&quot;: &quot;string&quot;
-        &#125;
-      &#125;
-    &#125;,
-    &quot;markdown&quot;: &#123;
-      &quot;type&quot;: &quot;object&quot;,
-      &quot;properties&quot;: &#123;
-        &quot;render&quot;: &#123;
-          &quot;type&quot;: &quot;object&quot;,
-          &quot;properties&quot;: &#123;
-            &quot;html&quot;: &#123;
-              &quot;type&quot;: &quot;boolean&quot;
-            &#125;,
-            &quot;xhtmlOut&quot;: &#123;
-              &quot;type&quot;: &quot;boolean&quot;
-            &#125;,
-            &quot;breaks&quot;: &#123;
-              &quot;type&quot;: &quot;boolean&quot;
-            &#125;,
-            &quot;linkify&quot;: &#123;
-              &quot;type&quot;: &quot;boolean&quot;
-            &#125;,
-            &quot;typographer&quot;: &#123;
-              &quot;type&quot;: &quot;boolean&quot;
-            &#125;
-          &#125;
-        &#125;,
-        &quot;plugins&quot;: &#123;
-          &quot;type&quot;: &quot;array&quot;,
-          &quot;items&quot;: &#123;
-            &quot;type&quot;: [&quot;string&quot;, &quot;array&quot;]
-          &#125;
-        &#125;
-        &#125;
-        &#125;
-      &#125;
-     &#125;
-
-
-settings.json 是什么？
-VS Code 的配置文件，使用 JSON 格式存储各种设置。VS Code 会读取它来自定义编辑器行为
-
-
-&#123;
-  &quot;yaml.schemas&quot;: &#123;
-    &quot;./hexo-schema.json&quot;: &quot;_config.yml&quot;
-  &#125;
-&#125;
-
-(2) 安装 hexo-tips
-这个插件用于提示块（info、warning、danger 卡片等），主题 Klise-enhanced 已支持。
-安装：
-npm install hexo-tips --save
-
-然后在 _config.yml 增加配置（可选）：
-tips:
-  enable: true
-
-使用示例（文章内）：
-&#123;% tips info %&#125;
-这是一个信息提示
-&#123;% endtips %&#125;
-
-(3) 安装文章加密插件：hexo-blog-encrypt
-安装：
-npm install hexo-blog-encrypt --save
-
-在 Hexo 全局 _config.yml 添加配置：
-encrypt:
-  enable: true
-  bg_color: &quot;#f2f2f2&quot;
-  default_abstract: &quot;请输入密码查看正文&quot;
-
-文章加密写法（Markdown front-matter）：
-title: 测试文章
-date: 2025-01-01
-password: 123456
-abstract: 这篇文章被加密了
-message: 输入密码继续阅读
-tags:
-  - test
-这里是正文内容。
-
-加密插件不需要额外命令，Hexo 会自动处理。
-启动网站
-最后就是清理缓存重新生成。
-hexo clean
-hexo g
-hexo s
-
-
-
-
-安装完毕后，浏览器复制 http://localhost:4000/，展示页面。
+排除 ARP 包：
+not arp
+
+1.3 捕获过滤器示例
+
+2. 显示过滤器（Display Filter）详解
+显示过滤器用在抓包完成后筛选数据包，功能强大、语法复杂，能针对各种协议和字段精确过滤。
+2.1 语法结构
+&lt;协议&gt;.&lt;字段&gt; &lt;比较符&gt; &lt;值&gt; [逻辑运算符 &lt;过滤表达式&gt;]...
+
+2.2 常用比较符
+
+2.3 逻辑运算符
+
+and：且
+or：或
+not：非
+2.4 常用协议及字段示例
+
+2.5 示例过滤器
+过滤源 IP 是 10.0.0.2 的包：
+
+ip.src == 10.0.0.2
+
+过滤目标端口是 80 或 443 的 TCP 包：
+tcp.dstport == 80 or tcp.dstport == 443
+
+过滤 HTTP GET 请求：
+http.request.method == &quot;GET&quot;
+
+过滤 DNS 查询包：
+dns.flags.response == 0
+
+3. 显示过滤器高级技巧
+3.1 组合逻辑过滤
+过滤条件可以任意组合，利用括号明确优先级，满足复杂过滤需求。
+示例：过滤源 IP 是 192.168.1.1 且目标端口是 80 或 443 的 TCP 包
+ip.src == 192.168.1.1 and (tcp.dstport == 80 or tcp.dstport == 443)
+
+3.2 利用协议标志位过滤
+针对 TCP 标志位的过滤非常实用，常用于诊断连接问题。
+过滤 TCP SYN 包（发起连接）
+tcp.flags.syn == 1 and tcp.flags.ack == 0
+
+过滤 TCP FIN 包（关闭连接）
+tcp.flags.fin == 1
+
+过滤 TCP 重传包
+tcp.analysis.retransmission
+
+3.3 按报文长度过滤
+有时候抓包数据量巨大，可以按包大小过滤，只看超过一定长度的包。
+frame.len &gt; 1000
+
+这可以帮你快速聚焦大数据包，比如文件传输。
+3.4 过滤存在某字段的包
+某些字段只有部分包有，例如 SSL 握手包中的 ssl.handshake 字段，过滤时可以用：
+ssl.handshake
+
+表示只显示带有握手字段的包。
+3.5 过滤 IPv6 流量
+IPv6 过滤与 IPv4 类似，但字段名不同。
+过滤 IPv6 源地址为 fe80::1 的包：
+ipv6.src == fe80::1
+
+过滤所有 IPv6 流量：
+ipv6
+
+3.6 过滤字符串字段包含关系
+常用 HTTP 或 DNS 过滤，查找域名或 URL 包含某关键字。
+HTTP Host 中包含 google：
+http.host contains &quot;google&quot;
+
+DNS 查询名匹配某正则表达式（如所有以.com 结尾）：
+dns.qry.name matches &quot;.*\.com&quot;
+
+4. 捕获过滤器实用技巧和复杂表达式
+4.1 捕获时指定多个条件
+要捕获多个 IP 或端口流量时，用括号明确优先级。
+示例：抓取目的 IP 是 192.168.1.1 或 192.168.1.2 的 TCP 包
+tcp and (dst host 192.168.1.1 or dst host 192.168.1.2)
+
+4.2 排除特定协议
+想抓包排除 ARP 包：
+not arp
+
+想抓取非 TCP 包：
+not tcp
+
+4.3 指定网卡的捕获过滤器
+用-i 参数指定抓哪个接口，结合过滤器精确抓包：
+tcpdump -i eth0 tcp port 80
+
+4.4 捕获过滤器语法限制
+捕获过滤器不支持协议内部字段，只能针对包头基本字段（IP、端口、协议），不支持显示过滤器的复杂条件。
+6. 显示过滤器更详细字段解析
+6.1 以太网层（Ethernet）
+
+eth.src：源 MAC 地址
+eth.dst：目的 MAC 地址
+eth.type：以太网类型，如 0x0800 表示 IPv4，0x86DD 表示 IPv6
+6.2 IP 层
+ip.version：IP 协议版本，4 或 6
+ip.ttl：生存时间（TTL）
+ip.id：标识，用于分片识别
+ip.proto：承载协议类型，如 6 是 TCP，17 是 UDP
+ip.flags：分片标志
+ip.frag_offset：分片偏移
+示例过滤 TTL 小于 64 的包：
+
+ip.ttl &lt; 64
+
+6.3 TCP 层
+
+tcp.seq：序列号
+tcp.ack：确认号
+tcp.flags：标志位整体
+tcp.flags.syn：同步标志
+tcp.flags.ack：确认标志
+tcp.flags.fin：关闭连接标志
+tcp.window_size：窗口大小
+过滤 TCP 窗口大小小于 1024 的包：
+
+tcp.window_size &lt; 1024
+
+6.4 UDP 层
+
+udp.length：UDP 报文长度
+6.5 ICMP 层
+icmp.type：类型码（如 8 是 Echo 请求，0 是 Echo 应答）
+icmp.code：类型细分
+过滤 ICMP Echo 请求包：
+
+icmp.type == 8
+
+6.6 HTTP 协议
+
+http.request.method：请求方法（GET、POST、PUT 等）
+http.response.code：响应码（200、404 等）
+http.host：请求的主机名
+http.user_agent：客户端信息
+过滤 HTTP 响应码 404：
+
+http.response.code == 404
+
+6.7 DNS 协议
+
+dns.qry.name：查询域名
+dns.qry.type：查询类型（A、AAAA、MX 等）
+dns.a：A 记录返回 IP 地址
+dns.flags.response：0 表示请求，1 表示响应
+过滤所有 DNS 查询包：
+
+dns.flags.response == 0
+
+6.8 SSL/TLS 协议
+
+ssl.handshake.type：握手类型（客户端 Hello、服务端 Hello 等）
+ssl.record.version：协议版本
+ssl.record.length：记录长度
+过滤所有 TLS 客户端 Hello 包：
+
+ssl.handshake.type == 1
+
+7. 显示过滤器性能优化建议
+当抓包文件巨大时，复杂过滤语法可能会导致 Wireshark 卡顿甚至崩溃。以下建议帮你提升效率：
+
+尽量先用捕获过滤器减少抓包量
+过滤表达式中避免使用 contains 和 matches 这类正则匹配，性能消耗大
+尽量使用字段的等值或范围比较
+对 IP 和端口的过滤尽量集中，不要写太多 or 条件
+使用括号明确运算顺序，避免解析错误
+分步骤过滤，先用粗过滤，再逐步精细化
+
+8. 实用场景举例
+8.1 定位特定主机通信
+只看某台主机的所有流量：
+ip.addr == 192.168.1.100
+
+8.2 诊断 TCP 三次握手过程
+过滤 TCP SYN 包：
+tcp.flags.syn == 1 and tcp.flags.ack == 0
+
+过滤 TCP SYN+ACK 包：
+tcp.flags.syn == 1 and tcp.flags.ack == 1
+
+过滤完成三次握手的包：
+tcp.flags.ack == 1 and tcp.seq == tcp.ack - 1
+
+8.3 抓取 HTTP 请求
+过滤所有 HTTP 请求：
+http.request
+
+过滤 POST 请求：
+http.request.method == &quot;POST&quot;
+
+8.4 DNS 问题排查
+过滤 DNS 请求：
+dns.flags.response == 0
+
+过滤 DNS 响应：
+dns.flags.response == 1
+
+过滤查询失败的 DNS 响应（RCODE 不为 0）：
+dns.flags.rcode != 0
+
+8.5 网络攻击检测
+过滤 ICMP 洪泛攻击（大量 ICMP 请求）：
+icmp.type == 8
+
+过滤 TCP SYN 洪泛攻击：
+tcp.flags.syn == 1 and tcp.flags.ack == 0
+
+9. 捕获过滤器更丰富的使用场景
+9.1 按接口过滤
+指定接口抓包：
+tcpdump -i eth1
+
+监听所有接口：
+tcpdump -i any
+
+9.2 指定 MAC 地址抓包
+抓取源 MAC 地址是 00:11:22:33:44:55 的包：
+ether src 00:11:22:33:44:55
+
+目的 MAC 地址：
+ether dst 00:11:22:33:44:55
+
+9.3 抓特定协议
+抓取 HTTP 流量（通常端口 80 端口）：
+tcp port 80
+
+抓取 DNS 流量：
+udp port 53
+
+抓取所有 ARP 包：
+arp
+
+9.4 按包大小过滤
+抓包长度大于 1000 字节的包：
+greater 1000
+
+9.5 复杂组合示例
+抓取目标是 192.168.1.10 且 TCP 端口是 22 或 80 的包：
+dst host 192.168.1.10 and tcp and (dst port 22 or dst port 80)
+
+抓取除 ICMP 外所有流量：
+not icmp
+
+10. 显示过滤器高级语法技巧
+10.1 字段赋值判断
+某些协议中字段可判断是否存在或赋值。
+判断 HTTP 请求是否有 Host 头：
+http.host
+
+判断 DNS 查询名是否以某域名结尾（正则）：
+dns.qry.name matches &quot;.*\.cn$&quot;
+
+10.2 多字段范围过滤
+过滤 TCP 目的端口是 1024 到 65535 的包（高端口）：
+tcp.dstport &gt;= 1024 and tcp.dstport &lt;= 65535
+
+10.3 空值判断
+过滤没有 TCP 选项的包：
+!tcp.options
+
+10.4 按协议层级过滤
+过滤所有包含 HTTP 但排除 HTTPS 的包：
+http and not ssl
+
+10.5 显示过滤器变量
+Wireshark 支持变量绑定和条件过滤，可在高级脚本和命令行用法中发挥作用，这里不做深讲。
+11. 捕获过滤器 vs 显示过滤器
+
+12. 常用命令参数总结
+-i &lt;interface&gt;：指定接口
+-c &lt;count&gt;：抓包数量限制
+-s &lt;snaplen&gt;：抓包长度限制
+-w &lt;file&gt;：写入文件
+-r &lt;file&gt;：读取文件分析
+-n：禁止DNS解析，直接显示IP
+-v：详细模式
+-e：显示链路层头部信息
 
 ]]></content>
       <categories>
-        <category>博客搭建</category>
+        <category>Wireshark</category>
       </categories>
       <tags>
-        <tag>HEXO</tag>
-        <tag>BLOG</tag>
+        <tag>命令</tag>
+        <tag>语法</tag>
+        <tag>过滤</tag>
       </tags>
   </entry>
   <entry>
@@ -2526,321 +2122,142 @@ flag{F098996689560BBB1B566EBC10D5E564}
       </tags>
   </entry>
   <entry>
-    <title>Wireshark过滤语法</title>
-    <url>/MYBLOG/2025/11/21/Sundry/Wireshark%E8%BF%87%E6%BB%A4%E8%AF%AD%E6%B3%95/</url>
-    <content><![CDATA[1. 捕获过滤器（Capture Filter）详解
-捕获过滤器作用是在抓包开始前限制抓取数据包，基于 BPF（Berkeley Packet Filter）语法。它对数据流量起“网筛”作用，过滤掉不关心的包，节省空间和性能。常用在抓包前预过滤。
-1.1 基础语法结构
-捕获过滤器是基于简洁的关键词和运算符，形式类似：
-&lt;表达式&gt; [and|or|not &lt;表达式&gt;] ...
+    <title>Hexo 项目结构</title>
+    <url>/MYBLOG/2025/11/22/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/Hexo%20%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/</url>
+    <content><![CDATA[📄 _config.yml（全局配置）
+这是 Hexo 主配置文件，你最常改的就是它。
+实际要改的典型配置：
 
-支持的基本关键词：
+title / subtitle：博客名
+theme：你要用的主题名称
+url：你部署到 GitHub Pages 或服务器时的域名
+deploy: Git 部署参数
 
-1.2 逻辑运算符
+你现在正在改 theme: next，就属于这里。
 
-and：且
-or：或
-not：非
-示例：
-抓取源 IP 是 10.0.0.1 且目标端口为 80 的 TCP 流量：
+📁 themes/
+放主题的目录。
+每个主题就是一个独立项目，比如：
+themes/
+  ├─ next/
+  ├─ yilia-plus/
+  └─ butterfly/
 
-src host 10.0.0.1 and tcp and dst port 80
+你只需在 _config.yml 写：
+theme: next
 
-抓取所有 UDP 包或 ICMP 包：
-udp or icmp
+就能切换主题。
+主题不是 npm 包，是 Git 项目，所以你可以：
+cd themes/next
+git pull
 
-排除 ARP 包：
-not arp
+来更新主题。
 
-1.3 捕获过滤器示例
+📁 source/
+你的文章内容放这里。
+里面一般有：
+source/
+  ├─ _posts/      # Markdown文章都放在这里
+  ├─ images/      # 图片
+  └─ about/       # 独立页面
 
-2. 显示过滤器（Display Filter）详解
-显示过滤器用在抓包完成后筛选数据包，功能强大、语法复杂，能针对各种协议和字段精确过滤。
-2.1 语法结构
-&lt;协议&gt;.&lt;字段&gt; &lt;比较符&gt; &lt;值&gt; [逻辑运算符 &lt;过滤表达式&gt;]...
-
-2.2 常用比较符
-
-2.3 逻辑运算符
+当你执行：
+hexo new post &quot;标题&quot;
 
-and：且
-or：或
-not：非
-2.4 常用协议及字段示例
-
-2.5 示例过滤器
-过滤源 IP 是 10.0.0.2 的包：
-
-ip.src == 10.0.0.2
-
-过滤目标端口是 80 或 443 的 TCP 包：
-tcp.dstport == 80 or tcp.dstport == 443
-
-过滤 HTTP GET 请求：
-http.request.method == &quot;GET&quot;
+它会自动生成：
+source/_posts/标题.md
 
-过滤 DNS 查询包：
-dns.flags.response == 0
-
-3. 显示过滤器高级技巧
-3.1 组合逻辑过滤
-过滤条件可以任意组合，利用括号明确优先级，满足复杂过滤需求。
-示例：过滤源 IP 是 192.168.1.1 且目标端口是 80 或 443 的 TCP 包
-ip.src == 192.168.1.1 and (tcp.dstport == 80 or tcp.dstport == 443)
+你基本 90% 时间都在改这里。
 
-3.2 利用协议标志位过滤
-针对 TCP 标志位的过滤非常实用，常用于诊断连接问题。
-过滤 TCP SYN 包（发起连接）
-tcp.flags.syn == 1 and tcp.flags.ack == 0
+📁 scaffolds/
+Hexo 新建文章时用的 模板。
+比如你执行：
+hexo new page &quot;about&quot;
 
-过滤 TCP FIN 包（关闭连接）
-tcp.flags.fin == 1
+它会按照 scaffolds 模板生成初始内容。
+你几乎不会改它，但 CTF 或自动化脚本想自定义文章头部格式时会用。
 
-过滤 TCP 重传包
-tcp.analysis.retransmission
+📁 public/
+执行：
+hexo generate   # 或 hexo g
 
-3.3 按报文长度过滤
-有时候抓包数据量巨大，可以按包大小过滤，只看超过一定长度的包。
-frame.len &gt; 1000
+Hexo 会把整个博客编译成静态网页输出到这里。
+里面都是 HTML / CSS / JS 等最终结果。
+你部署（上传）到 GitHub Pages 或服务器时，就是把这个目录里的内容上传。
+你不要手动修改它，每次 hexo g 都会被覆盖。
 
-这可以帮你快速聚焦大数据包，比如文件传输。
-3.4 过滤存在某字段的包
-某些字段只有部分包有，例如 SSL 握手包中的 ssl.handshake 字段，过滤时可以用：
-ssl.handshake
+📁 node_modules/
+npm 装的依赖都在这，比如：
 
-表示只显示带有握手字段的包。
-3.5 过滤 IPv6 流量
-IPv6 过滤与 IPv4 类似，但字段名不同。
-过滤 IPv6 源地址为 fe80::1 的包：
-ipv6.src == fe80::1
+hexo
+hexo-server
+hexo-generator-*
+主题依赖
 
-过滤所有 IPv6 流量：
-ipv6
+这个目录通常几百 MB，很大。
+不用管它，不要动它。
 
-3.6 过滤字符串字段包含关系
-常用 HTTP 或 DNS 过滤，查找域名或 URL 包含某关键字。
-HTTP Host 中包含 google：
-http.host contains &quot;google&quot;
+📄 package.json
+Hexo 项目的依赖声明文件。
+包含：
 
-DNS 查询名匹配某正则表达式（如所有以.com 结尾）：
-dns.qry.name matches &quot;.*\.com&quot;
+hexo 的版本
+hexo 插件
+你主题需要的 npm 包
 
-4. 捕获过滤器实用技巧和复杂表达式
-4.1 捕获时指定多个条件
-要捕获多个 IP 或端口流量时，用括号明确优先级。
-示例：抓取目的 IP 是 192.168.1.1 或 192.168.1.2 的 TCP 包
-tcp and (dst host 192.168.1.1 or dst host 192.168.1.2)
-
-4.2 排除特定协议
-想抓包排除 ARP 包：
-not arp
-
-想抓取非 TCP 包：
-not tcp
-
-4.3 指定网卡的捕获过滤器
-用-i 参数指定抓哪个接口，结合过滤器精确抓包：
-tcpdump -i eth0 tcp port 80
-
-4.4 捕获过滤器语法限制
-捕获过滤器不支持协议内部字段，只能针对包头基本字段（IP、端口、协议），不支持显示过滤器的复杂条件。
-6. 显示过滤器更详细字段解析
-6.1 以太网层（Ethernet）
+有时主题要求你装额外插件，就会在这里出现：
+&quot;hexo-renderer-marked&quot;: &quot;^5.0.0&quot;
 
-eth.src：源 MAC 地址
-eth.dst：目的 MAC 地址
-eth.type：以太网类型，如 0x0800 表示 IPv4，0x86DD 表示 IPv6
-6.2 IP 层
-ip.version：IP 协议版本，4 或 6
-ip.ttl：生存时间（TTL）
-ip.id：标识，用于分片识别
-ip.proto：承载协议类型，如 6 是 TCP，17 是 UDP
-ip.flags：分片标志
-ip.frag_offset：分片偏移
-示例过滤 TTL 小于 64 的包：
 
-ip.ttl &lt; 64
+📄 package-lock.json
+npm 的锁定文件，用来保证依赖版本固定。
+不用管它。
 
-6.3 TCP 层
+📄 db.json
+这是 Hexo 的“缓存数据库”。
+存储：
 
-tcp.seq：序列号
-tcp.ack：确认号
-tcp.flags：标志位整体
-tcp.flags.syn：同步标志
-tcp.flags.ack：确认标志
-tcp.flags.fin：关闭连接标志
-tcp.window_size：窗口大小
-过滤 TCP 窗口大小小于 1024 的包：
+上次生成时的文件状态
+文章索引
+主题资源缓存
 
-tcp.window_size &lt; 1024
+当内容不更新时，Hexo 可以跳过部分生成过程，提高性能。
+如果你出现异常，可以删除它再重新编译：
+hexo clean
 
-6.4 UDP 层
+Hexo 会自动重建。
 
-udp.length：UDP 报文长度
-6.5 ICMP 层
-icmp.type：类型码（如 8 是 Echo 请求，0 是 Echo 应答）
-icmp.code：类型细分
-过滤 ICMP Echo 请求包：
+📁 .github/
+这是 GitHub workflow 用的，自动部署（CI/CD）会用到。
+如果你看到它，大概率主题或 starter 模板帮你放进去的。
 
-icmp.type == 8
+📄 .gitignore
+Git 忽略规则。
+常见内容：
+node_modules/
+public/
+db.json
 
-6.6 HTTP 协议
+这些不会被上传到 GitHub。
 
-http.request.method：请求方法（GET、POST、PUT 等）
-http.response.code：响应码（200、404 等）
-http.host：请求的主机名
-http.user_agent：客户端信息
-过滤 HTTP 响应码 404：
+📌 最关键的几个你需要记住的目录
+按实际使用频率排序：
 
-http.response.code == 404
+source/ → 你写文章的地方
+themes/ → 放主题
+_config.yml → 配置全局设置（例如切主题）
+public/ → 生成后的最终网页（用来部署）
+scaffolds/ → 新文章模板（一般不碰）
 
-6.7 DNS 协议
-
-dns.qry.name：查询域名
-dns.qry.type：查询类型（A、AAAA、MX 等）
-dns.a：A 记录返回 IP 地址
-dns.flags.response：0 表示请求，1 表示响应
-过滤所有 DNS 查询包：
-
-dns.flags.response == 0
-
-6.8 SSL/TLS 协议
-
-ssl.handshake.type：握手类型（客户端 Hello、服务端 Hello 等）
-ssl.record.version：协议版本
-ssl.record.length：记录长度
-过滤所有 TLS 客户端 Hello 包：
-
-ssl.handshake.type == 1
-
-7. 显示过滤器性能优化建议
-当抓包文件巨大时，复杂过滤语法可能会导致 Wireshark 卡顿甚至崩溃。以下建议帮你提升效率：
-
-尽量先用捕获过滤器减少抓包量
-过滤表达式中避免使用 contains 和 matches 这类正则匹配，性能消耗大
-尽量使用字段的等值或范围比较
-对 IP 和端口的过滤尽量集中，不要写太多 or 条件
-使用括号明确运算顺序，避免解析错误
-分步骤过滤，先用粗过滤，再逐步精细化
-
-8. 实用场景举例
-8.1 定位特定主机通信
-只看某台主机的所有流量：
-ip.addr == 192.168.1.100
-
-8.2 诊断 TCP 三次握手过程
-过滤 TCP SYN 包：
-tcp.flags.syn == 1 and tcp.flags.ack == 0
-
-过滤 TCP SYN+ACK 包：
-tcp.flags.syn == 1 and tcp.flags.ack == 1
-
-过滤完成三次握手的包：
-tcp.flags.ack == 1 and tcp.seq == tcp.ack - 1
-
-8.3 抓取 HTTP 请求
-过滤所有 HTTP 请求：
-http.request
-
-过滤 POST 请求：
-http.request.method == &quot;POST&quot;
-
-8.4 DNS 问题排查
-过滤 DNS 请求：
-dns.flags.response == 0
-
-过滤 DNS 响应：
-dns.flags.response == 1
-
-过滤查询失败的 DNS 响应（RCODE 不为 0）：
-dns.flags.rcode != 0
-
-8.5 网络攻击检测
-过滤 ICMP 洪泛攻击（大量 ICMP 请求）：
-icmp.type == 8
-
-过滤 TCP SYN 洪泛攻击：
-tcp.flags.syn == 1 and tcp.flags.ack == 0
-
-9. 捕获过滤器更丰富的使用场景
-9.1 按接口过滤
-指定接口抓包：
-tcpdump -i eth1
-
-监听所有接口：
-tcpdump -i any
-
-9.2 指定 MAC 地址抓包
-抓取源 MAC 地址是 00:11:22:33:44:55 的包：
-ether src 00:11:22:33:44:55
-
-目的 MAC 地址：
-ether dst 00:11:22:33:44:55
-
-9.3 抓特定协议
-抓取 HTTP 流量（通常端口 80 端口）：
-tcp port 80
-
-抓取 DNS 流量：
-udp port 53
-
-抓取所有 ARP 包：
-arp
-
-9.4 按包大小过滤
-抓包长度大于 1000 字节的包：
-greater 1000
-
-9.5 复杂组合示例
-抓取目标是 192.168.1.10 且 TCP 端口是 22 或 80 的包：
-dst host 192.168.1.10 and tcp and (dst port 22 or dst port 80)
-
-抓取除 ICMP 外所有流量：
-not icmp
-
-10. 显示过滤器高级语法技巧
-10.1 字段赋值判断
-某些协议中字段可判断是否存在或赋值。
-判断 HTTP 请求是否有 Host 头：
-http.host
-
-判断 DNS 查询名是否以某域名结尾（正则）：
-dns.qry.name matches &quot;.*\.cn$&quot;
-
-10.2 多字段范围过滤
-过滤 TCP 目的端口是 1024 到 65535 的包（高端口）：
-tcp.dstport &gt;= 1024 and tcp.dstport &lt;= 65535
-
-10.3 空值判断
-过滤没有 TCP 选项的包：
-!tcp.options
-
-10.4 按协议层级过滤
-过滤所有包含 HTTP 但排除 HTTPS 的包：
-http and not ssl
-
-10.5 显示过滤器变量
-Wireshark 支持变量绑定和条件过滤，可在高级脚本和命令行用法中发挥作用，这里不做深讲。
-11. 捕获过滤器 vs 显示过滤器
-
-12. 常用命令参数总结
--i &lt;interface&gt;：指定接口
--c &lt;count&gt;：抓包数量限制
--s &lt;snaplen&gt;：抓包长度限制
--w &lt;file&gt;：写入文件
--r &lt;file&gt;：读取文件分析
--n：禁止DNS解析，直接显示IP
--v：详细模式
--e：显示链路层头部信息
-
+其它都是底层设施，不需要你手动管理。
 ]]></content>
       <categories>
-        <category>Wireshark</category>
+        <category>博客搭建</category>
       </categories>
       <tags>
-        <tag>命令</tag>
-        <tag>语法</tag>
-        <tag>过滤</tag>
+        <tag>HEXO</tag>
+        <tag>BLOG</tag>
+        <tag>MARKDOWN</tag>
       </tags>
   </entry>
   <entry>
@@ -2919,6 +2336,589 @@ ADTS header 有一个 private bit，以及若干控制位（copyright/original/h
       </categories>
       <tags>
         <tag>隐写</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>tags与categories的3D页面</title>
+    <url>/MYBLOG/2025/11/23/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/tags%E4%B8%8Ecategories%E7%9A%843D%E9%A1%B5%E9%9D%A2/</url>
+    <content><![CDATA[Tags 页面
+&lt;%- partial('partials/header') %&gt;
+&lt;div class=&quot;wrapper&quot;&gt;
+  &lt;header class=&quot;header&quot;&gt;
+    &lt;h1 class=&quot;header-title center&quot;&gt;Tags&lt;/h1&gt;
+  &lt;/header&gt;
+  &lt;!-- 3D 标签球 --&gt;
+  &lt;div style=&quot;text-align:center; margin: 40px 0;&quot;&gt;
+    &lt;canvas id=&quot;tagCanvas&quot; width=&quot;450&quot; height=&quot;450&quot;&gt;&lt;/canvas&gt;
+    &lt;!-- Tag 列表（供 JS 读取，但隐藏） --&gt;
+    &lt;div id=&quot;tagList&quot; style=&quot;display:none;&quot;&gt;
+      &lt;% if (site.tags &amp;&amp; site.tags.length) { %&gt;
+        &lt;% site.tags.sort('name').each(function(tag){ %&gt;
+          &lt;a class=&quot;tag-item&quot; href=&quot;&lt;%- url_for(tag.path || ('/tags/' + tag.name + '/')) %&gt;&quot;&gt;&lt;%= tag.name %&gt;&lt;/a&gt;
+        &lt;% }) %&gt;
+      &lt;% } %&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;script src=&quot;&lt;%- url_for('/js/tagcanvas.js') %&gt;&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+function getTagColor() {
+  return document.body.getAttribute('data-theme') === 'dark' ? '#eaeaea' : '#333';
+}
+document.addEventListener('DOMContentLoaded', function () {
+  if (typeof TagCanvas === 'undefined') return;
+  const items = document.querySelectorAll('#tagList .tag-item');
+  if (!items || items.length === 0) return;
+  const sphere = new TagCanvas('tagCanvas', {
+    radius: 180,
+    speed: 0.004,
+    font: '18px Arial',
+    color: getTagColor()
+  });
+  const observer = new MutationObserver(function () {
+    sphere.color = getTagColor();
+  });
+  observer.observe(document.body, { attributes: true });
+});
+&lt;/script&gt;
+&lt;%- partial('partials/foot') %&gt;
+
+Categories 页面
+&lt;%- partial('partials/header') %&gt;
+&lt;div class=&quot;wrapper&quot;&gt;
+  &lt;header class=&quot;header&quot;&gt;
+    &lt;h1 class=&quot;header-title center&quot;&gt;Categories&lt;/h1&gt;
+  &lt;/header&gt;
+  &lt;div style=&quot;text-align:center; margin: 40px 0;&quot;&gt;
+    &lt;canvas id=&quot;catCanvas&quot; width=&quot;450&quot; height=&quot;450&quot;&gt;&lt;/canvas&gt;
+    &lt;!-- 分类列表 --&gt;
+    &lt;div id=&quot;categoryList&quot; style=&quot;display:none;&quot;&gt;
+      &lt;% if (site.categories &amp;&amp; site.categories.length) { %&gt;
+        &lt;% site.categories.sort('name').each(function(cat){ %&gt;
+          &lt;a class=&quot;tag-item&quot; href=&quot;&lt;%- url_for(cat.path || ('/categories/' + cat.name + '/')) %&gt;&quot;&gt;&lt;%= cat.name %&gt;&lt;/a&gt;
+        &lt;% }) %&gt;
+      &lt;% } %&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;script src=&quot;&lt;%- url_for('/js/tagcanvas.js') %&gt;&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+function getTagColor() {
+  return document.body.getAttribute('data-theme') === 'dark' ? '#eaeaea' : '#333';
+}
+document.addEventListener('DOMContentLoaded', function () {
+  if (typeof TagCanvas === 'undefined') return;
+  const items = document.querySelectorAll('#categoryList .tag-item');
+  if (!items || items.length === 0) return;
+  const sphere = new TagCanvas('catCanvas', {
+    radius: 180,
+    speed: 0.004,
+    font: '18px Arial',
+    color: getTagColor()
+  });
+  const observer = new MutationObserver(function () {
+    sphere.color = getTagColor();
+  });
+  observer.observe(document.body, { attributes: true });
+});
+&lt;/script&gt;
+&lt;%- partial('partials/foot') %&gt;
+
+]]></content>
+      <categories>
+        <category>博客搭建</category>
+      </categories>
+      <tags>
+        <tag>BLOG</tag>
+        <tag>JS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>搭建自己的非公开博客</title>
+    <url>/MYBLOG/2025/11/19/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E9%9D%9E%E5%85%AC%E5%BC%80%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[VScode(开发环境)
+针对于编写现代 Web 和云应用的跨平台源代码编辑器，可在桌面上运行，并且可用于 Windows，macOS 和 Linux。
+Hexo（框架）
+Hexo 是一个快速、简单且功能强大的博客框架。你用 Markdown（或其他标记语言）写帖子，Hexo 会在几秒钟内生成带有漂亮主题的静态文件。
+本地环境
+Git
+Git 是一个开源的分布式版本控制系统，用于敏捷高效地处理任何或小或大的项目。
+注意配置 Git 环境
+右键--显示更多--Open Bash here
+
+
+Git Bash
+• 任何 Git 子命令都能用
+• 支持高级参数（--patch、--rebase-merges、--squash 等）
+• 能处理复杂脚本/自动化
+• 适合 CTF / DevOps / 深度开发
+GUI
+• 看得见历史和差异
+• 更适合初学者和简单日常操作
+• 复杂 rebase、工作树脚本、submodule 管理能力有限
+
+node.js
+
+一句话定位：
+一个让 JavaScript 脱离浏览器、跑在操作系统上的运行环境。
+它包含两部分：
+
+V8 引擎：负责执行 JS 代码（来自 Chrome）
+Node API：负责提供系统能力 - 文件读写（fs） - 网络（http/net） - 子进程（child_process） - 异步事件循环（event loop）
+
+
+安装 HEXO
+使用 CMD，命令行输入
+npm install -g hexo-cli
+
+安装 hexo 框架
+
+创建自己的 MyBlog 文件夹（注意文件夹内部一定要空的，不然后续可能报错）
+在自己的文件夹下右击，打开open git bash here输入命令安装（默认位置即可，方面后续配置，不建议修改）
+输入
+hexo init
+
+给你自动搭一个完整的博客项目骨架，本质就是 初始化一个 Hexo 项目目录，让你不用手动创建文件夹、配置文件和依赖。
+这一句代码其实包含了以下手动三步骤
+① 创建 Hexo 的标准目录结构
+它会生成像下面这样的目录：
+myblog/
+├─ \_config.yml # 项目配置
+├─ package.json # Node 依赖说明
+├─ source/ # 文章放这里
+├─ themes/ # 主题目录
+├─ scaffolds/ # 新建文章的模板
+└─ node_modules/ # （后面由 npm 自动填充）
+
+这是一个完整的 Hexo 博客项目框架。
+② 从 Hexo 官方仓库拉模板
+实际上 Hexo init 背后做的事情类似：
+git clone https://github.com/hexojs/hexo-starter.git
+
+但你无需手动 clone，Hexo 会自动处理好 starter 模板。
+③ 自动安装依赖（npm install）
+Hexo 会在新项目目录里跑：
+npm install
+
+装好运行 Hexo 所需要的 Node 模块，比如：
+
+hexo
+hexo-cli
+hexo-renderer-ejs
+hexo-server
+hexo-generator-index
+等等
+
+这步很关键，否则你没法 hexo g / hexo s。
+之后 MyBlog 会下载很多文件
+
+右击---Open Git Bash here---输入 hexo -v
+验证 Hexo 是否安装正常
+
+输入
+hero s
+
+
+在你的浏览器中打开 http://localhost:4000/，就可以看到以下页面
+
+报错解决方式
+如果你使用 Windows PowerShell，应该会报错，如果使用 CMD，那就不会报错了。
+
+那我一定要使用 Windows PowerShell，怎么办？ 包有解决办法的。
+短期（ 只对当前窗口生效）
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+
+长期有效（ 允许当前用户执行脚本）
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+
+然后再输入 hexo s ，就可以成功了
+若你不在 MyBlog 文件夹下，也会报错。
+安装/卸载插件，请在 MyBlog 根目录下操作，就是在 MyBlog 中执行
+
+markdown-it 配置文件格式错了？
+YAML 要对齐，有缩进错误时 Hexo 直接报错或不渲染。改动后先 hexo clean 再跑。
+网页中导航栏无法固定？
+首先是给 main.css 文件的 .navbar 添加属性 position: fixed; 看看成功没。
+如果还是没成功，可能是被其他 CSS 文件或样式覆盖。
+直接在里面在添加一句 position: fixed !important;
+要是还是不行，请把 .navbar 样式全部移到 main.css 文件的底部。
+
+安装个性化主题
+主题安装
+打开 hexo 的主题官网Themes
+
+下载自己喜欢的主题，我这边选择了hexo-theme-Klise-enhanced
+
+他的主页也有一些安装步骤
+你需要下载一个字数统计插件:
+npm install hexo-wordcount --save
+
+安装主题文件
+git clone https://github.com/g0dmao/hexo-theme-Klise-enhanced.git
+
+
+将主题根目录的_config.hexo-theme-Klise-enhanced.yml 移动到博客根目录。你可以打开该文件进行主题的一些配置。
+下面图片已经移动后的样子，就是再 MyBlog 文件夹中
+
+在博客配置文件_config.yml（根目录）中启用主题。
+
+打开主题文件夹下的 source\css\main.css 在头部修改，可以自定义明暗模式下不同的背景，已做好注释。
+
+打开主题文件夹下的 layout\layout.ejs 修改 document.title 即可。
+  document.addEventListener('visibilitychange', function () &#123;
+  if (document.visibilityState == 'hidden') &#123;
+      normal_title = document.title;
+      document.title = '点一下';
+  &#125; else document.title = normal_title;
+&#125;);
+
+
+安装三个插件 （可选）
+Hexo 插件都是 npm 包，直接安装即可。
+(1) 安装 markdown-it 渲染器
+先卸载默认 renderer（可选，但推荐，避免冲突）：
+npm uninstall hexo-renderer-marked
+
+安装 markdown-it 渲染器：
+npm install hexo-renderer-markdown-it-plus --save
+
+然后在你的 Hexo 全局配置 _config.yml 中加入 markdown-it 配置（推荐项）：
+markdown:
+  preset: default
+  render:
+    html: true
+  plugins:
+    - markdown-it-container
+
+不加这些插件也能跑，只是体验没那么好。
+是不是发现复制上去的代码报错了，咱们接着解决，在根目录创建 hexo-schema.json，
+
+Hexo JSON Schema 并不是 Hexo 系统内部的东西，而是给 VS Code / 编辑器 用的配套“智能提示规则文件”。
+有点像是：“告诉编辑器，Hexo 的 _config.yml 里有哪些合法字段，它们是什么类型，这样编辑器就能给你自动补全、检查错误。”
+可以把它理解为：
+Hexo 配置文件的类型说明书（给编辑器看的，不是给 Hexo 本身看的）
+
+
+然后在根目录创建一个.vccode 文件夹，里面再创建一个 settings.jso，复制过去之后，注意右击代码，进行格式化文档。
+&#123;
+    &quot;$schema&quot;: &quot;http://json-schema.org/draft-07/schema#&quot;,
+    &quot;title&quot;: &quot;Hexo Configuration Schema&quot;,
+    &quot;type&quot;: &quot;object&quot;,
+    &quot;properties&quot;: &#123;
+    &quot;title&quot;: &#123;
+      &quot;type&quot;: &quot;string&quot;
+    &#125;,
+    &quot;subtitle&quot;: &#123;
+      &quot;type&quot;: &quot;string&quot;
+    &#125;,
+    &quot;description&quot;: &#123;
+      &quot;type&quot;: &quot;string&quot;
+    &#125;,
+    &quot;keywords&quot;: &#123;
+      &quot;type&quot;: [&quot;string&quot;, &quot;array&quot;],
+      &quot;items&quot;: &#123;
+        &quot;type&quot;: &quot;string&quot;
+      &#125;
+    &#125;,
+    &quot;author&quot;: &#123;
+      &quot;type&quot;: &quot;string&quot;
+    &#125;,
+    &quot;language&quot;: &#123;
+      &quot;type&quot;: &quot;string&quot;
+    &#125;,
+    &quot;timezone&quot;: &#123;
+      &quot;type&quot;: &quot;string&quot;
+    &#125;,
+    &quot;url&quot;: &#123;
+      &quot;type&quot;: &quot;string&quot;
+    &#125;,
+    &quot;permalink&quot;: &#123;
+      &quot;type&quot;: &quot;string&quot;
+    &#125;,
+    &quot;permalink_defaults&quot;: &#123;
+      &quot;type&quot;: &quot;object&quot;
+    &#125;,
+    &quot;pretty_urls&quot;: &#123;
+      &quot;type&quot;: &quot;object&quot;,
+      &quot;properties&quot;: &#123;
+        &quot;trailing_index&quot;: &#123;
+          &quot;type&quot;: &quot;boolean&quot;
+        &#125;,
+        &quot;trailing_html&quot;: &#123;
+          &quot;type&quot;: &quot;boolean&quot;
+        &#125;
+      &#125;
+    &#125;,
+    &quot;source_dir&quot;: &#123;
+      &quot;type&quot;: &quot;string&quot;
+    &#125;,
+    &quot;public_dir&quot;: &#123;
+      &quot;type&quot;: &quot;string&quot;
+    &#125;,
+    &quot;tag_dir&quot;: &#123;
+      &quot;type&quot;: &quot;string&quot;
+    &#125;,
+    &quot;archive_dir&quot;: &#123;
+      &quot;type&quot;: &quot;string&quot;
+    &#125;,
+    &quot;category_dir&quot;: &#123;
+      &quot;type&quot;: &quot;string&quot;
+    &#125;,
+    &quot;i18n_dir&quot;: &#123;
+      &quot;type&quot;: &quot;string&quot;
+    &#125;,
+    &quot;new_post_name&quot;: &#123;
+      &quot;type&quot;: &quot;string&quot;
+    &#125;,
+    &quot;default_layout&quot;: &#123;
+      &quot;type&quot;: &quot;string&quot;
+    &#125;,
+    &quot;titlecase&quot;: &#123;
+      &quot;type&quot;: &quot;boolean&quot;
+    &#125;,
+    &quot;external_link&quot;: &#123;
+      &quot;type&quot;: &quot;object&quot;,
+      &quot;properties&quot;: &#123;
+        &quot;enable&quot;: &#123;
+          &quot;type&quot;: &quot;boolean&quot;
+        &#125;,
+        &quot;field&quot;: &#123;
+          &quot;type&quot;: &quot;string&quot;
+        &#125;,
+        &quot;exclude&quot;: &#123;
+          &quot;type&quot;: &quot;string&quot;
+        &#125;
+      &#125;
+    &#125;,
+    &quot;filename_case&quot;: &#123;
+      &quot;type&quot;: &quot;number&quot;
+    &#125;,
+    &quot;render_drafts&quot;: &#123;
+      &quot;type&quot;: &quot;boolean&quot;
+    &#125;,
+    &quot;post_asset_folder&quot;: &#123;
+      &quot;type&quot;: &quot;boolean&quot;
+    &#125;,
+    &quot;relative_link&quot;: &#123;
+      &quot;type&quot;: &quot;boolean&quot;
+    &#125;,
+    &quot;future&quot;: &#123;
+      &quot;type&quot;: &quot;boolean&quot;
+    &#125;,
+    &quot;syntax_highlighter&quot;: &#123;
+      &quot;type&quot;: &quot;string&quot;
+    &#125;,
+    &quot;highlight&quot;: &#123;
+      &quot;type&quot;: &quot;object&quot;,
+      &quot;properties&quot;: &#123;
+        &quot;enable&quot;: &#123;
+          &quot;type&quot;: &quot;boolean&quot;
+        &#125;,
+        &quot;line_number&quot;: &#123;
+          &quot;type&quot;: &quot;boolean&quot;
+        &#125;,
+        &quot;auto_detect&quot;: &#123;
+          &quot;type&quot;: &quot;boolean&quot;
+        &#125;,
+        &quot;tab_replace&quot;: &#123;
+          &quot;type&quot;: &quot;string&quot;
+        &#125;,
+        &quot;wrap&quot;: &#123;
+          &quot;type&quot;: &quot;boolean&quot;
+        &#125;,
+        &quot;hljs&quot;: &#123;
+          &quot;type&quot;: &quot;boolean&quot;
+        &#125;
+      &#125;
+    &#125;,
+    &quot;prismjs&quot;: &#123;
+      &quot;type&quot;: &quot;object&quot;,
+      &quot;properties&quot;: &#123;
+        &quot;preprocess&quot;: &#123;
+          &quot;type&quot;: &quot;boolean&quot;
+        &#125;,
+        &quot;line_number&quot;: &#123;
+          &quot;type&quot;: &quot;boolean&quot;
+        &#125;,
+        &quot;tab_replace&quot;: &#123;
+          &quot;type&quot;: &quot;string&quot;
+        &#125;
+      &#125;
+    &#125;,
+    &quot;index_generator&quot;: &#123;
+      &quot;type&quot;: &quot;object&quot;,
+      &quot;properties&quot;: &#123;
+        &quot;path&quot;: &#123;
+          &quot;type&quot;: &quot;string&quot;
+        &#125;,
+        &quot;per_page&quot;: &#123;
+          &quot;type&quot;: &quot;number&quot;
+        &#125;,
+        &quot;order_by&quot;: &#123;
+          &quot;type&quot;: &quot;string&quot;
+        &#125;
+      &#125;
+    &#125;,
+    &quot;category_map&quot;: &#123;
+      &quot;type&quot;: &quot;object&quot;
+    &#125;,
+    &quot;tag_map&quot;: &#123;
+      &quot;type&quot;: &quot;object&quot;
+    &#125;,
+    &quot;date_format&quot;: &#123;
+      &quot;type&quot;: &quot;string&quot;
+    &#125;,
+    &quot;time_format&quot;: &#123;
+      &quot;type&quot;: &quot;string&quot;
+    &#125;,
+    &quot;updated_option&quot;: &#123;
+      &quot;type&quot;: &quot;string&quot;
+    &#125;,
+    &quot;per_page&quot;: &#123;
+      &quot;type&quot;: &quot;number&quot;
+    &#125;,
+    &quot;pagination_dir&quot;: &#123;
+      &quot;type&quot;: &quot;string&quot;
+    &#125;,
+    &quot;include&quot;: &#123;
+      &quot;type&quot;: [&quot;array&quot;, &quot;string&quot;],
+      &quot;items&quot;: &#123;
+        &quot;type&quot;: &quot;string&quot;
+      &#125;
+    &#125;,
+    &quot;exclude&quot;: &#123;
+      &quot;type&quot;: [&quot;array&quot;, &quot;string&quot;],
+      &quot;items&quot;: &#123;
+        &quot;type&quot;: &quot;string&quot;
+      &#125;
+    &#125;,
+    &quot;ignore&quot;: &#123;
+      &quot;type&quot;: [&quot;array&quot;, &quot;string&quot;],
+      &quot;items&quot;: &#123;
+        &quot;type&quot;: &quot;string&quot;
+      &#125;
+    &#125;,
+    &quot;theme&quot;: &#123;
+      &quot;type&quot;: &quot;string&quot;
+    &#125;,
+    &quot;deploy&quot;: &#123;
+      &quot;type&quot;: [&quot;object&quot;, &quot;array&quot;],
+      &quot;items&quot;: &#123;
+        &quot;type&quot;: &quot;object&quot;
+      &#125;,
+      &quot;properties&quot;: &#123;
+        &quot;type&quot;: &#123;
+          &quot;type&quot;: &quot;string&quot;
+        &#125;,
+        &quot;repo&quot;: &#123;
+          &quot;type&quot;: [&quot;string&quot;, &quot;object&quot;]
+        &#125;,
+        &quot;branch&quot;: &#123;
+          &quot;type&quot;: &quot;string&quot;
+        &#125;,
+        &quot;message&quot;: &#123;
+          &quot;type&quot;: &quot;string&quot;
+        &#125;
+      &#125;
+    &#125;,
+    &quot;markdown&quot;: &#123;
+      &quot;type&quot;: &quot;object&quot;,
+      &quot;properties&quot;: &#123;
+        &quot;render&quot;: &#123;
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;properties&quot;: &#123;
+            &quot;html&quot;: &#123;
+              &quot;type&quot;: &quot;boolean&quot;
+            &#125;,
+            &quot;xhtmlOut&quot;: &#123;
+              &quot;type&quot;: &quot;boolean&quot;
+            &#125;,
+            &quot;breaks&quot;: &#123;
+              &quot;type&quot;: &quot;boolean&quot;
+            &#125;,
+            &quot;linkify&quot;: &#123;
+              &quot;type&quot;: &quot;boolean&quot;
+            &#125;,
+            &quot;typographer&quot;: &#123;
+              &quot;type&quot;: &quot;boolean&quot;
+            &#125;
+          &#125;
+        &#125;,
+        &quot;plugins&quot;: &#123;
+          &quot;type&quot;: &quot;array&quot;,
+          &quot;items&quot;: &#123;
+            &quot;type&quot;: [&quot;string&quot;, &quot;array&quot;]
+          &#125;
+        &#125;
+        &#125;
+        &#125;
+      &#125;
+     &#125;
+
+
+settings.json 是什么？
+VS Code 的配置文件，使用 JSON 格式存储各种设置。VS Code 会读取它来自定义编辑器行为
+
+
+&#123;
+  &quot;yaml.schemas&quot;: &#123;
+    &quot;./hexo-schema.json&quot;: &quot;_config.yml&quot;
+  &#125;
+&#125;
+
+(2) 安装 hexo-tips
+这个插件用于提示块（info、warning、danger 卡片等），主题 Klise-enhanced 已支持。
+安装：
+npm install hexo-tips --save
+
+然后在 _config.yml 增加配置（可选）：
+tips:
+  enable: true
+
+使用示例（文章内）：
+&#123;% tips info %&#125;
+这是一个信息提示
+&#123;% endtips %&#125;
+
+(3) 安装文章加密插件：hexo-blog-encrypt
+安装：
+npm install hexo-blog-encrypt --save
+
+在 Hexo 全局 _config.yml 添加配置：
+encrypt:
+  enable: true
+  bg_color: &quot;#f2f2f2&quot;
+  default_abstract: &quot;请输入密码查看正文&quot;
+
+文章加密写法（Markdown front-matter）：
+title: 测试文章
+date: 2025-01-01
+password: 123456
+abstract: 这篇文章被加密了
+message: 输入密码继续阅读
+tags:
+  - test
+这里是正文内容。
+
+加密插件不需要额外命令，Hexo 会自动处理。
+启动网站
+最后就是清理缓存重新生成。
+hexo clean
+hexo g
+hexo s
+
+
+
+
+安装完毕后，浏览器复制 http://localhost:4000/，展示页面。
+
+]]></content>
+      <categories>
+        <category>博客搭建</category>
+      </categories>
+      <tags>
+        <tag>HEXO</tag>
+        <tag>BLOG</tag>
       </tags>
   </entry>
 </search>
