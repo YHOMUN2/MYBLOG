@@ -5,8 +5,8 @@
 
 /* 主题背景与变量，便于在浅/深色下替换图片 */
 :root {
-  --bg-image-light: url("/img/webbj1.png"); /* 可替换为你的浅色背景图 */
-  --bg-image-dark: url("/img/webbj2.png"); /* 当前深色/默认背景图 */
+  --bg-image-light: url("../img/webbj1.png"); /* 可替换为你的浅色背景图 */
+  --bg-image-dark: url("../img/webbj2.png"); /* 当前深色/默认背景图 */
   --bg-overlay-light: rgba(255, 255, 255, 0.7);
   --bg-overlay-dark: rgba(0, 0, 0, 0.85);
 }
