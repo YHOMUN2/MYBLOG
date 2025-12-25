@@ -2,6 +2,18 @@
 (() => {
   // Ensure our DOM interactions run after DOM is ready
   document.addEventListener('DOMContentLoaded', () => {
+    // Fix image paths: convert /img/ to /MYBLOG/img/ (handle root path)
+    const baseUrl = document.querySelector('link[rel="alternate"]')?.href?.split('/atom.xml')[0] || '';
+    const root = baseUrl ? baseUrl.replace(window.location.origin, '') : '';
+    if (root) {
+      document.querySelectorAll('img').forEach(img => {
+        const src = img.getAttribute('src');
+        if (src && src.startsWith('/img/') && !src.startsWith(root)) {
+          img.setAttribute('src', root + src);
+        }
+      });
+    }
+
     // Theme switch
     const body = document.body;
     const lamp = document.getElementById('mode');
@@ -159,23 +171,26 @@
       trimBlankLinesIn(code || pre);
     });
 
-    const toggleTheme = (state) => {
-      if (state === 'dark') {
+    const toggleTheme = () => {
+      // Check if dark theme is currently active
+      const isDarkMode = body.getAttribute('data-theme') === 'dark';
+      
+      if (isDarkMode) {
+        // Switch to light mode
         localStorage.setItem('theme', 'light');
         body.removeAttribute('data-theme');
-      } else if (state === 'light') {
+      } else {
+        // Switch to dark mode
         localStorage.setItem('theme', 'dark');
         body.setAttribute('data-theme', 'dark');
-      } else {
-        // noop: leave initTheme to layout script
       }
     };
 
     if (lamp) {
-      if (!lamp.dataset._bindMode) {
-        lamp.addEventListener('click', () => toggleTheme(localStorage.getItem('theme')));
-        lamp.dataset._bindMode = '1';
-      }
+      lamp.addEventListener('click', function (e) {
+        e.preventDefault();
+        toggleTheme();
+      });
     }
 
     // Blur the content when the menu is open (guard existence)
